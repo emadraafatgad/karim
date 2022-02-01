@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- BOM Check Sequences -->
+        <record id="sequence_bom_quantity_check" model="ir.sequence">
+            <field name="name">BOM Check Quantity</field>
+            <field eval="4" name="padding"/>
+            <field name="prefix">BOM_quantity/%(month)s/</field>
+            <field name="code">bom.quantity.check</field>
+        </record>
+    </data>
+</odoo>

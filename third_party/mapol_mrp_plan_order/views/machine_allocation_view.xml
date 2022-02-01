@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+        <record id='view_machine_allocation_form' model='ir.ui.view'>
+			<field name="name">machine.allocation.form</field>
+			<field name="model">machine.allocation</field>
+			<field name="arch" type="xml">
+				<form string="Machine Allocation">
+					<sheet>
+						<label class="oe_inline" for="name" string="Machine Name"/>
+                        <h1>
+                        	<field name="name" placeholder="Machine Name"/>
+                        </h1>
+						<group>
+							<group>
+								<field name="total_hours_per_day"/>
+								<field name="date"/>
+							</group>
+							<group>
+								<field name="employee_ids" widget="many2many_tags"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+        <record id='view_machine_allocation_tree' model='ir.ui.view'>
+			<field name="name">machine.allocation.tree</field>
+			<field name="model">machine.allocation</field>
+			<field name="arch" type="xml">
+				<tree string="Machine Allocation">
+					<field name="name" />
+					<field name="total_hours_per_day"/>
+				</tree>
+			</field>
+		</record>
+
+        <!-- Window Action -->
+		<record id='action_machine_allocation' model='ir.actions.act_window'>
+			<field name="name">Machine Allocation Planning</field>
+			<field name="res_model">machine.allocation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click to create a new record.
+				</p>
+			</field>
+		</record>
+		
+		
+		<!--Menuitem Action -->
+		<menuitem id="menu_machine_allocation"
+          name="Machine Allocation Planning"
+          parent="mrp.menu_mrp_bom"
+          action="action_machine_allocation"
+          sequence="25"/>
+          
+    </data>
+</odoo>

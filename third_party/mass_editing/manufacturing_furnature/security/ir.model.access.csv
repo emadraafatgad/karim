@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+sale_order_component_line_id,sale_order_component_id,model_sale_order_component_line,,1,1,1,1
+product_component_list_id,product_component_list_id,model_product_component_list,,1,1,1,1
+product_component_name_id,product_component_name,model_component_name,,1,1,1,1
+bom_operation_name_id,product_operation_name,model_operation_name,,1,1,1,1
+direct_labour_cost_id,direct_labour_cost_name,model_direct_labour_cost,,1,1,1,1
+direct_material_cost_id,direct_material_cost_name,model_direct_material_cost,,1,1,1,1
+mrp_production_request_id,mrp_production_request_name,model_mrp_production_request,,1,1,1,1

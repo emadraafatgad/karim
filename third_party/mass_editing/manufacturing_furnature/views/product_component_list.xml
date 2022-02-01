@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+
+        <record id="view_product_komash_form" model="ir.ui.view">
+        <field name="name">product.compontent.list.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Component komash">
+                    <field name="product_component_list_ids">
+                        <tree string="Conponent" editable="bottom">
+                            <field name="component_id"/>
+                            <field name="internal_quantity"/>
+<!--                            <field name="external_quantity"/>-->
+                            <field name="quantity" invisible="1"/>
+<!--                            <field name="external_component" invisible="1"/>-->
+                            <field name="internal_component" invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    </data>
+</odoo>

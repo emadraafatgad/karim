@@ -1,0 +1,13 @@
+<odoo>
+    <template id="report_product_name_purchaseorder_document" inherit_id="purchase.report_purchaseorder_document">
+<!--        <xpath expr="//td[span[@t-field='line.name']]" position="before">-->
+            <xpath expr="//table[@class='table table-sm o_main_table']//thead//tr/th" position="before">
+            <th><strong>Product Name</strong></th>
+        </xpath>
+        <xpath expr="//td[span[@t-field='line.name']]" position="before">
+            <td>
+                <span t-field="line.product_id"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>

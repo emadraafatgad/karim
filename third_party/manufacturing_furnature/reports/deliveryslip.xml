@@ -1,0 +1,15 @@
+<odoo>
+     <template id="report_delivery_signature" inherit_id="stock.report_delivery_document">
+        <xpath expr="//table[2]" position="after">
+<!--            <div style="page-break-afer:always;"></div>-->
+                    <t>
+                        <div style="margin-right:290px;">
+                            <strong>Customer Signature</strong>
+                            <div style="border:thin solid; height: 100px; width: 300px;">
+                            </div>
+                        </div>
+                    </t>
+        </xpath>
+     </template>
+
+</odoo>

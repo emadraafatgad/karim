@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+     <record id="view_sale_order_komash_form" model="ir.ui.view">
+        <field name="name">sale.order.komash.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="mrp_date"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="komash">
+                    <button  name="product_component_form"  string="Get Product Options" type="object" class="btn btn-success"/>
+                    <field name="product_component_ids">
+                        <form>
+                            <sheet>
+                                <group colspan="4">
+                                    <group col="2">
+                                        <field name="product_id" readonly='1'/>
+                                    </group>
+                                </group>
+                                    <notebook>
+                                        <page string="Component">
+                                            <field name="component_list_ids">
+                                                <tree string="Conponent" editable="bottom">
+                                                    <field name="component_id"/>
+                                                    <field name="quantity" invisible="1"/>
+                                                    <field name="internal_component"/>
+                                                    <field name="internal_quantity" invisible="1"/>
+                                                </tree>
+                                            </field>
+                                        </page>
+                                    </notebook>
+                            </sheet>
+                        </form>
+                        <tree >
+                            <field name="product_id"/>
+                        </tree>
+
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+     <record id="view_sale_order_mrp_form" model="ir.ui.view">
+        <field name="name">mrp.production  form</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sale_order_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_komash_form" model="ir.ui.view">
+        <field name="name">sale.order.komash.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="action" string="Manufacturing Order" class="oe_stat_button" name="%(mrp.mrp_production_action)d" invisible="1" context="{'default_name':partner_id}" icon="fa-wrench">
+                </button>
+            </xpath>
+            <!--                    <field string="Manufacturing Order" name="app_count" widget="statinfo"/>-->
+            <xpath expr="//button[@name='preview_sale_order']" position="before">
+                <button  name="send_to_mrp"  string="Send Manufacturing Request" type="object" states="sale" class="btn btn-danger"/>
+            </xpath>
+        </field>
+    </record>
+
+    </data>
+</odoo>

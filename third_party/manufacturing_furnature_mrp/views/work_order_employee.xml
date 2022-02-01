@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="mrp_workorder_employee_inherit" model="ir.ui.view">
+             <field name="name">Work Order inherit</field>
+             <field name="model">mrp.workorder</field>
+             <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+             <field name="arch" type="xml">
+                 <xpath expr="//field[@name='is_produced']" position="before">
+                     <field name="employee_id"/>
+                </xpath>
+             </field>
+        </record>
+        <record id="mrp_workorder_employee_inherit_tree" model="ir.ui.view">
+             <field name="name">Work Order inherit tree</field>
+             <field name="model">mrp.workorder</field>
+             <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_view_inherit"/>
+             <field name="arch" type="xml">
+                 <xpath expr="//field[@name='workcenter_id']" position="after">
+                     <field name="employee_id"/>
+                </xpath>
+             </field>
+        </record>
+
+        <record id="payslip_workorder_employee_inherit_form" model="ir.ui.view">
+             <field name="name">Work Order Payroll form</field>
+             <field name="model">hr.payslip</field>
+             <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+             <field name="arch" type="xml">
+                 <xpath expr="//field[@name='number']" position="before">
+                     <field name="total_finished_products"/>
+                </xpath>
+             </field>
+        </record>
+
+    </data>
+</odoo>

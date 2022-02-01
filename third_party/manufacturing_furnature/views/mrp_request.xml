@@ -1,0 +1,152 @@
+<odoo>
+    <data>
+        <record id="seq_mrp_production_kk_request" model="ir.sequence">
+            <field name="name">Manufacturing Request</field>
+            <field name="code">mrp.production.requests</field>
+            <field name="prefix">MR/%(range_year)s/</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="product_production_request_action" model="ir.actions.act_window">
+            <field name="name">Manufacturing Request</field>
+            <field name="res_model">mrp.production.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="product_production_request_form" model="ir.ui.view">
+            <field name="name">mrp Production request Form</field>
+            <field name="model">mrp.production.request</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="send_to_mrp" string="Confirm Manufacturing" type="object" states="draft"
+                                class="btn btn-success"/>
+                        <button name="create_purchase_request" string="Send Purchase Request" states="Confirmed"
+                                class="btn btn-warning" type="object"/>
+                        <button name="get_request_attachments" string="Get Design" type="object" class="btn btn-warning" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,Confirmed,not,bom"/>
+                    </header>
+                    <sheet>
+                        <group colspan="12">
+                            <group cols="4">
+                                <field name="name"/>
+                                <field name="invoice_status"/>
+                                <field name="product_id"/>
+                                <field name="quantity_qty"/>
+                                <field name="product_uom_id"/>
+                            </group>
+                            <group cols="4">
+                                <field name="delivery_date"/>
+                                <field name="origin"/>
+                                <field name="attachment"/>
+                            </group>
+                            <group>
+                                <field name="bom_id"/>
+                                <field name="sale_order_id"/>
+                            </group>
+                            <group>
+                                <field name="city_id"/>
+                                <field name="note"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Component">
+                                <field name="bom_line_ids">
+                                    <tree>
+                                        <field name="product_id"/>
+                                        <field name="product_qty"/>
+                                        <field name="product_total_qty"/>
+                                        <field name="product_uom_id"/>
+                                        <field name="partner_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Paint">
+                                <field name="paint_ids" readonly="1">
+                                    <tree string="Paint">
+                                        <field name="product_id"/>
+                                        <field name="color_id"/>
+                                        <field name="delivery_date"/>
+                                        <field name="customer"/>
+                                        <field name="operation_id"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Carpenter">
+                                <field name="carpenter_ids" readonly="1">
+                                    <tree string="Carpainter">
+                                        <field name="product_id"/>
+                                        <field name="worker_id"/>
+                                        <field name="delivery_date"/>
+                                        <field name="customer"/>
+                                        <field name="operation_id"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_production_request_tree" model="ir.ui.view">
+            <field name="name">mrp Production request Tree</field>
+            <field name="model">mrp.production.request</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tree MRP">
+                    <field name="name"/>
+                    <field name="sale_order_id"/>
+                    <field name="invoice_status"/>
+                    <field name="product_id"/>
+                    <field name="quantity_qty"/>
+                    <field name="bom_id"/>
+                    <field name="delivery_date"/>
+                    <field name="origin"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_production_request_search" model="ir.ui.view">
+            <field name="name">mrp Production request Tree</field>
+            <field name="model">mrp.production.request</field>
+            <field name="type">search</field>
+            <field name="priority">15</field>
+            <field name="arch" type="xml">
+                <search string="Search MRP">
+                    <field name="sale_order_id"/>
+                    <field name="product_id"/>
+                    <field name="origin"/>
+                    <filter string="Not Mrp" name="purchase_only"
+                            domain="[('state', '=','not')]"/>
+                    <filter string="MO for next 15 days" name="this_month_mo"
+                            domain="[('delivery_date', '&gt;=', context_today().strftime('%Y-%m-%d')),('delivery_date', '&lt;=', (context_today() + datetime.timedelta(days=15)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Product" name="groupby_product" domain="[]"
+                            context="{'group_by': 'product_id'}"/>
+                    <filter string="Sale Order" name="sale_order_id" domain="[]"
+                            context="{'group_by': 'sale_order_id'}"/>
+                    <filter string="State" name="state_id" domain="[]"
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Invoice Status" name="state_id" domain="[]"
+                            context="{'group_by': 'invoice_status'}"/>
+                </search>
+            </field>
+        </record>
+
+        <menuitem id="manufacturing_request_id" action="product_production_request_action" name="Manufacturing Request"
+                  parent="mrp.menu_mrp_root" sequence="5"/>
+
+    </data>
+</odoo>

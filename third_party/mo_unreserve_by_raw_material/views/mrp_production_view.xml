@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="inherit_mrp_production_form_view">
+        <field name="name">inherit.mrp.production.form</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_raw_ids']/tree" position="attributes">
+                <attribute name="class">unreserve_tree_view</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']/tree/field[@name='quantity_done']" position="after">
+                <button name="action_unreserved_material"
+                    string="UnReserve" 
+                    type="object"
+                    icon="fa-undo fa-lg"
+                    attrs="{'column_invisible': [('parent.unreserve_visible', '=', False)]}"
+                    style="padding-left: 16px;"/>
+            </xpath>
+            <xpath expr="//button[@name='button_plan']" position="after">
+                <button name="action_force_assign_pickings" string="Force Reserve"  class="oe_highlight" type="object"/>
+            </xpath>
+            
+        </field>
+    </record>
+
+    
+
+</odoo>

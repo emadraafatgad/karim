@@ -1,0 +1,45 @@
+<odoo>
+    <data>
+
+         <record id="mrp_package_line_action" model="ir.actions.act_window">
+            <field name="name">mrp package line</field>
+            <field name="res_model">mrp.package.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.ui.view" id="mrp_package_line_form">
+            <field name="name">mrp package line</field>
+            <field name="model">mrp.package.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="MRP Package">
+                    <sheet>
+                        <group colspan="4">
+                            <group col="2">
+                                <field name="product_id"/>
+                                <field name="quantity"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mrp_package_line_tree">
+            <field name="name">mrp package line tree</field>
+            <field name="model">mrp.package.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="MRP Package">
+                    <field name="product_id"/>
+                    <field name="quantity"/>
+                    <field name="uom"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

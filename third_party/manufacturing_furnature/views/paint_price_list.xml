@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paint_price_list_form_view" model="ir.ui.view">
+            <field name="name">paint.price.list.form.view</field>
+            <field name="model">paint.price.list</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Information">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "active"}'/>
+                            </button>
+                        </div>
+                        <group>
+                            <group string="Worker">
+                                <field name="worker_id"
+                                       context="{'default_customer': 0, 'search_default_supplier': 1, 'default_supplier': 1}"/>
+                                <field name="product_id" groups="product.group_product_variant"/>
+                            </group>
+                            <group string="Price List">
+                                <field name="color_id"/>
+                                <field name="operation_id"/>
+                                <label for="cost"/>
+                                <div>
+                                    <field name="cost" class="oe_inline"/>
+                                    <field name="currency_id" class="oe_inline" readonly="1"/>
+                                </div>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="paint_price_list_search_view" model="ir.ui.view">
+            <field name="name">paint.price.list.search.view</field>
+            <field name="model">paint.price.list</field>
+            <field name="arch" type="xml">
+                <search string="Vendor">
+                    <field name="worker_id"/>
+                    <field name="product_id"/>
+                    <filter string="Active" name="active"
+                            domain="[('active', '=', True)]"/>
+                    <filter string="Archived" name="archived" domain="[('active', '!=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" name="groupby_product" domain="[]"
+                                context="{'group_by': 'product_id'}"/>
+                        <filter string="Color" name="groupby_color" domain="[]"
+                                context="{'group_by': 'color_id'}"/>
+                        <filter string="Vendor" name="groupby_vendor" domain="[]" context="{'group_by': 'worker_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+<!--        <record id="paint_price_list_view_kanban" model="ir.ui.view">-->
+<!--            <field name="name">paint.price.list.kanban</field>-->
+<!--            <field name="model">paint.price.list</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <kanban class="o_kanban_mobile">-->
+<!--                    <field name="min_qty"/>-->
+<!--                    <field name="delay"/>-->
+<!--                    <field name="price"/>-->
+<!--                    <field name="name"/>-->
+<!--                    <field name="currency_id"/>-->
+<!--                    <templates>-->
+<!--                        <t t-name="kanban-box">-->
+<!--                            <div class="oe_kanban_global_click">-->
+<!--                                <div class="row mb4">-->
+<!--                                    <strong class="col-6">-->
+<!--                                        <span t-esc="record.name.value"/>-->
+<!--                                    </strong>-->
+<!--                                    <strong class="col-6 text-right">-->
+<!--                                        <strong>-->
+<!--                                            <field name="price" widget="monetary"/>-->
+<!--                                        </strong>-->
+<!--                                    </strong>-->
+<!--                                    <div class="col-6">-->
+<!--                                        <span t-esc="record.min_qty.value"/>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-6 text-right">-->
+<!--                                        <span t-esc="record.delay.value"/>-->
+<!--                                        days-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </t>-->
+<!--                    </templates>-->
+<!--                </kanban>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="paint_price_list_tree_view" model="ir.ui.view">
+            <field name="name">paint.price.list.tree.view</field>
+            <field name="model">paint.price.list</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Information">
+                    <field name="worker_id"/>
+                    <field name="product_id" groups="product.group_product_variant"/>
+                    <field name="color_id" string="Color"/>
+                    <field name="operation_id"/>
+                    <field name="cost"/>
+                    <field name="currency_id"/>
+                    <!--                    <field name="product_uom" groups="uom.group_uom"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <record id="paint_price_list_type_action" model="ir.actions.act_window">
+            <field name="name">Painters Pricelists</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">paint.price.list</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'visible_product_id':False}</field>
+        </record>
+
+        <menuitem id="mrp_painter_price_list_id" action="paint_price_list_type_action" name = "Painter Pricelist" parent="mrp.menu_mrp_root" sequence="11"/>
+
+    </data>
+</odoo>

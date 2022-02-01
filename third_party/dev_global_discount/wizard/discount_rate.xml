@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+
+        <record id="discount_rate_form" model="ir.ui.view">
+            <field name="name">discount.rate</field>
+            <field name="model">discount.rate</field>
+            <field name="arch" type="xml">
+                <form string="Discount Rate">
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="sales_count"/>
+                        </group>
+                        <group>
+                            <field name="total_amount"/>
+                            <field name="total_discount"/>
+                            <field name="rate"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Ok" class="btn-primary" special="cancel"/>
+<!--                        <button string="Print" class="btn-primary" type="object"-->
+<!--                                name="print_daily_fee_collection_report"/>-->
+<!--                        <button string="Cancel" class="btn-secondary" special="cancel"/>-->
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_discount_rate_wizard" model="ir.actions.act_window">
+            <field name="name">Discount Rate</field>
+            <field name="res_model">discount.rate</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="discount_rate_form"/>
+            <field name="target">new</field>
+        </record>
+
+<!--        <menuitem id="discount_rate_menu" name="Discount" parent="sale.menu_sale_report"-->
+<!--                  sequence="50"/>-->
+
+        <menuitem id="discount_rate_menu" name="Discount" parent="sale.menu_sale_report"
+                  sequence="10" action="action_discount_rate_wizard"/>
+
+    </data>
+</odoo>

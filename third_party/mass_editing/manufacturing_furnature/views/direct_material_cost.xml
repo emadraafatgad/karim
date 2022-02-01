@@ -1,0 +1,113 @@
+<odoo>
+    <data>
+
+         <record id="direct_material_cost_action" model="ir.actions.act_window">
+            <field name="name">Direct material Cost </field>
+            <field name="res_model">direct.material.cost</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+        <record model="ir.ui.view" id="direct_material_cost_form">
+            <field name="name">Direct material Cost</field>
+            <field name="model">direct.material.cost</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group colspan="4">
+                            <group col="2">
+                                <field name="product_id"/>
+                                <field name="unit_cost"/>
+                                <field name="quantity"/>
+                                <field name="total_cost"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="direct_material_cost_tree">
+            <field name="name">direct.material.cost</field>
+            <field name="model">direct.material.cost</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="material Cost" >
+                    <field name="product_id"/>
+                    <field name="unit_cost"/>
+                    <field name="quantity"/>
+                    <field name="total_cost"/>
+                </tree>
+            </field>
+        </record>
+
+
+    <record id="view_bom_material_cost_form" model="ir.ui.view">
+        <field name="name">mrp.bom.material.cost.form</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+<!--                <page string="Direct material Cost">-->
+<!--                    <field name="direct_material_cost_ids">-->
+<!--                        <tree string="Direct material Cost" editable="bottom">-->
+<!--                            <field name="product_id"/>-->
+<!--                            <field name="unit_cost"/>-->
+<!--                            <field name="quantity"/>-->
+<!--                            <field name="total_cost"/>-->
+<!--                        </tree>-->
+<!--                    </field>-->
+<!--                    <group class="oe_subtotal_footer oe_right">-->
+<!--                         <field name="total_cost"/>-->
+<!--                    </group>-->
+<!--                </page>-->
+             </xpath>
+        </field>
+    </record>
+
+        <record id="view_direct_materal_cost_mrp_form" model="ir.ui.view">
+            <field name="name">mrp.production  form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_planned_start']" position="after">
+                    <field name="delivery_date"/>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+<!--                    <page string="Direct material Cost">-->
+<!--                        <field name="direct_material_cost_ids">-->
+<!--                            <tree string="Direct material Cost" editable="bottom">-->
+<!--                                <field name="operation_id"/>-->
+<!--                                <field name="unit_cost"/>-->
+<!--                                <field name="employee_id" invisible="0"/>-->
+<!--                            </tree>-->
+<!--                        </field>-->
+<!--                        <group class="oe_subtotal_footer oe_right">-->
+<!--                             <field name="total_cost"/>-->
+<!--                        </group>-->
+<!--                    </page>-->
+                    </xpath>
+            </field>
+        </record>
+
+
+
+        <record id="view_sale_order_mrp_search" model="ir.ui.view">
+            <field name="name">mrp.production  form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="sale_order_id"/>
+                    <field name="delivery_date"/>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

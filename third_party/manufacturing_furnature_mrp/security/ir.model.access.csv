@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+mrp_package_line_id,mrp_package_line_id,model_mrp_package_line,,1,1,1,1
+mrp_package_id,mrp_package_id,model_mrp_package,,1,1,1,1

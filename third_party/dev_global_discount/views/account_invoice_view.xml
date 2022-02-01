@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2015 DevIntelle Consulting Service Pvt.Ltd (<http://www.devintellecs.com>).
+
+For Module Support : devintelle@gmail.com  or Skype : devintelle 
+ -->
+<odoo>
+    <record id="dev_account_invoice_discount_inherit_form" model="ir.ui.view">
+         <field name="name">dev.account.invoice.discount.inheri.form</field>
+         <field name="model">account.invoice</field>
+         <field name="inherit_id" ref="account.invoice_form"/>
+         <field name="arch" type="xml">
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="apply_discount" attrs="{'readonly':[('state','!=','draft')]}"/>
+            </xpath>
+            <xpath expr="//notebook//page//group" position="replace">
+                <group class="oe_subtotal_footer oe_right">
+                    <field name="amount_untaxed"/>
+                    
+                    <field name="discount_account_id" widget="selection" attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}" />
+					
+					<field name="discount_type"  attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}"/>
+					
+					<field name="sale_discount"  attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}"/>
+					
+					<field name="disc_amount" readonly="1" widget='monetary' options="{'currency_field': 'currency_id'}" attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}"	/>
+					
+                    <field name="amount_tax"/>
+                    <field name="amount_total" class="oe_subtotal_footer_separator"/>
+                    <field name="payments_widget" colspan="2" nolabel="1" widget="payment"/>
+                    <field name="residual" class="oe_subtotal_footer_separator" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <field name="reconciled" invisible="1"/>
+                    <field name="outstanding_credits_debits_widget" colspan="2" nolabel="1" widget="payment" attrs="{'invisible': [('state', 'not in', 'open')]}"/>
+                </group>
+                            
+            </xpath>
+         </field>
+    </record>
+    
+    <record id="dev_supplier_account_invoice_discount_inherit_form" model="ir.ui.view">
+         <field name="name">dev.supplier.account.invoice.discount.inheri.form</field>
+         <field name="model">account.invoice</field>
+         <field name="inherit_id" ref="account.invoice_supplier_form"/>
+         <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_due']" position="after">
+                <field name="apply_discount" attrs="{'readonly':[('state','!=','draft')]}"/>
+            </xpath>
+            <xpath expr="//notebook//page//group" position="replace">
+                <group class="oe_subtotal_footer oe_right">
+                    <field name="amount_untaxed"/>
+                    
+                    <field name="discount_account_id" widget="selection" attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}" />
+					
+					<field name="discount_type"  attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}"/>
+					
+					<field name="sale_discount" string="Discount in PO"  attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}"/>
+					
+					<field name="disc_amount" readonly="1"  widget='monetary' options="{'currency_field': 'currency_id'}" attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}"	/>
+					
+                    <field name="amount_tax"/>
+                    <field name="amount_total" class="oe_subtotal_footer_separator"/>
+                    <field name="payments_widget" colspan="2" nolabel="1" widget="payment"/>
+                    <field name="residual" class="oe_subtotal_footer_separator" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <field name="reconciled" invisible="1"/>
+                    <field name="outstanding_credits_debits_widget" colspan="2" nolabel="1" widget="payment" attrs="{'invisible': [('state', 'not in', 'open')]}"/>
+                </group>
+                            
+            </xpath>
+         </field>
+    </record>
+</odoo>

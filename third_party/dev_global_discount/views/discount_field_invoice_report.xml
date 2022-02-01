@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2015 DevIntelle Consulting Service Pvt.Ltd (<http://www.devintellecs.com>).
+
+For Module Support : devintelle@gmail.com  or Skype : devintelle 
+ -->
+<odoo>
+	<template id="discount_field_invoice_report_id" inherit_id="account.report_invoice_document">  
+	<xpath expr="//div[@id='total']/div/table/tr" position="after">
+	        <t t-if="o.apply_discount">
+		        <tr>
+		            <td><strong>Discount</strong></td>
+		            <td class="text-right">
+			            <span t-esc="o.amount_untaxed - o.disc_amount"
+			                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+			               
+			        </td>
+		        </tr>
+		        <tr>
+		            <td><strong>After Discount</strong></td>
+		            <td class="text-right">
+			            <span t-esc="o.disc_amount"
+			                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+			               
+			        </td>
+		        </tr>
+            </t>
+	</xpath>	
+	</template>
+</odoo>
+

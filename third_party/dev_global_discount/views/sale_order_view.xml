@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2015 DevIntelle Consulting Service Pvt.Ltd (<http://www.devintellecs.com>).
+
+For Module Support : devintelle@gmail.com  or Skype : devintelle 
+ -->
+<odoo>
+    <record id="dev_sale_order_discount_inherit_form" model="ir.ui.view">
+         <field name="name">dev.sale.order.discount.inheri.form</field>
+         <field name="model">sale.order</field>
+         <field name="inherit_id" ref="sale.view_order_form"/>
+         <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="apply_discount"/>
+            </xpath>
+            <xpath expr="//group[@name='sale_total']" position="replace">
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                    <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="discount_account_id" widget="selection" attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)],'required':[('apply_discount','=',True)]}"/>
+                    <field name="discount_type"  attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}"/>
+					<field name="sale_discount" attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}"/>
+					
+					<field name="disc_amount" widget='monetary' options="{'currency_field': 'currency_id'}" attrs="{'readonly':[('state','!=','draft')],'invisible':[('apply_discount','=',False)]}" readonly="1"	/>
+                    <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                        <label for="amount_total"/>
+                    </div>
+                    <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                </group>
+            </xpath>
+         </field>
+    </record>
+</odoo>

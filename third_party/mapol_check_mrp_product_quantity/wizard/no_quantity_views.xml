@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_no_quantity" model="ir.ui.view">
+        <field name="name">no.quantity.view.form</field>
+        <field name="model">no.quantity</field>
+        <field name="arch" type="xml">
+            <form string="BOM Quantity status">
+                <group>
+                    <h3>
+                        <i style="color:red;">No Bill of Material</i>.Kindly purchase products before manufacturing it.
+                    </h3>
+                </group>
+                <footer>
+                    <button name="availability_info" string="_Done" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+	
+         <record id="mrp_production_form_view_plan_inherit" model="ir.ui.view">
+            <field name="name">mrp.production.form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+<!--                <xpath expr="/form/header/button[@name='action_assign']" position="before">-->
+<!--          			<button name="create_purchase_request"-->
+<!--              			string="Create Purchase Request" invisible="1" state="D" type="object" class="oe_highlight"/>-->
+<!--          		</xpath> -->
+          		<xpath expr="/form/sheet/notebook/page[3]" position="before">
+          			<page string="Machine Allocation Planning" attrs="{'invisible': ['|', ('availability', 'not in', ('assigned', 'none')), ('is_locked', '=', False)]}">
+                        <group>
+                            <group>
+                                <field name="machine_id" attrs="{'invisible': ['|', ('availability', 'not in', ('assigned', 'none')), ('is_locked', '=', False)],'readonly': [('state', 'in', ('progress', 'done'))]}"/>
+                                <field name="total_hours" attrs="{'invisible': ['|', ('availability', 'not in', ('assigned', 'none')), ('is_locked', '=', False)],'readonly': [('state', 'in', ('progress', 'done'))]}"/>
+                            </group>
+                        </group>
+                    </page>
+          		</xpath> 
+            </field>
+        </record>
+
+          
+    </data>
+</odoo>

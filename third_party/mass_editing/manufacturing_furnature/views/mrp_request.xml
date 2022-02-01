@@ -1,0 +1,95 @@
+<odoo>
+    <data>
+        <record id="product_production_request_action" model="ir.actions.act_window">
+            <field name="name">Manufacturing Request</field>
+            <field name="res_model">mrp.production.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="product_production_request_form" model="ir.ui.view">
+            <field name="name">mrp Production request Form</field>
+            <field name="model">mrp.production.request</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button  name="send_to_mrp"  string="Confirm Manufacturing" type="object" states="draft" class="btn btn-success"/>
+                        <button name="create_purchase_request" string="Send Purchase Request"  states="Confirmed" class="btn btn-warning" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,Confirmed,bom"/>
+                    </header>
+                    <sheet>
+                        <group colspan="12">
+                            <group cols="4">
+                                <field name="product_id"/>
+                                <field name="quantity_qty"/>
+                                <field name="product_uom_id"/>
+                            </group>
+                            <group cols="4">
+                                <field name="delivery_date"/>
+                                <field name="origin"/>
+                            </group>
+                            <group>
+                                <field name="bom_id"/>
+                                <field name="sale_order_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Component">
+                                <field name="bom_line_ids" readonly="1">
+                                    <tree>
+                                        <field name="product_id"/>
+                                        <field name="product_qty"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_production_request_tree" model="ir.ui.view">
+            <field name="name">mrp Production request Tree</field>
+            <field name="model">mrp.production.request</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tree MRP">
+                    <field name="product_id"/>
+                    <field name="quantity_qty"/>
+                    <field name="bom_id"/>
+                    <field name="delivery_date"/>
+                    <field name="origin"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+
+         <record id="product_production_request_search" model="ir.ui.view">
+             <field name="name">mrp Production request Tree</field>
+             <field name="model">mrp.production.request</field>
+             <field name="type">search</field>
+             <field name="priority">15</field>
+             <field name="arch" type="xml">
+                 <search string="Search MRP">
+                     <field name="product_id"/>
+                     <filter string="MO for next 15 days" name="this_month_mo"
+                            domain="[('delivery_date', '&gt;=', context_today().strftime('%Y-%m-%d')),('delivery_date', '&lt;=', (context_today() + datetime.timedelta(days=15)).strftime('%Y-%m-%d'))]"/>
+                 </search>
+            </field>
+        </record>
+
+        <menuitem id="manufacturing_request_id" action="product_production_request_action" name = "Manufacturing Request" parent="mrp.menu_mrp_root" sequence="5"/>
+
+    </data>
+</odoo>

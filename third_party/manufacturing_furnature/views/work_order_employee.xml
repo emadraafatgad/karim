@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="mrp_workorder_employee_inherit" model="ir.ui.view">
+             <field name="name">Work Order inherit</field>
+             <field name="model">mrp.workorder</field>
+             <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+             <field name="arch" type="xml">
+                 <xpath expr="//group/group" position="after">
+                        <group>
+                            <field name="color_id"/>
+                            <field name="worker_id"/>
+                            <field name="worker_wage"/>
+                        </group>
+                </xpath>
+             </field>
+        </record>
+        <record id="mrp_workorder_employee_inherit_tree" model="ir.ui.view">
+             <field name="name">Work Order inherit tree</field>
+             <field name="model">mrp.workorder</field>
+             <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_view_inherit"/>
+             <field name="arch" type="xml">
+                 <xpath expr="//field[@name='workcenter_id']" position="after">
+                     <field name="worker_id"/>
+                </xpath>
+             </field>
+        </record>
+
+
+    </data>
+</odoo>

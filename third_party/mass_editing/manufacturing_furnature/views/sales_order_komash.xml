@@ -1,0 +1,176 @@
+<odoo>
+    <data>
+
+
+         <record id="product_component_name_action" model="ir.actions.act_window">
+            <field name="name">component name</field>
+            <field name="res_model">component.name</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.ui.view" id="product_component_name_form">
+            <field name="name">product component list</field>
+            <field name="model">component.name</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group colspan="4">
+                                <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="product_component_name_tree">
+            <field name="name">product component list</field>
+            <field name="model">component.name</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+         <record id="product_component_list_action" model="ir.actions.act_window">
+            <field name="name">product component list </field>
+            <field name="res_model">product.component.list</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+        <record model="ir.ui.view" id="product_component_list_form">
+            <field name="name">product component list</field>
+            <field name="model">product.component.list</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group colspan="4">
+                            <group col="2">
+                                <field name="component_id"/>
+                                <field name="quantity"/>
+<!--                                <field name="external_component"/>-->
+<!--                                <field name="external_quantity"/>-->
+                                <field name="internal_component"/>
+                                <field name="internal_quantity"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_component_list_tree">
+            <field name="name">product component list</field>
+            <field name="model">product.component.list</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Conponent" >
+                    <field name="component_id"/>
+                    <field name="quantity"/>
+<!--                    <field name="external_component"/>-->
+<!--                    <field name="external_quantity"/>-->
+                    <field name="internal_component"/>
+                    <field name="internal_quantity"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_component_list_filter" model="ir.ui.view">
+            <field name="name">product component list search</field>
+            <field name="model">product.component.list</field>
+            <field name="priority">15</field>
+            <field name="arch" type="xml">
+                <search string="Search Product">
+                    <field name="component_id"/>
+<!--                    <field name="external_component"/>-->
+                    <field name="internal_component"/>
+                </search>
+            </field>
+        </record>
+
+
+
+        <record id="product_component_line_action" model="ir.actions.act_window">
+            <field name="name">product component line </field>
+            <field name="res_model">sale.order.component.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+        <record model="ir.ui.view" id="product_component_line_form">
+            <field name="name">product component line</field>
+            <field name="model">sale.order.component.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group colspan="4">
+                            <group col="2">
+                                <field name="product_id"/>
+                            </group>
+                        </group>
+                            <notebook>
+                                <page string="Component">
+                                    <button  name="add_list_of_records"  string="List Component" type="object" class="btn btn-warning"/>
+                                    <field name="component_list_ids">
+                                        <tree string="Conponent" editable="bottom">
+                                            <field name="component_id"/>
+                                            <field name="quantity"/>
+<!--                                            <field name="external_component"/>-->
+<!--                                            <field name="external_quantity"/>-->
+                                            <field name="internal_component"/>
+                                            <field name="internal_quantity"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_component_line_tree">
+            <field name="name">product component line</field>
+            <field name="model">sale.order.component.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Stages" >
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_component_line_filter" model="ir.ui.view">
+            <field name="name">product component line search</field>
+            <field name="model">sale.order.component.line</field>
+            <field name="priority">15</field>
+            <field name="arch" type="xml">
+                <search string="Search Component">
+                    <field name="product_id"/>
+                </search>
+            </field>
+        </record>
+
+
+<!--        -->
+<!--        <menuitem id="oeh_medical_stages_menu"  name = "Stages" parent="oeh_medical_config_menu" sequence="5"/>-->
+<!--        <menuitem id="oeh_appointment_stages_line_menu"  action="oeh_appointment_stages_action" name = "appointment stages" parent="oeh_medical_stages_menu" sequence="5"/>-->
+<!--        <menuitem id="oeh_serviice_stages_line_menu"  action="oeh_service_stages_action" name = "Sessions Stages" parent="oeh_medical_stages_menu" sequence="5"/>-->
+
+
+    </data>
+</odoo>

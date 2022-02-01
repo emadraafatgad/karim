@@ -1,0 +1,134 @@
+<odoo>
+    <data>
+
+         <record id="direct_labour_cost_action" model="ir.actions.act_window">
+            <field name="name">Direct Labor Cost </field>
+            <field name="res_model">direct.labour.cost</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+        <record model="ir.ui.view" id="direct_labour_cost_form">
+            <field name="name">Direct Labor Cost</field>
+            <field name="model">direct.labour.cost</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group colspan="4">
+                            <group col="2">
+                                <field name="operation_id"/>
+                                <field name="employee_id"/>
+                                <field name="labour_cost"/>
+                                <field name="product_id" invisible="1"/>
+                                <field name="unit_cost" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="direct_labour_cost_tree">
+            <field name="name">direct.labour.cost</field>
+            <field name="model">direct.labour.cost</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="labour Cost" >
+                    <field name="operation_id"/>
+                    <field name="employee_id"/>
+                    <field name="labour_cost"/>
+                    <field name="product_id" invisible="1"/>
+                    <field name="unit_cost" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+    <record id="view_bom_labour_cost_form" model="ir.ui.view">
+        <field name="name">mrp.bom.labour.cost.form</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Direct Labour Cost">
+                    <field name="direct_labour_cost_ids">
+                        <tree string="Direct Labour Cost" editable="bottom">
+                            <field name="operation_id"/>
+                            <field name="labour_cost"/>
+                            <field name="product_id" invisible="1"/>
+                            <field name="unit_cost" invisible="1"/>
+                            <field name="employee_id" invisible="1"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right">
+                         <field name="total_cost" invisible="1"/>
+                    </group>
+                </page>
+             </xpath>
+        </field>
+    </record>
+
+        <record id="view_labour_cost_mrp_form" model="ir.ui.view">
+        <field name="name">mrp.production  form</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Direct Labour Cost" invisible="1">
+                    <field name="direct_labour_cost_ids">
+                        <tree string="Direct Labour Cost" editable="bottom">
+                                <field name="operation_id"/>
+                                <field name="employee_id"/>
+                                <field name="labour_cost"/>
+                                <field name="product_id" invisible="1"/>
+                                <field name="unit_cost" invisible="1"/>
+                        </tree>
+                    </field>
+                    <group class="oe_subtotal_footer oe_right">
+                         <field name="total_cost" invisible="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+         <record id="operation_labour_name_action" model="ir.actions.act_window">
+            <field name="name">operation name</field>
+            <field name="res_model">operation.name</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.ui.view" id="operation_labour_name_form">
+            <field name="name">operation list</field>
+            <field name="model">operation.name</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group colspan="4">
+                                <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="operation_labour_name_tree">
+            <field name="name">product component list</field>
+            <field name="model">operation.name</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

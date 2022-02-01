@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+          <!-- BOM quantity check Form View -->
+        <record id='view_bom_quantity_check_form' model='ir.ui.view'>
+			<field name="name">bom.quantity.check.form</field>
+			<field name="model">bom.quantity.check</field>
+			<field name="arch" type="xml">
+				<form string="BOM Check">
+					<header>
+						<button name="check_bom_status" string="Check availability"  attrs="{'invisible': ['|',('is_check_button', '=', False),('state', '!=', 'draft')]}" type="object"
+							class="oe_highlight"/>
+						<button name="move_done" string="Mark as Done" attrs="{'invisible': [('state', 'in', ['done','draft'])]}" type="object"/>
+						<button name="create_purchase_request" string="Create Purchase Request"  attrs="{'invisible': [('state', 'not in', ['deficient','partially_available'])]}" type="object"
+							class="oe_highlight"/>
+						<button name="create_manufacture_order" string="Create Manufacture Order"  attrs="{'invisible': [('state', '!=', 'available')]}" type="object"
+							class="oe_highlight"/>
+						<field name="state" widget="statusbar"
+							statusbar_visible="draft,available,deficient"
+							statusbar_colors='{"deficient":"red"}' />
+					</header> 
+					<sheet>
+						<h1>
+							<field name="name" class="oe_inline" readonly="1"/>
+						</h1>
+						<group>
+							<group>
+								<field name="product_id" attrs="{'readonly': [('state', '!=', 'draft')]}"  domain="[('bom_ids', '!=', False), ('bom_ids.active', '=', True), ('bom_ids.type', '=', 'normal')]"/>
+								<field name="product_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+								<field name="bom_id" attrs="{'readonly': [('state', '!=', 'draft')]}"  />
+							</group>
+							<group>
+								<field name="company_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+								<field name="user_id" readonly="1"/>
+								<field name="is_check_button" invisible="1"/>
+								<field name="picking_type_id" invisible="1"/>
+								<field name="product_uom_id" invisible="1"/> 
+							</group>
+						</group>
+						<!-- <notebook>
+	                        <page string="Components">
+	                            <field name="bom_line_ids" widget="one2many_list" context="{'default_product_id': product_id}">
+	                                <tree string="Components" editable="bottom">
+	                                    <field name="product_id" context="{'default_type': 'product'}"/>
+	                                    <field name="product_qty"/>
+	                                </tree>
+	                            </field>
+	                        </page>
+                        </notebook> -->
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		 <!--BOM quantity check Tree View -->
+        <record id='view_bom_quantity_check_tree' model='ir.ui.view'>
+			<field name="name">bom.quantity.check.tree</field>
+			<field name="model">bom.quantity.check</field>
+			<field name="arch" type="xml">
+				<tree string="BOM Check">
+					<field name="name" />
+					<field name="product_id" />
+					<field name="bom_id" />
+					<field name="product_qty" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+        <!-- Bom check Window Action -->
+		<record id='action_bom_quantity_check' model='ir.actions.act_window'>
+			<field name="name">Check BOM quantity</field>
+			<field name="res_model">bom.quantity.check</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					Click to create a new record.
+				</p>
+			</field>
+		</record>
+		
+		
+		<!--Menuitem Action -->
+		<menuitem id="menu_bom_quantity_check"
+          name="Check BOM quantity"
+          parent="mrp.menu_mrp_reporting"
+          action="action_bom_quantity_check"
+          sequence="20"/>
+          
+    </data>
+</odoo>

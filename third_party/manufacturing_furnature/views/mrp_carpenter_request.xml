@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="carpenter_request_form_view" model="ir.ui.view">
+            <field name="name">carpenter.request.form.view</field>
+            <field name="model">mrp.carpenter.request</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Information">
+                    <header>
+                        <button  name="inprogress_status"  string="In Progress" attrs="{'invisible': [('status', '!=', 'draft')]}" type="object"  class="btn btn-success"/>
+                        <button name="done_status" string="Done" attrs="{'invisible': [('status', '=', 'done')]}" class="btn btn-warning" type="object"/>
+                        <field name="status" widget="statusbar" statusbar_visible="draft,progress,done"/>
+                    </header>
+                    <sheet>
+
+                        <group>
+                            <group string="product">
+                                <field name="product_id" groups="product.group_product_variant"/>
+                                <field name="operation_id"/>
+                                <field name="worker_id"/>
+                            </group>
+                            <group string="info">
+                                <field name="customer"/>
+                                <field name="delivery_date"/>
+                                <field name="state"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="carpenter_request_search_view" model="ir.ui.view">
+            <field name="name">mrp.carpenter.request.search.view</field>
+            <field name="model">mrp.carpenter.request</field>
+            <field name="arch" type="xml">
+                <search string="Vendor">
+                    <field name="customer"/>
+                    <field name="worker_id"/>
+                    <field name="product_id"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" name="groupby_product" domain="[]"
+                                context="{'group_by': 'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="carpenter_request_tree_view" model="ir.ui.view">
+            <field name="name">mrp.carpenter.request.tree.view</field>
+            <field name="model">mrp.carpenter.request</field>
+            <field name="arch" type="xml">
+                <tree string="Information">
+                    <field name="worker_id"/>
+                    <field name="product_id" groups="product.group_product_variant"/>
+                    <field name="operation_id"/>
+                    <field name="customer"/>
+                    <field name="delivery_date"/>
+                    <field name="state"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="carpenter_request_type_action" model="ir.actions.act_window">
+            <field name="name">carpenter Plan</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.carpenter.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+        </record>
+
+        <menuitem id="mrp_carpenter_request_id" action="carpenter_request_type_action" name = "Carpenter Plan" parent="mrp.menu_mrp_root" sequence="11"/>
+
+    </data>
+</odoo>

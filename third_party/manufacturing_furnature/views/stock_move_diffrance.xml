@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="mrp_production_form_view_not_conusmed" model="ir.ui.view">
+            <field name="name">monthly.Manufacturing.form.not.consumed</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='move_raw_ids']//field[@name='quantity_done']" position="after">
+                    <field name="not_consumed" string="Not Consumed" invisible="1" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_stock_mrp_to_consume" model="ir.ui.view">
+            <field name="name">stock.move.lots.form</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="mrp.view_stock_move_lots"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="to_consume"/>
+                    <field name="customer_name"/>
+<!--                    <field name="customers_name"/>-->
+                </xpath>
+            </field>
+        </record>
+        <record id="view_stock_mrp_to_line" model="ir.ui.view">
+            <field name="name">stock.move.line.form</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="customer_name"/>
+<!--                    <field name="customers_name"/>-->
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

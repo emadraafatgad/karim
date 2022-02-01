@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bom_quantity_check,mapol_check_mrp_product_quantity.bom.quantity.check,model_bom_quantity_check,mrp.group_mrp_user,1,1,1,1
+,,,,,,,
+access_bom_purchase_request_user,bom.purchase.request.user,model_bom_purchase_request,base.group_user,1,1,1,1
+access_bom_purchase_request_line_user,bom.purchase.request.line.user,model_bom_purchase_request_line,base.group_user,1,1,1,1

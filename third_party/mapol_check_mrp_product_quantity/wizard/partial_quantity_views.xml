@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_partial_quantity" model="ir.ui.view">
+        <field name="name">partial.quantity.view.form</field>
+        <field name="model">partial.quantity</field>
+        <field name="arch" type="xml">
+            <form string="BOM Quantity status">
+                <group>
+                    <h3>
+                        Some BOM product quantities are <i style="color:red;">unavailable</i>.You should proceed with the purchase order before manufacture it.
+                    </h3>
+                </group>
+                <footer>
+                    <button name="availability_info" string="_Done" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

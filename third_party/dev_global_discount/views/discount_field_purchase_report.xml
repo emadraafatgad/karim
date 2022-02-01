@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2015 DevIntelle Consulting Service Pvt.Ltd (<http://www.devintellecs.com>).
+
+For Module Support : devintelle@gmail.com  or Skype : devintelle 
+ -->
+<odoo>
+	<template id="discount_amount_on_purchase_report_id" inherit_id="purchase.report_purchaseorder_document">  
+	<xpath expr="//div[@class='row justify-content-end']//div//table[@class='table table-sm']//tr" position="after">
+	        <t t-if="o.apply_discount">
+                <tr class="border-black">
+                    <td><strong>Discount</strong></td>
+                    <td class="text-right">
+                        <span t-esc="o.amount_untaxed - o.disc_amount"
+                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                    </td>
+                </tr>
+                <tr class="border-black">
+                    <td><strong>Amount After Discount</strong></td>
+                    <td class="text-right">
+                        <span t-esc="o.disc_amount"
+                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                    </td>
+                </tr>
+            </t>
+	</xpath>	
+	</template>
+	
+	
+</odoo>
+

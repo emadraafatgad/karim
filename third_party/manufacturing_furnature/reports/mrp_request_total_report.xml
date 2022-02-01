@@ -1,0 +1,98 @@
+<odoo>
+    <data>
+        <report
+                id="action_report_mrp_total_saleorder"
+                string="Mrp Report"
+                model="mrp.production.request"
+                report_type="qweb-pdf"
+                file="manufacturing_furnature.report_mrp_total_saleorder"
+                name="manufacturing_furnature.report_mrp_total_saleorder"/>
+        <!--                    print_report_name="('Order - %s' % (object.name)) or 'Order - %s' % (object.name)"-->
+        <!--                />-->
+        <template id="report_mrp_total_saleorder">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="manufacturing_furnature.mrp_template_mrp_total_quotation"
+                       t-lang="doc.sale_order_id.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+        <template id="mrp_template_mrp_total_quotation">
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc.with_context(lang=doc.sale_order_id.partner_id.lang)"/>
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <h2 class="text-center">
+                        <span t-if="doc.sale_order_id.state not in ['draft','sent']">Manufacturing For Order #</span>
+                        <span t-field="doc.sale_order_id.name"/>
+                    </h2>
+                    <h5>
+                        <strong>Customer Details</strong>
+                    </h5>
+
+                    <div class="row mt32 mb32" id="informations">
+                        <div class="col-auto mw-100 ">
+                            <strong>Customer Name:</strong>
+                            <p class="m-0" t-field="doc.sale_order_id.partner_id.name"/>
+                        </div>
+                    </div>
+                    <div class="row mt32 mb32" id="other_informations">
+                        <div t-if="doc.sale_order_id.mrp_date"
+                             class="col-auto mw-100 mb-2">
+                            <strong>Delivery Date:</strong>
+                            <p class="m-0" t-field="doc.sale_order_id.mrp_date"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+                <h4 class="text-center">
+                    <t>
+                        <span t-field="doc.product_id"/>
+                    </t>
+                </h4>
+                <h3 class="text-center">
+                    <t>
+                        Total count <span t-field="doc.quantity_qty"/>
+                    </t>
+                </h3>
+                <br/>
+                <br/>
+                <div class="text-center">
+                    <h2>Materials Quantity</h2>
+                </div>
+                <br/>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <t t-set="colspan" t-value="5"/>
+                            <th class="text-left">Material</th>
+                            <th class="text-left">Quantity</th>
+                            <th class="text-left">Total Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody class="sale_tbody">
+                        <t t-set="count" t-value="doc.quantity_qty"/>
+
+                        <t t-foreach="materials_docs" t-as="material_line">
+                            <t t-set="total_qty" t-value="material_line[1] * count"/>
+                            <tr>
+                                <t>
+                                    <td class="text-left">
+                                        <span t-esc="material_line[0]"/>
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-esc="material_line[1]"/>
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-esc="total_qty"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+
+        </template>
+    </data>
+</odoo>

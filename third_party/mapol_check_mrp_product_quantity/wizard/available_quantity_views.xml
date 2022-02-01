@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_available_quantity" model="ir.ui.view">
+        <field name="name">available.quantity.view.form</field>
+        <field name="model">available.quantity</field>
+        <field name="arch" type="xml">
+            <form string="BOM Quantity status">
+                <group>
+                    <h3>
+                        All BOM product quantities are <i style="color:green;">available</i>.You can proceed with the order by clicking manufacturing menu.
+                    </h3>
+                </group>
+                <footer>
+                    <button name="availability_info" string="_Done" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,74 @@
+<odoo>
+    <data>
+
+         <record id="mrp_package_action" model="ir.actions.act_window">
+            <field name="name">MRP Package</field>
+            <field name="res_model">mrp.package</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.ui.view" id="mrp_package_line_form">
+            <field name="name">mrp package </field>
+            <field name="model">mrp.package</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group colspan="4">
+                            <group col="2">
+                                <field name="name"/>
+                                <field name="parent"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Package Line">
+                                <field name="package_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="quantity"/>
+                                        <field name="uom"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mrp_package_line_tree">
+            <field name="name">mrp package line tree</field>
+            <field name="model">mrp.package</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="labour Cost" >
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <menuitem id="package_type_line_id" name="Packages" action="mrp_package_action" parent="mrp.menu_view_resource_calendar_search_mrp"/>
+
+
+    <record id="mrp_product_package_form" model="ir.ui.view">
+        <field name="name">mrp.product.package.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Packages">
+                    <field name="package_ids">
+                        <tree string="Packages" editable="bottom">
+                            <field name="name"/>
+                        </tree>
+                    </field>
+                </page>
+             </xpath>
+        </field>
+    </record>
+
+    </data>
+</odoo>

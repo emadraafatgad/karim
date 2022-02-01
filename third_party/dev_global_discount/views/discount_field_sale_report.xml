@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2015 DevIntelle Consulting Service Pvt.Ltd (<http://www.devintellecs.com>).
+
+For Module Support : devintelle@gmail.com  or Skype : devintelle 
+ -->
+<odoo>
+	<template id="discount_field_report_id" inherit_id="sale.report_saleorder_document">  
+	    <xpath expr="//div[@class='page']//div[@class='clearfix']" position="replace">
+	        <div class="clearfix">
+                <div class="row" name="total">
+                    <div t-attf-class="#{'col-5' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                        <table class="table table-sm">
+                            <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                <td><strong>Subtotal</strong></td>
+                                <td class="text-right">
+                                    <span t-field="doc.amount_untaxed"/>
+                                </td>
+                            </tr>
+                            <t t-if="doc.apply_discount">
+							    <tr>
+						        	<td><strong>Discount</strong></td>
+							        <td class="text-right">
+							            <span t-esc="doc.amount_untaxed - doc.disc_amount"
+							                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+							        </td>
+						        </tr>
+						        <tr>
+						        	<td><strong>Amount After Discount</strong></td>
+							        <td class="text-right">
+							            <span t-esc="doc.disc_amount"
+							                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+							        </td>
+						        </tr>
+						    </t>
+                            <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
+                                <tr style="border-bottom:1px solid #dddddd;">
+                                    <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
+                                        <td>
+                                            <span t-esc="amount_by_group[0]"/>
+                                            <span>&amp;nbsp;<span>on</span>&amp;nbsp;<t t-esc="amount_by_group[2]" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/></span>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="amount_by_group[1]"
+                                                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                        </td>
+                                    </t>
+                                    <t t-else ="">
+                                        <td>
+                                            <span t-esc="amount_by_group[0]"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="amount_by_group[1]"
+                                                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                            <tr class="border-black">
+                                <td><strong>Total</strong></td>
+                                <td class="text-right">
+                                    <span t-field="doc.amount_total"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+	    </xpath>	
+	</template>
+</odoo>
+

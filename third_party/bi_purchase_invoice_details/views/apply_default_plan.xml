@@ -1,0 +1,35 @@
+<odoo>
+    <data>
+
+        <record id="apply_default_plan_form" model="ir.ui.view">
+            <field name="name">get.purchase.invoice</field>
+            <field name="model">get.purchase.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Apply Plan">
+                    <group>
+                        <field name="response_data" readonly="1" nolabel="1"/>
+                    </group>
+                    <footer>
+                        <button string="Apply" class="btn-primary" type="object"
+                                    name="get_all_invoices_purchase"/>
+                        <button string="NO" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_apply_default_plan_wizard" model="ir.actions.act_window">
+            <field name="name">Get Invoice Data</field>
+            <field name="res_model">get.purchase.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="apply_default_plan_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_classera_apply_default_plan" action="action_apply_default_plan_wizard" name="Get Invoice Data"
+              parent="purchase.menu_procurement_management"  sequence="35"/>
+
+
+    </data>
+</odoo>

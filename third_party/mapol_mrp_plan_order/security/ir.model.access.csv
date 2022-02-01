@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_machine_allocation_user,machine.allocation,mapol_mrp_plan_order.model_machine_allocation,mrp.group_mrp_user,1,1,1,1

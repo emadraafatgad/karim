@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+    <record model="ir.module.category" id="bom_purchase_request_category">
+        <field name="name">BOM Purchase Request</field>
+        <field name="parent_id" ref="base.module_category_purchase_management"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="group_bom_purchase_request_user" model="res.groups">
+        <field name="name">BOM Request User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="bom_purchase_request_category"/>
+    </record>
+
+    <record id="group_bom_purchase_request_manager" model="res.groups">
+        <field name="name">BOM Request Manager</field>
+        <field name="implied_ids" eval="[(4, ref('mapol_check_mrp_product_quantity.group_bom_purchase_request_user'))]"/>
+        <field name="category_id" ref="bom_purchase_request_category"/>
+    </record>
+
+</data>
+</odoo>

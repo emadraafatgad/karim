@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+     <record id="view_mrp_bom_type_form" model="ir.ui.view">
+        <field name="name">mrp.bom.type.form</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="is_standard"/>
+                <field name="is_export"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                  <page string="Component komash">
+                    <field name="product_component_list_ids">
+                        <tree string="Component" editable="bottom">
+                            <field name="component_id" />
+                            <field name="is_count"/>
+                             <field name="category_id"/>
+                            <field name="quantity" attrs="{'readonly':[('is_count','!=',True)]}"/>
+                            <field name="internal_component" />
+                            <field name="internal_quantity"/>
+                            <field name="operation_id" groups="mrp.group_mrp_routings" domain="[('routing_id', '=', parent.routing_id)]" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                        </tree>
+                    </field>
+                </page>
+             </xpath>
+        </field>
+     </record>
+
+     <record id="tree_mrp_bom_inherit" model="ir.ui.view">
+         <field name="name">mrp.bom..tree.inherit</field>
+         <field name="model">mrp.bom</field>
+         <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
+         <field name="arch" type="xml">
+             <xpath expr="//field[@name='code']" position="after">
+                <field name="is_standard"/>
+                 <field name="is_export"/>
+            </xpath>
+         </field>
+     </record>
+
+
+    </data>
+</odoo>

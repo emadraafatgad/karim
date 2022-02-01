@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+
+        <record id="view_product_komash_form" model="ir.ui.view">
+        <field name="name">product.compontent.list.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='options']" position="after">
+                <div>
+                    <field name="is_komash"/>
+                    <label for="is_komash"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="mrp_product_type" />
+                <field name="package_size" attrs="{'invisible':[('sale_ok','=',False)]}"/>
+            </xpath>
+        </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<data>
+        <record id="product_mrp_packaging_action" model="ir.actions.act_window">
+            <field name="name">Packaging</field>
+            <field name="res_model">mrp.packaging</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="product_mrp_packaging_form" model="ir.ui.view">
+            <field name="name">mrp Production request Form</field>
+            <field name="model">mrp.packaging</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group colspan="12">
+                            <group cols="4">
+                                <field name="package_size"/>
+                                <field name="product_id"/>
+                            </group>
+                            <group cols="4">
+                                <field name="operation_id"/>
+                                <field name="total_cost"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Materials List">
+                                <field name="packaging_line_ids" >
+                                    <tree  string="Materials" editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="qty"/>
+                                        <field name="uom_id"/>
+                                        <field name="unit_cost"/>
+                                        <field name="cost"/>
+                                        <field name="currency_id"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="product_id"/>
+                                            <field name="qty"/>
+                                            <field name="uom_id"/>
+                                        </group>
+                                        <group>
+                                            <field name="cost"/>
+                                            <field name="currency_id"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_mrp_packaging_tree" model="ir.ui.view">
+            <field name="name">mrp Production request Tree</field>
+            <field name="model">mrp.packaging</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tree MRP">
+                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="total_cost"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+
+         <record id="product_mrp_packaging_search" model="ir.ui.view">
+             <field name="name">mrp Production request Tree</field>
+             <field name="model">mrp.packaging</field>
+             <field name="type">search</field>
+             <field name="priority">15</field>
+             <field name="arch" type="xml">
+                 <search string="Search MRP">
+                     <field name="name"/>
+                     <field name="product_id"/>
+                     <filter string="Product Packaging" name="prodcut_packaging"
+                            domain="[]"/>
+                     <filter name="group_by_product" string="Finished Product Packaging" domain="[]" context="{'group_by': 'product_id'}"/>
+                 </search>
+            </field>
+        </record>
+        <menuitem id="mrp_packaging_id" action="product_mrp_packaging_action" name = "Finished Product Packaging" parent="mrp.menu_mrp_root" sequence="10"/>
+
+</data>

@@ -1,0 +1,418 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* automatic_backup
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-07 03:35+0000\n"
+"PO-Revision-Date: 2018-06-07 11:51+0800\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.0.8\n"
+"Last-Translator: \n"
+"Language: zh_TW\n"
+
+#. module: automatic_backup
+#: model:ir.ui.view,arch_db:automatic_backup.automatic_backup_rule_form_view
+msgid ""
+"<b attrs=\"{'invisible': [('backup_destination', 'not in', ['dropbox', "
+"'google_drive'])]}\">Please visit this URL for the Authentication Code<br/></"
+"b>"
+msgstr ""
+"<b attrs=\"{'invisible': [('backup_destination', 'not in', ['dropbox', "
+"'google_drive'])]}\">請訪問此 URL 進行身份驗證代碼<br></b>"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_s3_access_key_secret
+msgid "Acces key secret"
+msgstr "存取金鑰"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_s3_access_key
+msgid "Access key"
+msgstr "存取金鑰"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_channel_ids
+msgid "Add Channels"
+msgstr "新增群"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_partner_ids
+msgid "Add Followers"
+msgstr "添加關注者"
+
+#. module: automatic_backup
+#: selection:ir.cron,backup_destination:0
+msgid "Amazon S3"
+msgstr "Amazon S3"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_dropbox_authorization_code
+msgid "Authorization Code"
+msgstr "授權碼是空的。"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_dropbox_authorize_url
+msgid "Authorize URL"
+msgstr "授權網址"
+
+#. module: automatic_backup
+#: model:ir.actions.act_window,name:automatic_backup.automatic_backup_action
+#: model:ir.model,name:automatic_backup.model_automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_automatic_backup_id
+#: model:ir.ui.menu,name:automatic_backup.automatic_backup_menu
+#: model:ir.ui.view,arch_db:automatic_backup.automatic_backup_form_view
+msgid "Automatic Backup"
+msgstr "自動備份"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_automatic_backup_rule_ids
+#: model:ir.ui.view,arch_db:automatic_backup.automatic_backup_rule_form_view
+msgid "Automatic Backup Rule"
+msgstr "授權自動備份規則"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:473
+#: code:addons/automatic_backup/models/automatic_backup.py:483
+#: code:addons/automatic_backup/models/automatic_backup.py:491
+#, python-format
+msgid "Automatic backup failed!"
+msgstr "自動備份失敗!"
+
+#. module: automatic_backup
+#: model:ir.ui.view,arch_db:automatic_backup.automatic_backup_form_view
+#: model:ir.ui.view,arch_db:automatic_backup.automatic_backup_rule_form_view
+msgid "Backup"
+msgstr "備份"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:414
+#: code:addons/automatic_backup/models/automatic_backup.py:440
+#: code:addons/automatic_backup/models/automatic_backup.py:475
+#, python-format
+msgid "Backup Destination: "
+msgstr "備份目標："
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_backup_destination
+msgid "Backup Destionation"
+msgstr "備份位置："
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_dropbox_path
+msgid "Backup Path"
+msgstr "備份路徑"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_backup_type
+msgid "Backup Type"
+msgstr "備份類型"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:413
+#: code:addons/automatic_backup/models/automatic_backup.py:439
+#: code:addons/automatic_backup/models/automatic_backup.py:474
+#, python-format
+msgid "Backup Type: "
+msgstr "備份類型："
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:412
+#: code:addons/automatic_backup/models/automatic_backup.py:423
+#: code:addons/automatic_backup/models/automatic_backup.py:431
+#, python-format
+msgid "Backup created successfully!"
+msgstr "自動備份創建成功！"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_s3_bucket_name
+msgid "Bucket name"
+msgstr "儲存位置名稱"
+
+#. module: automatic_backup
+#: model:ir.ui.view,arch_db:automatic_backup.automatic_backup_form_view
+#: model:ir.ui.view,arch_db:automatic_backup.automatic_backup_rule_form_view
+msgid "Check Settings"
+msgstr "檢查設置"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_create_uid
+msgid "Created by"
+msgstr "創建人"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_create_date
+msgid "Created on"
+msgstr "創建時間"
+
+#. module: automatic_backup
+#: selection:ir.cron,backup_type:0
+msgid "Database Only"
+msgstr "僅資料庫備份"
+
+#. module: automatic_backup
+#: selection:ir.cron,backup_type:0
+msgid "Database and Filestore"
+msgstr "資料庫及附件備份"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_delete_old_backups
+msgid "Delete Old Backups"
+msgstr "刪除過舊的備份檔案"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_delete_days
+msgid "Delete backups older than [days]"
+msgstr "大於多少天，刪除過舊的備份檔案"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_display_name
+msgid "Display Name"
+msgstr "顯示名稱"
+
+#. module: automatic_backup
+#: selection:ir.cron,backup_destination:0
+msgid "Dropbox"
+msgstr "Dropbox"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_dropbox_access_token
+msgid "Dropbox Access Token"
+msgstr "Dropbox金鑰"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_dropbox_authorize_url_rel
+msgid "Dropbox Authorize Url Rel"
+msgstr "Dropbox授權網址"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_dropbox_flow
+msgid "Dropbox Flow"
+msgstr "Dropbox Flow"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_dropbox_user_id
+msgid "Dropbox User"
+msgstr "Dropbox 使用者"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_template_id
+msgid "Email Template"
+msgstr "電子郵件範本"
+
+#. module: automatic_backup
+#: model:ir.ui.view,arch_db:automatic_backup.automatic_backup_form_view
+msgid "Emails separated by comma"
+msgstr "以逗號分隔的電子郵件清單"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:481
+#, python-format
+msgid "Exception: "
+msgstr "例外："
+
+#. module: automatic_backup
+#: selection:ir.cron,backup_destination:0
+msgid "FTP"
+msgstr "FTP"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:419
+#: code:addons/automatic_backup/models/automatic_backup.py:445
+#: code:addons/automatic_backup/models/automatic_backup.py:479
+#, python-format
+msgid "FTP Adress: "
+msgstr "FTP地址："
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:420
+#: code:addons/automatic_backup/models/automatic_backup.py:446
+#: code:addons/automatic_backup/models/automatic_backup.py:480
+#, python-format
+msgid "FTP Path: "
+msgstr "FTP路徑："
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_failed_backup_notify_emails
+msgid "Failed Backup Notification"
+msgstr "失敗的備份通知"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_filename
+msgid "Filename"
+msgstr "文件名"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:421
+#: code:addons/automatic_backup/models/automatic_backup.py:447
+#, python-format
+msgid "Filename: "
+msgstr "檔案名:"
+
+#. module: automatic_backup
+#: selection:ir.cron,backup_destination:0
+msgid "Folder"
+msgstr "資料夾"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_folder_path
+msgid "Folder Path"
+msgstr "資料夾路徑"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:417
+#: code:addons/automatic_backup/models/automatic_backup.py:443
+#: code:addons/automatic_backup/models/automatic_backup.py:477
+#, python-format
+msgid "Folder Path: "
+msgstr "資料夾路徑："
+
+#. module: automatic_backup
+#: selection:ir.cron,backup_destination:0
+msgid "Google Drive"
+msgstr "Google雲端硬盤"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_id
+msgid "ID"
+msgstr "ID"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup___last_update
+msgid "Last Modified on"
+msgstr "最後修改日"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_write_uid
+msgid "Last Updated by"
+msgstr "最後更新人"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_write_date
+msgid "Last Updated on"
+msgstr "最後更新時間"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_ftp_login
+msgid "Login"
+msgstr "登入"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:80
+#, python-format
+msgid "Minimal Delete Days = 1"
+msgstr "最小刪除天數= 1"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:156
+#: code:addons/automatic_backup/models/automatic_backup.py:195
+#, python-format
+msgid ""
+"Missing required PyDrive python package\n"
+"https://pypi.python.org/pypi/PyDrive"
+msgstr ""
+"缺少必需的PyDrive python軟件包，請參考：\n"
+"https://pypi.python.org/pypi/PyDrive"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:207
+#, python-format
+msgid ""
+"Missing required boto3 python package\n"
+"https://pypi.python.org/pypi/boto3"
+msgstr ""
+"缺少必要的boto3 python軟件包，請參考：\n"
+"https://pypi.python.org/pypi/boto3"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:141
+#: code:addons/automatic_backup/models/automatic_backup.py:181
+#, python-format
+msgid ""
+"Missing required dropbox python package\n"
+"https://pypi.python.org/pypi/dropbox"
+msgstr ""
+"缺少必需的dropbox python軟件包，請參考：\n"
+"https://pypi.python.org/pypi/dropbox"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:136
+#: code:addons/automatic_backup/models/automatic_backup.py:176
+#, python-format
+msgid ""
+"Missing required pysftp python package\n"
+"https://pypi.python.org/pypi/pysftp"
+msgstr ""
+"缺少必需的pysftp python軟件包，請參考：\n"
+"https://pypi.python.org/pypi/pysftp"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_name
+msgid "Name"
+msgstr "名字"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:438
+#: code:addons/automatic_backup/models/automatic_backup.py:449
+#: code:addons/automatic_backup/models/automatic_backup.py:457
+#, python-format
+msgid "Old backup deleted!"
+msgstr "過舊備份資料已刪除"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_ftp_password
+msgid "Password"
+msgstr "密碼"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_ftp_path
+msgid "Path"
+msgstr "路徑"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_ftp_port
+msgid "Port"
+msgstr "端口"
+
+#. module: automatic_backup
+#: selection:ir.cron,backup_destination:0
+msgid "SFTP"
+msgstr "SFTP"
+
+#. module: automatic_backup
+#: model:ir.model,name:automatic_backup.model_ir_cron
+msgid "Scheduled Actions"
+msgstr "預定行動"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:408
+#, python-format
+msgid "Settings are correct."
+msgstr "設置是正確的。"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_automatic_backup_successful_backup_notify_emails
+msgid "Successful Backup Notification"
+msgstr "成功的備份通知"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_ftp_address
+msgid "URL"
+msgstr "網址"
+
+#. module: automatic_backup
+#: model:ir.model.fields,field_description:automatic_backup.field_ir_cron_s3_username
+msgid "Username"
+msgstr "用戶名"
+
+#. module: automatic_backup
+#: code:addons/automatic_backup/models/automatic_backup.py:468
+#, python-format
+msgid "Wrong method parameters"
+msgstr "錯誤的方法參數"
