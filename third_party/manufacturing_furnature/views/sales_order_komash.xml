@@ -183,8 +183,8 @@
                 </xpath>
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="phone"/>
-                    <field name="city_id" options="{'no_quick_create':True,'no_create_edit':True}" required="1"/>
-<!--                           attrs="{'readonly':[('state','in',('done','cancel'))]}"/>-->
+                    <field name="city_id" options="{'no_quick_create':True,'no_create_edit':True}" required="1"
+                           attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
                     <!--                <field name="date_order" string="Contract Date"/>-->
                     <field name="delivery_status"/>
                 </xpath>

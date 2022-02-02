@@ -1,0 +1,22 @@
+<odoo>
+
+    <record id="view_sale_order_invoice_statuse_h_form" model="ir.ui.view">
+        <field name="name">sale.order.invoice.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Iinvoice Info">
+                    <group>
+                        <field name="due_amount"/>
+                        <field name="invoiced_amount"/>
+                        <field name="paid_amount" />
+                        <field name="payment_status"/>
+                        <button name="get_invoice_status" type="object" class="oe_stat_button " string="get invoice data"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
