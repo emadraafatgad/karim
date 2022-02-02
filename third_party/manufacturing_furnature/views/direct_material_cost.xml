@@ -52,39 +52,54 @@
             <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//notebook" position="inside">
-                    <!--                <page string="Direct material Cost">-->
-                    <!--                    <field name="direct_material_cost_ids">-->
-                    <!--                        <tree string="Direct material Cost" editable="bottom">-->
-                    <!--                            <field name="product_id"/>-->
-                    <!--                            <field name="unit_cost"/>-->
-                    <!--                            <field name="quantity"/>-->
-                    <!--                            <field name="total_cost"/>-->
-                    <!--                        </tree>-->
-                    <!--                    </field>-->
-                    <!--                    <group class="oe_subtotal_footer oe_right">-->
-                    <!--                         <field name="total_cost"/>-->
-                    <!--                    </group>-->
-                    <!--                </page>-->
+                    <page string="Direct material Cost">
+                        <field name="direct_material_cost_ids">
+                            <tree string="Direct material Cost" editable="bottom">
+                                <field name="product_id"/>
+                                <field name="unit_cost"/>
+                                <!--                                                <field name="quantity"/>-->
+<!--                                <field name="unit_cost"/>-->
+                            </tree>
+                        </field>
+                        <!--                                        <group class="oe_subtotal_footer oe_right">-->
+                        <!--                                             <field name="total_cost"/>-->
+                        <!--                                        </group>-->
+                    </page>
                 </xpath>
             </field>
         </record>
 
-    <record id="view_direct_materal_cost_mRrp_form" model="ir.ui.view">
-        <field name="name">mrp.production form</field>
-        <field name="model">mrp.production</field>
-        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='button_plan']" position="after">
-                <button name="confirm_work_orders" attrs="{'invisible': ['|', ('check_to_done', '=', True), ('consumed_less_than_planned', '=', True)]}" string="Confirm All Orders" class="btn btn-danger" type="object"/>
-            </xpath>
-            <xpath expr="//field[@name='date_planned_start']" position="after">
-                <field name="delivery_date"/>
-            </xpath>
-<!--                <xpath expr="//notebook" position="inside">-->
-<!--                    -->
-<!--                </xpath>-->
-        </field>
-    </record>
+        <record id="view_direct_materal_cost_mRrp_form" model="ir.ui.view">
+            <field name="name">mrp.production form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_plan']" position="after">
+                    <button name="confirm_work_orders"
+                            attrs="{'invisible': ['|', ('check_to_done', '=', True), ('consumed_less_than_planned', '=', True)]}"
+                            string="Confirm All Orders" class="btn btn-danger" type="object"/>
+                </xpath>
+                <xpath expr="//field[@name='date_planned_start']" position="after">
+                    <field name="delivery_date"/>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="labour Cost">
+
+                        <field name="direct_material_cost_ids">
+                            <tree string="Direct material Cost" editable="bottom">
+                                <field name="product_id"/>
+                                <field name="unit_cost"/>
+                                <!--                                                <field name="quantity"/>-->
+<!--                                <field name="labour_cost"/>-->
+                            </tree>
+                        </field>
+                        <!--                                        <group class="oe_subtotal_footer oe_right">-->
+                        <!--                                             <field name="total_cost"/>-->
+                        <!--                                        </group>-->
+                    </page>
+                </xpath>
+            </field>
+        </record>
 
 
         <record id="view_sale_order_mrp_search" model="ir.ui.view">

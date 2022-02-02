@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="mrp_production_costing_form_view" model="ir.ui.view">
+        <field name="name">costfigures.mrp.production.form</field>
+        <field name="model">mrp.production</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <notebook>
+                <page string="Costing">
+                    <group name='Product Costing' col="4">
+                        <group string='Standard Costs'>
+
+                            <field name="cur_std_mat_cost" widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string='Labour Costs'>
+                            <field name="lab_mac_cost" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <group string='Actual Costs '>
+                            <field name="mat_cost_unit" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                    </group>
+                    <group col="4">
+                        <group string="Total Cost">
+                            <field name="total_production_cost"/>
+                        </group>
+                        <group string="Price">
+                            <field name="finished_product_price"/>
+                        </group>
+<!--                        <group string="Profit Margin">-->
+<!--                            <label for="profit_per"/>-->
+<!--                            <div>-->
+<!--                                <field name="profit_per"/>%-->
+<!--                            </div>-->
+<!--                        </group>-->
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record id="mrp_production_form_view_average_cost" model="ir.ui.view">
+        <field name="name">monthly.Manufacturing.form.average.cost</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_raw_ids']//field[@name='quantity_done']" position="after">
+                <field name="avarage_cost" string="Average Cost" invisible="0" />
+                <field name="avarage_cost_qty" string="Actual Cost" invisible="0" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

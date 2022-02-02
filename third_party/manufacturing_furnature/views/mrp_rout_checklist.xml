@@ -1,0 +1,118 @@
+<odoo>
+    <data>
+
+        <record id="product_routs_checklist_action" model="ir.actions.act_window">
+            <field name="name">Checklist Routs</field>
+            <field name="res_model">mrp.routs.checklist</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <record id="product_routs_checklist_tree" model="ir.ui.view">
+            <field name="name">Rout Checklist Tree</field>
+            <field name="model">mrp.routs.checklist</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Rout">
+                    <field name="name"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+        <record id="product_routs_checklist_form" model="ir.ui.view">
+            <field name="name">Checklist Routs Form</field>
+            <field name="model">mrp.routs.checklist</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group colspan="12">
+                            <group cols="4">
+                                <field name="name"/>
+                                <field name="product_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Rout Line">
+                                <field name="check_list_lines">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="product_routs_checklist_search" model="ir.ui.view">
+            <field name="name">mrp Routs checklist Tree</field>
+            <field name="model">mrp.routs.checklist</field>
+            <field name="type">search</field>
+            <field name="priority">15</field>
+            <field name="arch" type="xml">
+                <search string="Search MRP">
+                    <field name="product_id"/>
+                </search>
+            </field>
+        </record>
+        <menuitem id="manufacturing_routs_root" name="New Routs"
+                  parent="mrp.menu_mrp_root" sequence="5"/>
+
+        <menuitem id="manufacturing_routs_checklist_id" action="product_routs_checklist_action" name="Product Routs"
+                  parent="manufacturing_routs_root" sequence="5"/>
+
+
+        <record id="product_routs_name_action" model="ir.actions.act_window">
+            <field name="name">Routs Name</field>
+            <field name="res_model">rout.name</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <record id="product_routs_name_tree" model="ir.ui.view">
+            <field name="name">Rout Name Tree</field>
+            <field name="model">rout.name</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Rout">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_routs_name_form" model="ir.ui.view">
+            <field name="name">Routs Name Form</field>
+            <field name="model">rout.name</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group colspan="12">
+                            <group cols="4">
+                                <field name="name"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <menuitem id="manufacturing_routs_name_id" action="product_routs_name_action" name="Routs Name"
+                  parent="manufacturing_routs_root" sequence="5"/>
+    </data>
+</odoo>

@@ -30,8 +30,14 @@ class NewManufacturingRequest(models.Model):
         ('to invoice', 'To Invoice'),
         ('no', 'Nothing to Invoice')
     ], string='Invoice Status', related='sale_order_id.invoice_status', store=True, readonly=True)
+    payment_status = fields.Selection([('not', 'Not Paid'), ('partial', 'Partially Paid'), ('paid', 'Paid'), ],
+                                      track_visibility='onchange', store=True,
+                                      related='sale_order_id.payment_status')
+
     attachment = fields.Binary()
     note = fields.Text(track_visibility='onchange',readonly=True)
+    mrp_routs_ids = fields.Many2many('mrp.checklist.line', domain="[('product_id','=',product_id)]")
+    current_operation = fields.Many2one('rout.name',track_visibility='onchange')
 
     @api.multi
     def get_bom_line_ids(self):

@@ -8,7 +8,8 @@
     'version': '12.0.1.0.0',
     'category': 'manufacturing',
     'depends': [
-        'base', 'sale', 'mrp', 'purchase', 'partner_district', 'mapol_check_mrp_product_quantity','stock',
+        'base', 'sale', 'mrp', 'purchase', 'partner_district', 'mapol_check_mrp_product_quantity', 'stock',
+        'delivery_carrier_info',
     ],
     'author': 'Emad Raafat Gad',
     'website': 'https://odoo-community.org/',
@@ -24,6 +25,7 @@
         'views/bill_of_matrial_type.xml',
         'views/komash_sale_order.xml',
         'views/sales_order_komash.xml',
+        'views/mrp_rout_checklist.xml',
         'views/product_component_list.xml',
         'views/direct_labour_cost.xml',
         'views/purchase_product_available.xml',
@@ -36,6 +38,7 @@
         'views/work_order_worker.xml',
         'views/purchase_requiest_vendor.xml',
         'views/mrp_request_report.xml',
+
         'reports/mrp_request_total_report.xml',
         'reports/purchase_report.xml',
         'reports/deliveryslip.xml',

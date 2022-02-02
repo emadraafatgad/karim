@@ -89,6 +89,12 @@
                                     </tree>
                                 </field>
                             </page>
+                            <page string="Routs">
+                                <group>
+                                    <field name="current_operation"/>
+                                    <field name="mrp_routs_ids" widget="many2many_checkboxes"/>
+                                </group>
+                            </page>
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">
@@ -108,7 +114,8 @@
                 <tree string="Tree MRP">
                     <field name="name"/>
                     <field name="sale_order_id"/>
-                    <field name="invoice_status"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="payment_status"/>
                     <field name="product_id"/>
                     <field name="quantity_qty"/>
                     <field name="bom_id"/>
@@ -139,8 +146,11 @@
                             context="{'group_by': 'sale_order_id'}"/>
                     <filter string="State" name="state_id" domain="[]"
                             context="{'group_by': 'state'}"/>
-                    <filter string="Invoice Status" name="state_id" domain="[]"
-                            context="{'group_by': 'invoice_status'}"/>
+<!--                    <filter string="Invoice Status" name="state_id" domain="[]"-->
+<!--                            context="{'group_by': 'invoice_status'}"/>-->
+                    <filter string="Payment Status" name="payment_status" domain="[]"
+                            context="{'group_by': 'payment_status'}"/>
+
                 </search>
             </field>
         </record>

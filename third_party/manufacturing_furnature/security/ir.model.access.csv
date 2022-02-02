@@ -13,3 +13,6 @@ mrp_paint_price_list,mrp_paint_price_list,model_paint_price_list,,1,1,1,1
 mrp_mrp_paint_request,mrp_mrp.paint.request,model_mrp_paint_request,,1,1,1,1
 mrp_mrp_carpenter_request,mrp_mrp.carpenter.request,model_mrp_carpenter_request,,1,1,1,1
 mrp_mrp_package_size,mrp_mrp.package.size,model_package_size,,1,1,1,1
+mrp_mrp_routs_checklist,mrp_mrp_mrp.routs.checklist,model_mrp_routs_checklist,,1,1,1,1
+mrp_routs_checklist_line,mrp_mrp_mrp.routs.checklist,model_mrp_checklist_line,,1,1,1,1
+mrp_mrp_routs_name,mrp_mrp_mrp.routs.checklist,model_rout_name,,1,1,1,1

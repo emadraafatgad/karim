@@ -9,6 +9,7 @@ from . import bill_of_matrial_type
 from . import labour_cost
 from . import direct_cost
 from . import purchase_product_quantity
+from . import mro_routs_checklist
 from . import mrp_request
 from . import stock_move_diffiranec
 from . import do_produce
