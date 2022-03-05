@@ -27,7 +27,7 @@ class ProductTemplate(models.Model):
     show_current_avarage_cost = fields.Boolean(compute='_compute_show_current_avarage_cost')
     
     def _compute_show_current_avarage_cost(self):
-        module_id = self.env['ir.module.module'].search([('name', '=', 'wh_enhancement_privileges'),('state', '=', 'installed')], limit=1)
+        module_id = self.env['ir.module.module'].sudo().search([('name', '=', 'wh_enhancement_privileges'),('state', '=', 'installed')], limit=1)
         show_field = True
         if module_id:
             show_field = self.env.user.has_group('wh_enhancement_privileges.group_allow_product_cost')
