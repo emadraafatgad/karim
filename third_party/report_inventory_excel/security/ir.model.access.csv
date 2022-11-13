@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mutasi_report_user,access_mutasi_report_admin,model_mutasi_report,stock.group_stock_manager,1,0,0,0
+access_mutasi_report_beacukai,access_mutasi_report_beacukai,model_mutasi_report,report_inventory_excel.group_bea_cukai,1,0,0,0
+access_mutasi_auditlog_log,access_auditlog_log,auditlog.model_auditlog_log,report_inventory_excel.group_bea_cukai,1,0,0,0

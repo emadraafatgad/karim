@@ -49,6 +49,7 @@ class SalesOrderComponentLine(models.Model):
     sale_order_line_id = fields.Many2one('sale.order.line')
     mrp_send = fields.Boolean()
     mrp_package = fields.Boolean()
+    product_qty = fields.Float()
 
     # mrp_product_qty = fields.Float(default=1,required=True)
 
@@ -105,6 +106,14 @@ class SalesOrderKomash(models.Model):
             [('sale_order_id', '=', self.id), ('state', '!=', 'not')])
         if mrp_req:
             raise ValidationError('This order has Mrp Request Sent , please ask your manager to delete it first')
+        order_invoices = self.env['account.invoice'].sudo().search([('origin', '=', self.name)])
+        for inv in order_invoices:
+            if inv.state in ['open', 'paid']:
+                raise ValidationError(
+                    'This order has Open or Paid Invoices , please ask your manager to delete drafts or cancel it')
+            if inv.state == 'draft':
+                raise ValidationError(
+                    'This order has Draft Invoices , please ask your manager to delete drafts or cancel it')
         self.mrp_send = 'Ready'
         for variant in self.product_component_ids:
             variant.mrp_send = False
@@ -112,7 +121,7 @@ class SalesOrderKomash(models.Model):
         self.write({'state': 'sale'})
 
     delivery_status = fields.Selection([('New', 'New'), ('Partial', 'Partial'), ('Done', 'Done')],
-                                       compute='compute_delivered_qty',store=True)
+                                       compute='compute_delivered_qty', store=True)
 
     @api.depends('order_line.product_uom_qty', 'order_line.qty_delivered')
     def compute_delivered_qty(self):
@@ -136,7 +145,7 @@ class SalesOrderKomash(models.Model):
     def po_send_button(self):
         counter = 0
         for line in self.order_line:
-            if line.product_id:
+            if line.product_id and line.product_id.type == 'product':
                 counter = counter + 1
                 if line.product_id.bom_count == 0:
                     self.ensure_one()
@@ -268,6 +277,7 @@ class SalesOrderKomash(models.Model):
                     component_line_id = component_line_obj.create({
                         'sale_order_id': self.id,
                         'sale_order_line_id': rec.id,
+                        'product_qty':rec.product_uom_qty,
                         'product_id': rec.product_id.id,
                     })
                     component_line_id.add_list_of_records()
@@ -443,20 +453,21 @@ class SalesOrderKomash(models.Model):
             bom_id = self.return_bom_id_base(line)
             product_uom_qty = 0
             for order_line in self.order_line:
-                if order_line.product_id == line.product_id:
+                if order_line.product_id == line.product_id and order_line.id == line.sale_order_line_id.id:
                     product_uom_qty = order_line.product_uom_qty
             mo_production_id = self.env['mrp.production.request'].create({
                 'product_id': line.product_id.id,
                 'product_uom_id': line.product_id.uom_id.id,
                 'origin': self.partner_id.name,
                 'sale_order_id': self.id,
+                'note': line.note,
                 'quantity_qty': product_uom_qty,
                 'bom_id': bom_id.id,
                 'attachment': line.attachment,
                 'delivery_date': self.mrp_date,
                 'company_id': self.company_id.id,
             })
-
+            # mo_production_id.write({'note':})
             for paint in line.paint_ids:
                 paint.request_id = mo_production_id
             carpenter_from_labour = self.env['direct.labour.cost'].search(

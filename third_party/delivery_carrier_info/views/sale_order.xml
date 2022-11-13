@@ -6,11 +6,13 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//notebook" position="inside">
-                <page string="Iinvoice Info">
+                <page string="Invoice Info">
                     <group>
-                        <field name="due_amount"/>
                         <field name="invoiced_amount"/>
+                        <field name="due_amount"/>
+                        <field name="total_downpayment"/>
                         <field name="paid_amount" />
+                        <field name="remaining"/>
                         <field name="payment_status"/>
                         <button name="get_invoice_status" type="object" class="oe_stat_button " string="get invoice data"/>
                     </group>

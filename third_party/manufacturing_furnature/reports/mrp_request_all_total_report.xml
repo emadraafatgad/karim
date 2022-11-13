@@ -1,0 +1,86 @@
+<odoo>
+    <data>
+        <report
+                id="action_report_mrp_total_all_saleorder"
+                string="All Order Material"
+                model="mrp.production.request"
+                report_type="qweb-pdf"
+                file="manufacturing_furnature.report_mrp_all_order_materials_total_saleorder"
+                name="manufacturing_furnature.report_mrp_all_order_materials_total_saleorder"
+                print_report_name="('Order - %s' % (object.sales_order_id.name))"
+        />
+        <template id="report_mrp_all_order_materials_total_saleorder">
+            <t t-call="web.html_container">
+                <!--                <t t-foreach="docs" t-as="doc">-->
+                <t t-call="manufacturing_furnature.mrp_template_mrp_all_materials_quotation"/>
+                <!--                       t-lang="order_no.partner_id.lang"/>-->
+                <!--                </t>-->
+            </t>
+        </template>
+        <template id="mrp_template_mrp_all_materials_quotation">
+            <t t-call="web.external_layout">
+                <!--                <t t-set="doc" t-value="doc.with_context(lang=doc.sale_order_id.partner_id.lang)"/>-->
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <h2 class="text-center">
+                        <span>Materials For Order #</span>
+                        <span t-esc="order_no['name']"/>
+                        <!--                        <span t-esc="order_no['name']"/>-->
+                    </h2>
+                    <div class="row mt32 mb32" id="informations">
+                        <div class="col-auto mw-100 ">
+                            <strong>Customer Name:</strong>
+                            <p class="m-0" t-esc="order_no['partner_id']"/>
+                        </div>
+                        <div t-if="order_no"
+                             class="col-auto mw-100 mb-2">
+                            <strong>Delivery Date:</strong>
+                            <p class="m-0" t-esc="order_no['mrp_date']"/>
+                        </div>
+                    </div>
+                    <div class="row mt32 mb32" id="other_informations">
+
+                        <div class="col-auto mw-100 mb-2">
+                            <strong>Requests Numbers:</strong>
+                            <p class="m-0">
+                                    <span t-esc="request_list"/>
+                                </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+                <br/>
+                <br/>
+                <div class="text-center">
+                    <h2>Materials Quantity</h2>
+                </div>
+                <br/>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <t t-set="colspan" t-value="5"/>
+                            <th class="text-left">Material</th>
+                            <th class="text-left">Total Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody class="sale_tbody">
+                        <t t-foreach="products_qty" t-as="product_qty">
+                            <tr>
+                                <t>
+                                    <td class="text-left">
+                                        <span t-esc="product_qty[0]"/>
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-esc="product_qty[1]"/>
+                                    </td>
+
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+
+        </template>
+    </data>
+</odoo>

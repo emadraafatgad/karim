@@ -1,0 +1,13 @@
+<odoo>
+    <record id="group_unlock_permission" model="res.groups">
+        <field name="name">Unlock Done MO</field>
+        <field name="comment">Enable Unlock MO</field>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="group_mark_done_mo" model="res.groups">
+        <field name="name">Mark Done</field>
+        <field name="comment">Mark Done MO</field>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>

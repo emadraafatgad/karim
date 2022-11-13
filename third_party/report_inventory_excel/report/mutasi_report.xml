@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+        <record model="ir.ui.view" id="view_mutasi_tree">
+            <field name="name">view_mutasi_tree</field>
+            <field name="model">mutasi.report</field>
+            <field name="arch" type="xml">
+                <tree create="0">
+                    <field name="categ_id"/>
+                    <field name="prod_code"/>
+                    <field name="prod_name"/>
+                    <field name="uom"/>
+                    <field name="saldo_awal"/>
+                    <field name="masuk"/>
+                    <field name="keluar"/>
+                    <field name="adjusment"/>
+                </tree>
+            </field> 
+        </record>
+        
+        <record model="ir.ui.view" id="view_mutasi_pivot">
+            <field name="name">view_mutasi_pivot</field>
+            <field name="model">mutasi.report</field>
+            <field name="arch" type="xml">
+                <pivot/>
+            </field> 
+        </record>
+        
+        <record id="action_mutasi_report" model="ir.actions.act_window">
+            <field name="name">Mutasi Bahan Baku dan Bahan Penolong</field>
+            <field name="res_model">mutasi.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,pivot,graph</field>
+            <field name="target">current</field>
+        </record>
+        
+	</data>
+</odoo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="print_all_sale_order_materials_from" model="ir.ui.view">
+        <field name="name">print all sales order materials</field>
+        <field name="model">order.all.materials</field>
+        <field name="arch" type="xml">
+            <form string="Materials">
+                <sheet>
+                    <group>
+                        <field name="sale_order_id" required="1" />
+                    </group>
+                    <footer>
+                        <button name="print_sale_order_material" string="Print All Materials" type="object"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Action of Terminate Student Wizard -->
+    <record id="action_print_order_all_materials_wizard" model="ir.actions.act_window">
+        <field name="name">Print order materials</field>
+        <field name="res_model">order.all.materials</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+     <menuitem id="print_order_materials_id" action="action_print_order_all_materials_wizard" name="Print Sale Order Material"
+                  parent="manufacturing_furnature.manufacturing_request_id" sequence="10"/>
+
+</odoo>

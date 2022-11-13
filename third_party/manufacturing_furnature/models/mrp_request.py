@@ -7,23 +7,28 @@ class NewManufacturingRequest(models.Model):
     _name = 'mrp.production.request'
     _rec_name = 'product_id'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+    _order = "id DESC"
 
     name = fields.Char("Code", readonly=True, copy=False, default='New', track_visibility='onchange')
     product_id = fields.Many2one('product.product', readonly=True
-                                  , required=True)
+                                 , required=True)
     quantity_qty = fields.Float(string="Product Quantity", readonly=True)
     bom_id = fields.Many2one('mrp.bom', readonly=True)
     product_uom_id = fields.Many2one('uom.uom', 'Unit of Measure', readonly=True)
     delivery_date = fields.Date(readonly=True)
     origin = fields.Char(string="Customer Name", readonly=True)
-    state = fields.Selection([('draft', 'draft'), ('Confirmed', 'MRP Order'),('not','Not MRP'),
+    state = fields.Selection([('draft', 'draft'), ('Confirmed', 'MRP Order'), ('not', 'Not MRP'),
                               ('bom', 'Purchase Requested')], track_visibility='onchange',
                              default='draft', readonly=True)
     sale_order_id = fields.Many2one('sale.order', readonly=True)
-    city_id = fields.Many2one('res.city', 'City', related='sale_order_id.city_id', store=True,track_visibility='onchange',)
+    city_id = fields.Many2one('res.city', 'City', related='sale_order_id.city_id', store=True,
+                              track_visibility='onchange', )
+    expected_delivery_date = fields.Date(track_visibility='onchange')
+    payment_validate_date = fields.Date(track_visibility='onchange')
+    latest_payment_date = fields.Date(readonly=1,track_visibility='onchange')
     bom_line_ids = fields.One2many('mrp.request.line', 'request_id', readonly=True)
-    paint_ids = fields.One2many('mrp.paint.request', 'request_id',track_visibility='onchange',)
-    carpenter_ids = fields.One2many('mrp.carpenter.request', 'request_id',track_visibility='onchange',)
+    paint_ids = fields.One2many('mrp.paint.request', 'request_id', track_visibility='onchange', )
+    carpenter_ids = fields.One2many('mrp.carpenter.request', 'request_id', track_visibility='onchange', )
     invoice_status = fields.Selection([
         ('upselling', 'Upselling Opportunity'),
         ('invoiced', 'Fully Invoiced'),
@@ -35,9 +40,19 @@ class NewManufacturingRequest(models.Model):
                                       related='sale_order_id.payment_status')
 
     attachment = fields.Binary()
-    note = fields.Text(track_visibility='onchange',readonly=True)
+    note = fields.Text(track_visibility='onchange', readonly=True)
     mrp_routs_ids = fields.Many2many('mrp.checklist.line', domain="[('product_id','=',product_id)]")
-    current_operation = fields.Many2one('rout.name',track_visibility='onchange')
+    current_operation = fields.Many2one('rout.name', track_visibility='onchange')
+    called_or_not = fields.Boolean(track_visibility='onchange')
+    is_late = fields.Boolean(compute="is_late_to_confirm",store=True)
+
+    @api.depends('payment_validate_date','latest_payment_date')
+    def is_late_to_confirm(self):
+        for rec in self:
+            if rec.payment_validate_date and rec.latest_payment_date:
+                print((rec.payment_validate_date - rec.latest_payment_date))
+                if (rec.payment_validate_date - rec.latest_payment_date).days <= -4:
+                    rec.is_late = True
 
     @api.multi
     def get_bom_line_ids(self):
@@ -51,18 +66,27 @@ class NewManufacturingRequest(models.Model):
                 'request_id': self.id
             })
 
+    def get_latest_payment_date(self):
+        all_payments = self.env['account.payment'].search(
+            [('partner_id', '=', self.sale_order_id.partner_id.id), ('payment_type', '=', 'inbound')],
+            order="name DESC ,payment_date DESC",limit=1)
+        if all_payments:
+            self.latest_payment_date = all_payments.payment_date
+        for line in all_payments:
+            print(line.name,line.payment_date)
+
     # @api.model
     def get_request_attachments(self):
         print("=========-------------==========")
         attachments = self.env['ir.attachment'].search(
             [('res_model', '=', 'sale.order'), ('res_id', '=', self.sale_order_id.id)])
-        print("attachement",attachments)
+        print("attachement", attachments)
         if attachments:
             for attachment in attachments:
                 values = {
-                    'name': attachments.name,
-                    'datas': attachments.datas,
-                    'datas_fname': attachments.datas_fname,
+                    'name': attachment.name,
+                    'datas': attachment.datas,
+                    'datas_fname': attachment.datas_fname,
                     'res_model': self._name,
                     'res_id': self.id,
                     'type': 'binary',  # override default_type from context, possibly meant for another model!
@@ -168,3 +192,15 @@ class ManufacturingRequestLine(models.Model):
             # print("request_id", rec.request_id)
             # print("qty-qty-qty-qty")
             rec.product_total_qty = rec.product_qty * rec.quantity_qty
+
+class ManufacturingMaterials(models.Model):
+    _name = 'mrp.production.material'
+    _rec_name = 'product_id'
+    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+
+    name = fields.Char("Code", readonly=True, copy=False, default='New', track_visibility='onchange')
+    product_id = fields.Many2one('product.product', readonly=True
+                                 , required=True)
+    operation_id = fields.Many2one('mrp.routing.workcenter')
+    quantity = fields.Float()
+    bom_id = fields.Many2one('mrp.bom')

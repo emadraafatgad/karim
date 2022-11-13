@@ -1,0 +1,80 @@
+<odoo>
+    <data>
+
+        <record id="product_production_material_action" model="ir.actions.act_window">
+            <field name="name">Manufacturing Material</field>
+            <field name="res_model">mrp.production.material</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search,pivot</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="product_production_material_form" model="ir.ui.view">
+            <field name="name">mrp Production Material Form</field>
+            <field name="model">mrp.production.material</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group colspan="12">
+                            <group cols="4">
+                                <field name="product_id"/>
+                                <field name="virtual_available"/>
+                                <field name="product_qty"/>
+                                <field name="product_total_qty"/>
+                            </group>
+                            <group cols="4">
+                                <field name="product_uom_id"/>
+                                <field name="partner_id" invisible="0"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record id="product_production_material_tree" model="ir.ui.view">
+            <field name="name">mrp Production Material Tree</field>
+            <field name="model">mrp.production.material</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="request_id" string="Material For"/>
+                    <field name="product_id"/>
+                    <field name="product_qty"/>
+                    <field name="virtual_available"/>
+                    <field name="quantity_qty"/>
+                    <field name="product_total_qty"/>
+                    <field name="product_uom_id"/>
+                    <field name="delivery_date"/>
+                    <field name="origin"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_production_material_search" model="ir.ui.view">
+            <field name="name">mrp Production Material Tree</field>
+            <field name="model">mrp.production.material</field>
+            <field name="type">search</field>
+            <field name="priority">15</field>
+            <field name="arch" type="xml">
+                <search string="Search MRP Material">
+                    <field name="product_id"/>
+                </search>
+            </field>
+        </record>
+
+        <menuitem id="manufacturing_material_id" action="product_production_material_action" name="Manufacturing Material"
+                  parent="mrp.menu_mrp_root" sequence="5"/>
+
+    </data>
+</odoo>

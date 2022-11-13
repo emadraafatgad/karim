@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_bea_cukai" name="Bea Cukai" web_icon="stock,static/description/icon.png" groups="report_inventory_excel.group_bea_cukai"/>
+    
+    <!-- Menu Reporting -->
+        <menuitem action="auditlog.action_auditlog_log_tree" name="User Activity History"
+                id="menu_bea_cukai_log_action"
+                parent="menu_bea_cukai" sequence="2"/>
+    
+    <menuitem id="menu_bea_cukai_report" name="Reporting"
+            parent="menu_bea_cukai" sequence="3"/>
+    
+    <menuitem action="action_print_penerimaan_inventory_report"
+            id="menu_bea_cukai_report_penerimaan"
+            parent="menu_bea_cukai_report" sequence="301"/>
+    
+    <menuitem action="action_print_pengeluaran_inventory_report"
+            id="menu_bea_cukai_report_pengeluaran"
+            parent="menu_bea_cukai_report" sequence="302"/>
+            
+    <menuitem action="action_print_wip_inventory_export_report"
+            id="menu_bea_cukai_report_wip"
+            parent="menu_bea_cukai_report" sequence="303"/>
+    
+    <menuitem action="action_print_mutasi_inventory_export_report"
+            id="menu_bea_cukai_report_mutasi"
+            parent="menu_bea_cukai_report" sequence="304"/>
+       
+    <menuitem action="action_print_mutasi_jadi_inventory_export_report"
+            id="menu_bea_cukai_report_mutasi_jadi"
+            parent="menu_bea_cukai_report" sequence="305"/>
+         
+    <menuitem action="action_print_mutasi_sisa_inventory_export_report"
+            id="menu_bea_cukai_report_mutasi_sisa"
+            parent="menu_bea_cukai_report" sequence="306"/>
+            
+    <menuitem action="action_print_mutasi_mesin_inventory_export_report"
+            id="menu_bea_cukai_report_mutasi_mesin"
+            parent="menu_bea_cukai_report" sequence="307"/>
+            
+    
+            
+</odoo>

@@ -33,6 +33,8 @@ class SalesOrderComponentLine(models.Model):
     product_id = fields.Many2one('product.product')
     component_list_ids = fields.One2many('product.component.list','component_line_id')
     sale_order_id = fields.Many2one('sale.order')
+    sale_order_line_id = fields.Many2one('sale.order.line')
+    quantity = fields.Float()
 
     def add_list_of_records(self):
         sales_component = self.env['product.component.list']
@@ -130,6 +132,8 @@ class SalesOrderKomash(models.Model):
                 })
             print(bom_id,"new bom")
             for dic in self.return_bill_material(line.product_id):
+                print("dicdicdic")
+                print(dic)
                 bom_id.write({'product_component_list_ids': [(0, 0, dic)]})
                 print("done products base")
             bom_id.write({'bom_line_ids':[(6, 0, self.return_base_bom_lines(bom_id,line))]})
@@ -192,6 +196,7 @@ class SalesOrderKomash(models.Model):
             print("------<>",bom_id)
             mo_production_id = self.env['mrp.production.request'].create({
                 'product_id': line.product_id.id,
+                'note':line.name,
                 'product_uom_id':line.product_id.uom_id.id,
                 'origin':self.partner_id.name,
                 'sale_order_id':self.id,

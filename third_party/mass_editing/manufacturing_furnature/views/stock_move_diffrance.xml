@@ -7,6 +7,7 @@
             <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='move_raw_ids']//field[@name='quantity_done']" position="after">
+                    <field name="to_consume" string="Base Consume" readonly="1"/>
                     <field name="not_consumed" string="Not Consumed" readonly="1"/>
                 </xpath>
             </field>

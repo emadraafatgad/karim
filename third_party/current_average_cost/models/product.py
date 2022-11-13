@@ -10,14 +10,21 @@ class ProductProduct(models.Model):
 
     def get_compute_stock_value(self):
         for product in self:
-            all_pro = self.env['product.product'].search([('type','=','product')])
-            for all in all_pro:
-                all._compute_stock_value()
+            # all_pro = self.env['product.product'].search([('type','=','product')])
+            # for all in all_pro:
+            #     all._compute_stock_value()
+                product._compute_stock_value()
 
     @api.multi
     def _get_avg_cost(self):
         for prod in self:
-            prod.avarage_cost = prod.stock_value/prod.qty_available if prod.qty_available else 0.0
+            prod._compute_stock_value()
+            print(prod.stock_value)
+            print(prod.qty_available)
+            # if not prod.standard_price:
+            #     prod.avarage_cost = prod.stock_value/prod.qty_available if prod.qty_available else 0.0
+            # else:
+            #     prod.avarage_cost = prod.standard_price / prod.qty_available if prod.qty_available else 0.0
 
 
 class ProductTemplate(models.Model):

@@ -1,5 +1,14 @@
 <odoo>
     <data>
+
+        <record id="action_server_action_materials" model="ir.actions.server">
+            <field name="name">Set TO Consume as QTY</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="binding_model_id" ref="stock.model_stock_move"/>
+            <field name="state">code</field>
+            <field name="code">records.cal_material_to_consume()</field>
+        </record>
+
         <record id="seq_mrp_production_kk_request" model="ir.sequence">
             <field name="name">Manufacturing Request</field>
             <field name="code">mrp.production.requests</field>
@@ -27,7 +36,10 @@
                                 class="btn btn-success"/>
                         <button name="create_purchase_request" string="Send Purchase Request" states="Confirmed"
                                 class="btn btn-warning" type="object"/>
-                        <button name="get_request_attachments" string="Get Design" type="object" class="btn btn-warning" />
+                        <button name="get_request_attachments" string="Get Design" type="object"
+                                class="btn btn-warning"/>
+                        <button name="get_latest_payment_date" string="Get Latest Payment" type="object"
+                                class="btn btn-warning"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,Confirmed,not,bom"/>
                     </header>
                     <sheet>
@@ -40,6 +52,10 @@
                                 <field name="product_uom_id"/>
                             </group>
                             <group cols="4">
+                                <field name="expected_delivery_date"/>
+                                <field name="payment_validate_date"/>
+                                <field name="latest_payment_date"/>
+                                <field name="called_or_not"/>
                                 <field name="delivery_date"/>
                                 <field name="origin"/>
                                 <field name="attachment"/>
@@ -111,7 +127,7 @@
             <field name="model">mrp.production.request</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="Tree MRP">
+                <tree string="Tree MRP" decoration-danger="is_late == True">
                     <field name="name"/>
                     <field name="sale_order_id"/>
                     <field name="invoice_status" invisible="1"/>
@@ -119,8 +135,14 @@
                     <field name="product_id"/>
                     <field name="quantity_qty"/>
                     <field name="bom_id"/>
-                    <field name="delivery_date"/>
                     <field name="origin"/>
+                    <field name="delivery_date"/>
+                    <field name="current_operation"/>
+                    <field name="latest_payment_date"/>
+                    <field name="expected_delivery_date"/>
+                    <field name="is_late" invisible="0"/>
+                    <field name="payment_validate_date"/>
+                    <field name="called_or_not" widget="boolean_toggle"/>
                     <field name="state"/>
                 </tree>
             </field>
@@ -146,8 +168,8 @@
                             context="{'group_by': 'sale_order_id'}"/>
                     <filter string="State" name="state_id" domain="[]"
                             context="{'group_by': 'state'}"/>
-<!--                    <filter string="Invoice Status" name="state_id" domain="[]"-->
-<!--                            context="{'group_by': 'invoice_status'}"/>-->
+                    <!--                    <filter string="Invoice Status" name="state_id" domain="[]"-->
+                    <!--                            context="{'group_by': 'invoice_status'}"/>-->
                     <filter string="Payment Status" name="payment_status" domain="[]"
                             context="{'group_by': 'payment_status'}"/>
 
@@ -155,8 +177,11 @@
             </field>
         </record>
 
-        <menuitem id="manufacturing_request_id" action="product_production_request_action" name="Manufacturing Request"
+        <menuitem id="manufacturing_request_id" name="Manufacturing Request"
                   parent="mrp.menu_mrp_root" sequence="5"/>
+
+        <menuitem id="manufacturing_request_action_id" action="manufacturing_furnature.product_production_request_action" name="Manufacturing Request"
+                  parent="manufacturing_furnature.manufacturing_request_id" sequence="5"/>
 
     </data>
 </odoo>

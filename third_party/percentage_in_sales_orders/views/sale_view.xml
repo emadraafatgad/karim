@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="percentage_view_quotation_tree" model="ir.ui.view">
+            <field name="name">percentage.sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="before">
+                    <field name="large_percentage"/>
+                    <field name="done_large_percentage"/>
+                    <field name="remaining_large_percentage"/>
+                    <field name="low_percentage"/>
+                    <field name="done_low_percentage"/>
+                    <field name="remaining_low_percentage"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="percentage_sale_view_form" model="ir.ui.view">
+            <field name="name">percentage.sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='order_lines']" position="after">
+                    <page string="Payment Details" name="payment_details">
+                        <group string=" 70 %Percentage" name="branch">
+                            <field name="large_percentage"/>
+                            <field name="done_large_percentage"/>
+                            <field name="remaining_large_percentage"/>
+                        </group>
+                        <group string=" 30 %Percentage" name="branch">
+                            <field name="low_percentage"/>
+                            <field name="done_low_percentage"/>
+                            <field name="remaining_low_percentage"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

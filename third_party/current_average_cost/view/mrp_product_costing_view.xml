@@ -8,9 +8,11 @@
         <field name="arch" type="xml">
             <notebook>
                 <page string="Costing">
+                    <group>
+                        <button name="calc_avaerage" type="object" string="Compute Cost Line" class="btn btn-success" />
+                    </group>
                     <group name='Product Costing' col="4">
                         <group string='Standard Costs'>
-
                             <field name="cur_std_mat_cost" widget="monetary"
                                    options="{'currency_field': 'currency_id'}"/>
                             <field name="currency_id" invisible="1"/>

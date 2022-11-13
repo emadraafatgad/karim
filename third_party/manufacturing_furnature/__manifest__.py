@@ -15,6 +15,7 @@
     'website': 'https://odoo-community.org/',
     'license': 'AGPL-3',
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/mrp_operation_workcenter.xml',
         'views/package_size.xml',
@@ -42,6 +43,8 @@
         'reports/mrp_request_total_report.xml',
         'reports/purchase_report.xml',
         'reports/deliveryslip.xml',
+        'reports/mrp_request_all_total_report.xml',
+        'wizard/print_all_materials.xml',
 
     ],
     'demo': [

@@ -14,9 +14,11 @@ class StockMove(models.Model):
     @api.depends('product_id')
     def _get_avg_cost(self):
         for move in self:
-            if move.product_id.avarage_cost:
-                move.avarage_cost = move.product_id.avarage_cost
-                move.avarage_cost_qty = move.product_id.avarage_cost*move.product_uom_qty
+            # print("okay")
+            if move.product_id.standard_price:
+                # print("oook")
+                move.avarage_cost = move.product_id.standard_price
+                move.avarage_cost_qty = move.product_id.standard_price*move.product_uom_qty
 
 
 class MrpProduction(models.Model):
@@ -31,6 +33,11 @@ class MrpProduction(models.Model):
     profit_per = fields.Float(digits=dp.get_precision('Product Price'),string="Profit Percentage",compute='get_profit_percentage')
     currency_id = fields.Many2one('res.currency', string='Currency', default=lambda self: self.env.user.company_id.currency_id.id)
 
+    def calc_avaerage(self):
+        for line in self.move_raw_ids:
+            # print("ok")
+            line._get_avg_cost()
+
     @api.multi
     def calculate_planned_costs(self):
         costmat = 0.0
@@ -39,8 +46,13 @@ class MrpProduction(models.Model):
             product_id = production.product_id
             bom_id = production.bom_id
             result, result2 = bom_id.explode(product_id, 1)
+            # print("result")
+            # print(result,result2)
             for sbom, sbom_data in result2:
-                costmat += sbom.product_id.avarage_cost * sbom_data['qty']
+                # print("sbom")
+                # print(sbom,sbom_data)
+                costmat += sbom.product_id.standard_price * sbom_data['qty']
+                # print(costmat)
             production.prod_std_cost = production.product_id.standard_price
             production.cur_std_mat_cost = costmat
         return True
@@ -57,7 +69,7 @@ class MrpProduction(models.Model):
             if not planned_cost:
                 for move in production.move_raw_ids:
                     if move.state == 'done':
-                        matamount += move.product_id.avarage_cost * move.product_uom_qty
+                        matamount += move.product_id.standard_price * move.product_uom_qty
                 qty_produced = 0.0
                 if production.qty_produced == 0.0:
                     qty_produced = production.product_qty
@@ -69,26 +81,26 @@ class MrpProduction(models.Model):
 
     @api.multi
     def calculate_labour_cost(self):
-        labmacprice = 0.0
-        labmacamount = 0.0
         for production in self:
+            labmacprice = 0.0
+            labmacamount = 0.0
             if production.state == "cancel" or production.state == "confirmed" or production.state == "planned":
-                    planned_cost = True  
+                planned_cost = True
             labor_costs = self.env['direct.labour.cost'].search([('product_id','=',production.product_id.id)])
             for labor in labor_costs:
                 labmacprice += labor.labour_cost
             production.lab_mac_cost = labmacprice
-            print('==========-=========------=-=-==-=-=-=-=-=')
+            # print('==========-=========------=-=-==-=-=-=-=-=')
         return True
 
     @api.multi
     def calculate_total_cost(self):
         total_cost = 0.0
-        print('==========-=========------=-=-==-=-=-=-=-=')
+        # print('==========-=========------=-=-==-=-=-=-=-=')
         for production in self:
-            print('==========-=========------=-=-==-=-=-=-=-=')
+            # print('==========-=========------=-=-==-=-=-=-=-=')
             production.total_production_cost = production.mat_cost_unit + production.lab_mac_cost
-            print(total_cost)
+            # print(total_cost)
         return True
 
     @api.multi

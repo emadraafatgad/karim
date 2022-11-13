@@ -7,7 +7,9 @@
             <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='move_raw_ids']//field[@name='quantity_done']" position="after">
-                    <field name="not_consumed" string="Not Consumed" invisible="1" readonly="1"/>
+                    <field name="to_consume" string="Base Consume" readonly="1" invisible="0"/>
+                    <field name="not_consumed" string="Not Consumed" invisible="0" readonly="1"/>
+
                 </xpath>
             </field>
         </record>
@@ -18,8 +20,8 @@
             <field name="inherit_id" ref="mrp.view_stock_move_lots"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='product_id']" position="after">
-                    <field name="to_consume"/>
-                    <field name="customer_name"/>
+                    <field name="to_consume" readonly="1"/>
+                    <field name="customer_name" readonly="1"/>
 <!--                    <field name="customers_name"/>-->
                 </xpath>
             </field>
