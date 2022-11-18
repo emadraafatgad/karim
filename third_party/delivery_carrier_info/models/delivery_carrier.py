@@ -4,7 +4,7 @@ from odoo import fields, models
 class DeliveryCarrier(models.Model):
     _inherit = 'stock.picking'
 
-    driver_id = fields.Many2one('res.partner', domain="[('supplier','=','True')]")
+    driver_id = fields.Many2one('res.partner', domain="[('supplier','=',True),('category_id','in',[2])]")
     delivery_date = fields.Date()
     driver_phone = fields.Char()
     phone = fields.Char(related='partner_id.phone')

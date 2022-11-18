@@ -18,7 +18,11 @@
         "bin": [],
     },
     "depends": [
-        'stock','sale','sale_stock'
+        'stock',
+        'sale',
+        'sale_stock',
+        'percentage_in_sales_orders',
+         'utm',
     ],
     "data": [
         "views/delivery_view.xml",

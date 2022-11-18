@@ -26,6 +26,8 @@ class SaleOrder(models.Model):
     residual = fields.Monetary(store=True, readonly=True,compute='_compute_residual_amount',
                                                track_visibility='onchange')
 
+    remaining = fields.Float()
+
     @api.depends('order_line','order_line.qty_invoiced')
     def _compute_residual_amount(self):
         for rec in self:

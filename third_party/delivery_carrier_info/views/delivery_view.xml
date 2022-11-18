@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-  <record id="view_delivery_carrier_date_picking_tree" model="ir.ui.view">
-    <field name="name">delivery_carrier_base.tree</field>
-    <field name="model">stock.picking</field>
-    <field name="inherit_id" ref="stock.view_picking_form"/>
-    <field name="arch" type="xml">
-        <xpath position="after" expr="//field[@name='partner_id']">
-            <field name="phone"/>
-            <field name="invoice_status"/>
-            <field name="payment_status"/>
-        </xpath>
-       <xpath expr="//notebook" position="inside">
-        <page string="Carrier">
-          <group>
-            <field name="driver_id"/>
-            <field name="delivery_date"/>
-            <field name="driver_phone"/>
-          </group>
-        </page>
-       </xpath>
-    </field>
-  </record>
+    <record id="sale_view_inherit_marketing" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.sale</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='utm_link']" position="replace">
+                <group string="Marketing" name="utm_link" >
+                    <field name="campaign_id"/>
+                    <field name="medium_id"/>
+                    <field name="source_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_delivery_carrier_date_picking_tree" model="ir.ui.view">
+        <field name="name">delivery_carrier_base.tree</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath position="after" expr="//field[@name='partner_id']">
+                <field name="phone"/>
+                <field name="invoice_status"/>
+                <field name="payment_status"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Carrier">
+                    <group>
+                        <field name="driver_id" context="{'default_supplier':True,'default_customer':False}"
+                               domain="[('category_id','in',[2]),('supplier', '=',  True)]"/>
+                        <field name="delivery_date"/>
+                        <field name="driver_phone"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
 
 </odoo>
