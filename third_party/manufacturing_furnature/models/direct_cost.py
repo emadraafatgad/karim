@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-
+from odoo.exceptions import ValidationError
 
 class PackageForFinalProduct(models.Model):
     _name = "package.local"
@@ -74,6 +74,17 @@ class MoMaterialCost(models.Model):
             if work_order.state == 'done':
                 pass
 
+    def action_toggle_is_locked(self):
+        self.ensure_one()
+        print("looooooooooooooooooooooooooooooooook")
+        if self.env.user.has_group('manufacturing_furnature.group_unlock_permission'):
+            self.is_locked = not self.is_locked
+        elif self.state != 'done':
+            self.is_locked = not self.is_locked
+        elif not self.env.user.has_group('manufacturing_furnature.group_unlock_permission'):
+                print("has group not")
+                raise ValidationError("You Are Not Allowed to Update Quantity")
+        return True
     @api.depends('direct_material_cost_ids')
     def calc_total_direct_labour_cost(self):
         for line in self:

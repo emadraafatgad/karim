@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
             <notebook>
-                <page string="Costing">
+                <page string="Costing" groups="account.group_account_user">
                     <group>
                         <button name="calc_avaerage" type="object" string="Compute Cost Line" class="btn btn-success" />
                     </group>
@@ -20,7 +20,7 @@
                         <group string='Labour Costs'>
                             <field name="lab_mac_cost" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         </group>
-                        <group string='Actual Costs '>
+                        <group string='Consumed Material Cost'>
                             <field name="mat_cost_unit" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         </group>
                     </group>
@@ -50,7 +50,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='move_raw_ids']//field[@name='quantity_done']" position="after">
                 <field name="avarage_cost" string="Average Cost" invisible="0" />
-                <field name="avarage_cost_qty" string="Actual Cost" invisible="0" />
+                <field name="avarage_cost_qty" string="Consumed Material Cost" invisible="0" />
             </xpath>
         </field>
     </record>

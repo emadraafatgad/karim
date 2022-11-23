@@ -5,7 +5,7 @@ class PurchaseOder(models.Model):
     _inherit = 'purchase.order'
 
     received_status = fields.Boolean()
-
+    note = fields.Text()
     @api.multi
     def check_purchase_order_received(self):
         for rec in self:
@@ -17,6 +17,11 @@ class PurchaseOder(models.Model):
             rec.write({'received_status': state})
             print(rec.received_status,fields.Datetime.now())
 
+
+    def update_note_with_discription(self):
+        for rec in self:
+            for line in rec.order_line:
+                rec.note += line.name
 
 
 class PurchaseOderLine(models.Model):

@@ -83,8 +83,7 @@
                     <field name="delivery_date"/>
                 </xpath>
                 <xpath expr="//notebook" position="inside">
-                    <page string="labour Cost">
-
+                    <page string="labour Cost" groups="account.group_account_user">
                         <field name="direct_material_cost_ids">
                             <tree string="Direct material Cost" editable="bottom">
                                 <field name="product_id"/>

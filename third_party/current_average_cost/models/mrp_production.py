@@ -26,7 +26,7 @@ class MrpProduction(models.Model):
 
     prod_std_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Standard Cost', compute='calculate_planned_costs')
     cur_std_mat_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Planned Material Cost', compute='calculate_planned_costs')
-    mat_cost_unit = fields.Float(digits=dp.get_precision('Product Price'), string='Actual Material Cost', compute='calculate_material_cost')
+    mat_cost_unit = fields.Float(digits=dp.get_precision('Product Price'), string='Consumed Material Cost', compute='calculate_material_cost')
     lab_mac_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Actual Labour Cost', compute='calculate_labour_cost')
     total_production_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Actual Total Cost',  compute='calculate_total_cost')
     finished_product_price = fields.Float(digits=dp.get_precision('Product Price'),string="Actual Price",related='product_id.lst_price')
@@ -66,17 +66,17 @@ class MrpProduction(models.Model):
             for move in production.move_raw_ids:
                 if not move.is_done:
                     planned_cost = True
-            if not planned_cost:
-                for move in production.move_raw_ids:
-                    if move.state == 'done':
-                        matamount += move.product_id.standard_price * move.product_uom_qty
-                qty_produced = 0.0
-                if production.qty_produced == 0.0:
-                    qty_produced = production.product_qty
-                else:
-                    qty_produced = production.qty_produced
-                matprice = matamount / qty_produced
-            production.mat_cost_unit = matprice 
+            # if not planned_cost:
+            for move in production.move_raw_ids:
+                if move.state == 'done':
+                    matamount += move.product_id.standard_price * move.product_uom_qty
+            qty_produced = 0.0
+            if production.qty_produced == 0.0:
+                qty_produced = production.product_qty
+            else:
+                qty_produced = production.qty_produced
+            matprice = matamount / qty_produced
+        production.mat_cost_unit = matprice
         return True
 
     @api.multi

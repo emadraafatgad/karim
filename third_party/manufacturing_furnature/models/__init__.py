@@ -16,4 +16,5 @@ from . import do_produce
 from . import work_order_worker
 from . import purchase_requiest_with_vendor
 from . import mrp_packaging
+from . import purchase_order
 # from . import mrp_report_data

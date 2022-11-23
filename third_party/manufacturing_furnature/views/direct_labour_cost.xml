@@ -93,12 +93,12 @@
             <field name="model">mrp.production</field>
             <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
             <field name="arch" type="xml">
-                <xpath expr="//button[@name='action_toggle_is_locked']" position="replace">
-                    <button name="action_toggle_is_locked" attrs="{'invisible': ['|', '|', ('state', '=', 'cancel'), ('id', '=', False), ('is_locked', '=', False)]}" string="Unlock" groups="manufacturing_furnature.group_unlock_permission" type="object" help="Unlock the manufacturing order to correct what has been consumed or produced."/>
-                </xpath>
-                 <xpath expr="//button[@name='action_toggle_is_locked'][2]" position="replace">
-                    <button name="action_toggle_is_locked" attrs="{'invisible': [('is_locked', '=', True)]}" string="Lock" class="oe_highlight" groups="manufacturing_furnature.group_unlock_permission" type="object"/>
-                </xpath>
+<!--                <xpath expr="//button[@name='action_toggle_is_locked']" position="replace">-->
+<!--                    <button name="action_toggle_is_locked" attrs="{'invisible': ['|', '|', ('state', '=', 'cancel'), ('id', '=', False), ('is_locked', '=', False)]}" string="Unlock" groups="manufacturing_furnature.group_unlock_permission" type="object" help="Unlock the manufacturing order to correct what has been consumed or produced."/>-->
+<!--                </xpath>-->
+<!--                 <xpath expr="//button[@name='action_toggle_is_locked'][2]" position="replace">-->
+<!--                    <button name="action_toggle_is_locked" attrs="{'invisible': [('is_locked', '=', True)]}" string="Lock" class="oe_highlight" groups="manufacturing_furnature.group_unlock_permission" type="object"/>-->
+<!--                </xpath>-->
                 <xpath expr="//button[@name='button_mark_done']" position="replace">
                     <button name="button_mark_done" groups="manufacturing_furnature.group_mark_done_mo" attrs="{'invisible': ['|', ('check_to_done', '=', False), ('consumed_less_than_planned', '=', True)]}" string="Mark as Done" type="object" class="oe_highlight"/>
                 </xpath>

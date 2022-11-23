@@ -1,14 +1,20 @@
 from odoo import fields, models, api
-
+from odoo.exceptions import ValidationError
 
 class PrintAllMaterials(models.TransientModel):
     _name = 'order.all.materials'
 
-    sale_order_id = fields.Many2one('sale.order', required=True)
+    sale_order_id = fields.Many2one('sale.order')
+    sale_order_ids = fields.Many2many('sale.order')
 
     @api.multi
     def print_sale_order_material(self):
-        mrp_request_objs = self.env['mrp.production.request'].search([('sale_order_id', '=', self.sale_order_id.id)])
+        if self.sale_order_id:
+            mrp_request_objs = self.env['mrp.production.request'].search([('sale_order_id', '=', self.sale_order_id.id)])
+        elif self.sale_order_ids:
+            mrp_request_objs = self.env['mrp.production.request'].search([('sale_order_id', 'in', self.sale_order_ids.ids)])
+        else:
+            raise ValidationError("Please Select one at least sales order")
         request_list = []
         products_dict = {}
         product_list = []
