@@ -7,8 +7,8 @@
             <form string="Materials">
                 <sheet>
                     <group>
-                        <field name="sale_order_id" required="0" />
-                        <field name="sale_order_ids" required="0" widget="many2many_tags"/>
+<!--                        <field name="sale_order_id" required="0" />-->
+                        <field name="sale_order_ids" required="1" widget="many2many_tags"/>
                     </group>
                     <footer>
                         <button name="print_sale_order_material" string="Print All Materials" class="btn btn-green" type="object"/>
