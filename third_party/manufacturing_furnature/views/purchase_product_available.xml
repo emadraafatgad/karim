@@ -10,7 +10,9 @@
                 </xpath>
                 <xpath expr="//field[@name='order_line']" position="before">
                     <button name="update_note_with_description" type="object" class="btn-success" string="Update Notes"
-                            status="draft,to approve"/>
+                           attrs="{'invisible':[('state', 'not in', ['draft','to approve'])]}"/>
+                    <button name="update_picking_with_description" type="object" class="btn-success" string="Update Receipt"
+                            attrs="{'invisible':[('state', 'not in', ['purchase','done'])]}"/>
                 </xpath>
                 <xpath expr="//notebook" position="inside">
                     <page string="Note">

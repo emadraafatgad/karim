@@ -13,6 +13,13 @@ class PurchaseOder(models.Model):
                     rec.note = "---note---\n"
                 rec.note += line.product_id.name + " ----> " + line.name+"\n"
 
+    def update_picking_with_description(self):
+        for rec in self:
+            for order in self:
+                if order.note:
+                    for picking in order.picking_ids:
+                        picking.note = order.note
+
     @api.multi
     def button_confirm(self):
         for order in self:
