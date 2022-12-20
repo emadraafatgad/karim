@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ticket_category_search" model="ir.ui.view">
+        <field name="name">Tickit - Search</field>
+        <field name="model">ticket.category</field>
+        <field name="arch" type="xml">
+            <search string="Stage Search">
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="ticket_category_tree" model="ir.ui.view">
+        <field name="name">helpdesk_lite.stage.tree</field>
+        <field name="model">ticket.category</field>
+        <field name="arch" type="xml">
+            <tree string="Category" editable="top">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="ticket_category_form" model="ir.ui.view">
+        <field name="name">ticket.category.form</field>
+        <field name="model">ticket.category</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Stage">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Category name..."/>
+                        </h1>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ticket_category_action" model="ir.actions.act_window">
+        <field name="name">Categroy</field>
+        <field name="res_model">ticket.category</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="helpdesk_lite.ticket_category_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to set a new category in your support tickets.
+            </p><p>
+            Category to classifay every issue
+        </p>
+        </field>
+    </record>
+
+    <menuitem
+            id="menu_ticket_category_act"
+            name="Ticket Category"
+            sequence="20"
+            action="ticket_category_action"
+            parent="menu_config"
+            groups="base.group_no_one"/>
+
+</odoo>

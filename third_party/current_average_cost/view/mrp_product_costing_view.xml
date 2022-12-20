@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
             <notebook>
-                <page string="Costing" groups="account.group_account_user">
+                <page string="Costing" groups="current_average_cost.group_mo_cost_of_good_sold">
                     <group>
                         <button name="calc_avaerage" type="object" string="Compute Cost Line" class="btn btn-success" />
                     </group>

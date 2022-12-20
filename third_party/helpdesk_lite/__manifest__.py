@@ -17,6 +17,7 @@
         'views/helpdesk_tickets.xml',
         'views/helpdesk_team_views.xml',
         'views/helpdesk_stage_views.xml',
+        'views/ticket_category_views.xml',
         'views/helpdesk_data.xml',
         'views/helpdesk_templates.xml',
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, tools, SUPERUSER_ID, _
 import re
-from odoo.exceptions import AccessError
+from odoo.exceptions import AccessError,ValidationError
 
 AVAILABLE_PRIORITIES = [
     ('0', 'Low'),
@@ -10,6 +10,10 @@ AVAILABLE_PRIORITIES = [
     ('3', 'Urgent'),
 ]
 
+class TicketCategory(models.Model):
+    _name = 'ticket.category'
+
+    name = fields.Char(required=True)
 
 class HelpdeskTicket(models.Model):
     _name = "helpdesk_lite.ticket"
@@ -23,6 +27,7 @@ class HelpdeskTicket(models.Model):
         return self.env['helpdesk_lite.stage'].search([], order='sequence', limit=1)
 
     name = fields.Char(string='Ticket', track_visibility='always', required=True)
+    ticket_category_id = fields.Many2one('ticket.category',required=True)
     description = fields.Text('Private Note')
     partner_id = fields.Many2one('res.partner', string='Customer', track_visibility='onchange', index=True)
     phone = fields.Char(related='partner_id.phone',store=True, track_visibility='onchange')
@@ -58,6 +63,7 @@ class HelpdeskTicket(models.Model):
     color = fields.Integer('Color Index')
     legend_blocked = fields.Char(related="stage_id.legend_blocked", readonly=True)
     legend_done = fields.Char(related="stage_id.legend_done", readonly=True)
+    last = fields.Boolean(related="stage_id.last", readonly=True)
     legend_normal = fields.Char(related="stage_id.legend_normal", readonly=True)
 
     active = fields.Boolean(default=True)
@@ -68,7 +74,18 @@ class HelpdeskTicket(models.Model):
     def _onchange_partner_id(self):
         """ This function sets partner email address based on partner
         """
-        self.email_from = self.partner_id.email
+        self.email_from = self.partner_id.email\
+
+
+    def mark_as_done_id(self):
+        """ This function sets partner email address based on partner
+        """
+        done_stage = self.env['helpdesk_lite.stage'].search([('last','=',True)])
+        if not done_stage:
+            raise ValidationError('Please Select Last/done in stages')
+        print(done_stage.id)
+        print(done_stage.name)
+        self.stage_id = done_stage.id
 
     @api.multi
     def copy(self, default=None):

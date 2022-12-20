@@ -10,7 +10,8 @@
     'depends': ['product', 'stock', 'stock_account'],
     'data': [
         'view/product.xml',
-        'view/mrp_product_costing_view.xml'
+        'view/mrp_product_costing_view.xml',
+        'view/security.xml'
     ],
     "images": ['static/description/image.png'],
     'installable': True,

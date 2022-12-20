@@ -9,9 +9,9 @@
                     <field name="product_quantity"/>
                 </xpath>
                 <xpath expr="//field[@name='order_line']" position="before">
-                    <button name="update_note_with_description" type="object" class="btn-success" string="Update Notes"
+                    <button name="update_note_with_description" groups="manufacturing_furnature.group_update_po_receipt" type="object" class="btn-success" string="Update Notes"
                            attrs="{'invisible':[('state', 'not in', ['draft','to approve','purchase','done'])]}"/>
-                    <button name="update_picking_with_description" type="object" class="btn-success" string="Update Receipt"
+                    <button name="update_picking_with_description" groups="manufacturing_furnature.group_update_po_receipt" type="object" class="btn-success" string="Update Receipt"
                             attrs="{'invisible':[('state', 'not in', ['purchase','done'])]}"/>
                 </xpath>
                 <xpath expr="//notebook" position="inside">
