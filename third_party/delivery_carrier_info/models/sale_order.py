@@ -32,11 +32,11 @@ class SaleOrder(models.Model):
             all_invoice_id = self.env['account.invoice'].search(
                 ['&', ('origin', '=', rec.name), '|', ('state', '=', 'open'), ('state', '=', 'paid')])
             if not all_invoice_id:
-                rec.due_amount = rec.disc_amount
+                rec.due_amount = rec.amount_total
                 rec.total_downpayment = 0
                 rec.invoiced_amount = 0
                 rec.paid_amount = 0
-                rec.remaining = rec.disc_amount
+                rec.remaining = rec.amount_total
                 rec.payment_status = 'not'
                 break
 
@@ -80,9 +80,9 @@ class SaleOrder(models.Model):
             if sale_order:
                 print("invoiced_amount,total_downpayment,sum_residual")
                 print(invoiced_amount, total_downpayment, sum_residual)
-                sale_order.due_amount = rec.disc_amount
+                sale_order.due_amount = rec.amount_total
                 sale_order.total_downpayment = total_downpayment
                 sale_order.invoiced_amount = invoiced_amount - total_downpayment
-                sale_order.paid_amount = rec.disc_amount - sum_residual if full_invoiced else total_downpayment
-                sale_order.remaining = sum_residual if full_invoiced else sale_order.disc_amount - sale_order.paid_amount
+                sale_order.paid_amount = rec.amount_total - sum_residual if full_invoiced else total_downpayment
+                sale_order.remaining = sum_residual if full_invoiced else sale_order.amount_total - sale_order.paid_amount
                 sale_order.payment_status = 'paid' if sale_order.remaining == 0 else "partial"

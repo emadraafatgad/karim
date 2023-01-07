@@ -3,11 +3,13 @@
 import odoo.addons.decimal_precision as dp
 from odoo import models, fields, api, _
 
+
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
     avarage_cost = fields.Float('Current Average Cost', compute="_get_avg_cost",store=True,
                                 digits=dp.get_precision('Product Price'), help='Current Stock Average Cost')
+
     avarage_cost_qty = fields.Float('Current Average Cost', compute="_get_avg_cost", store=True,
                                 digits=dp.get_precision('Product Price'), help='Current Stock Average Cost')
 

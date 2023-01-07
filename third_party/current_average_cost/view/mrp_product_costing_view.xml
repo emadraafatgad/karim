@@ -49,8 +49,8 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='move_raw_ids']//field[@name='quantity_done']" position="after">
-                <field name="avarage_cost" string="Average Cost" invisible="0" />
-                <field name="avarage_cost_qty" string="Consumed Material Cost" invisible="0" />
+                <field name="avarage_cost" string="Average Cost" groups="current_average_cost.group_mo_cost_of_good_sold" invisible="0" />
+                <field name="avarage_cost_qty" string="Consumed Material Cost" groups="current_average_cost.group_mo_cost_of_good_sold"a invisible="0" />
             </xpath>
         </field>
     </record>

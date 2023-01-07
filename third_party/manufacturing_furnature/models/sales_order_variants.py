@@ -100,6 +100,13 @@ class SalesOrderKomash(models.Model):
     city_id = fields.Many2one('res.city', 'City', track_visibility='onchange', )
     phone = fields.Char(related='partner_id.phone', required=True, readonly=False, track_visibility='onchange', )
 
+    # @api.multi
+    # def action_cancel(self):
+    #     now = fields.Datetime.now()
+    #     for order in self:
+    #
+    #     return super(SalesOrderKomash, self).action_cancel()
+    #
     @api.multi
     def action_unlock(self):
         mrp_req = self.env['mrp.production.request'].sudo().search(
@@ -483,3 +490,23 @@ class SalesOrderKomash(models.Model):
             mo_production_id.get_bom_line_ids()
             self.mrp_send = 'Sent'
             self.state = 'done'
+
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    @api.multi
+    def write(self, values):
+        if 'product_uom_qty' in values or 'price_unit' in values:
+            if len(self.invoice_lines) > 0:
+                for line in self.invoice_lines:
+                    if line.invoice_id.state not in ['draft','cancel']:
+                        raise ValidationError("you can't update quantity or unit price of not cancel items invoices")
+        return super(SaleOrderLine, self).write(values)
+
+    @api.multi
+    def unlink(self):
+        if len(self.invoice_lines) > 0:
+            for line in self.invoice_lines:
+                if line.invoice_id.state not in ['draft','cancel']:
+                    raise ValidationError("you can't delete line with invoiced items")
+        return super(SaleOrderLine, self).unlink()

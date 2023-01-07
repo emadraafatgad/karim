@@ -44,7 +44,10 @@
         'reports/purchase_report.xml',
         'reports/deliveryslip.xml',
         'reports/mrp_request_all_total_report.xml',
+        'reports/mrp_request_mo_report.xml',
         'wizard/print_all_materials.xml',
+        'wizard/print_mos_materials.xml',
+
 
     ],
     'demo': [
