@@ -7,11 +7,11 @@ from odoo import models, fields, api, _
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
-    avarage_cost = fields.Float('Current Average Cost', compute="_get_avg_cost",store=True,
+    avarage_cost = fields.Float('Current Average Cost', compute="_get_avg_cost", store=True,
                                 digits=dp.get_precision('Product Price'), help='Current Stock Average Cost')
 
     avarage_cost_qty = fields.Float('Current Average Cost', compute="_get_avg_cost", store=True,
-                                digits=dp.get_precision('Product Price'), help='Current Stock Average Cost')
+                                    digits=dp.get_precision('Product Price'), help='Current Stock Average Cost')
 
     @api.depends('product_id')
     def _get_avg_cost(self):
@@ -20,20 +20,28 @@ class StockMove(models.Model):
             if move.product_id.standard_price:
                 # print("oook")
                 move.avarage_cost = move.product_id.standard_price
-                move.avarage_cost_qty = move.product_id.standard_price*move.product_uom_qty
+                move.avarage_cost_qty = move.product_id.standard_price * move.product_uom_qty
 
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
-    prod_std_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Standard Cost', compute='calculate_planned_costs')
-    cur_std_mat_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Planned Material Cost', compute='calculate_planned_costs')
-    mat_cost_unit = fields.Float(digits=dp.get_precision('Product Price'), string='Consumed Material Cost', compute='calculate_material_cost')
-    lab_mac_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Actual Labour Cost', compute='calculate_labour_cost')
-    total_production_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Actual Total Cost',  compute='calculate_total_cost')
-    finished_product_price = fields.Float(digits=dp.get_precision('Product Price'),string="Actual Price",related='product_id.lst_price')
-    profit_per = fields.Float(digits=dp.get_precision('Product Price'),string="Profit Percentage",compute='get_profit_percentage')
-    currency_id = fields.Many2one('res.currency', string='Currency', default=lambda self: self.env.user.company_id.currency_id.id)
+    prod_std_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Standard Cost',
+                                 compute='calculate_planned_costs')
+    cur_std_mat_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Planned Material Cost',
+                                    compute='calculate_planned_costs')
+    mat_cost_unit = fields.Float(digits=dp.get_precision('Product Price'), string='Consumed Material Cost',
+                                 compute='calculate_material_cost')
+    lab_mac_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Actual Labour Cost',
+                                compute='calculate_labour_cost')
+    total_production_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Actual Total Cost',
+                                         compute='calculate_total_cost')
+    finished_product_price = fields.Float(digits=dp.get_precision('Product Price'), string="Actual Price",
+                                          related='product_id.lst_price')
+    profit_per = fields.Float(digits=dp.get_precision('Product Price'), string="Profit Percentage",
+                              compute='get_profit_percentage')
+    currency_id = fields.Many2one('res.currency', string='Currency',
+                                  default=lambda self: self.env.user.company_id.currency_id.id)
 
     def calc_avaerage(self):
         for line in self.move_raw_ids:
@@ -88,7 +96,7 @@ class MrpProduction(models.Model):
             labmacamount = 0.0
             if production.state == "cancel" or production.state == "confirmed" or production.state == "planned":
                 planned_cost = True
-            labor_costs = self.env['direct.labour.cost'].search([('product_id','=',production.product_id.id)])
+            labor_costs = self.env['direct.labour.cost'].search([('product_id', '=', production.product_id.id)])
             for labor in labor_costs:
                 labmacprice += labor.labour_cost
             production.lab_mac_cost = labmacprice
@@ -109,4 +117,4 @@ class MrpProduction(models.Model):
     def get_profit_percentage(self):
         for production in self:
             if production.total_production_cost:
-                production.profit_per = 100*(production.finished_product_price / production.total_production_cost-1)
+                production.profit_per = 100 * (production.finished_product_price / production.total_production_cost - 1)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, tools, SUPERUSER_ID, _
 import re
-from odoo.exceptions import AccessError,ValidationError
+from odoo.exceptions import AccessError, ValidationError
 
 AVAILABLE_PRIORITIES = [
     ('0', 'Low'),
@@ -10,10 +10,12 @@ AVAILABLE_PRIORITIES = [
     ('3', 'Urgent'),
 ]
 
+
 class TicketCategory(models.Model):
     _name = 'ticket.category'
 
     name = fields.Char(required=True)
+
 
 class HelpdeskTicket(models.Model):
     _name = "helpdesk_lite.ticket"
@@ -27,22 +29,24 @@ class HelpdeskTicket(models.Model):
         return self.env['helpdesk_lite.stage'].search([], order='sequence', limit=1)
 
     name = fields.Char(string='Ticket', track_visibility='always', required=True)
-    ticket_category_id = fields.Many2one('ticket.category',required=True)
+    ticket_category_id = fields.Many2one('ticket.category', required=True)
     description = fields.Text('Private Note')
     partner_id = fields.Many2one('res.partner', string='Customer', track_visibility='onchange', index=True)
-    phone = fields.Char(related='partner_id.phone',store=True, track_visibility='onchange')
-    sale_order_id = fields.Many2one('sale.order',domain="[('partner_id','=',partner_id)]", track_visibility='onchange')
+    phone = fields.Char(related='partner_id.phone', store=True, track_visibility='onchange')
+    sale_order_id = fields.Many2one('sale.order', domain="[('partner_id','=',partner_id)]", track_visibility='onchange')
     delivery_date = fields.Date(related='sale_order_id.mrp_date', track_visibility='onchange')
     contract_date = fields.Datetime(related='sale_order_id.confirmation_date', track_visibility='onchange')
-    salesperson = fields.Many2one(related='sale_order_id.user_id',store=True, track_visibility='onchange')
+    salesperson = fields.Many2one(related='sale_order_id.user_id', store=True, track_visibility='onchange')
     commercial_partner_id = fields.Many2one(
         related='partner_id.commercial_partner_id', string='Customer Company', store=True, index=True)
     contact_name = fields.Char('Contact Name')
     email_from = fields.Char('Email', help="Email address of the contact", index=True)
     user_id = fields.Many2one('res.users', string='Assigned to', track_visibility='onchange', index=True, default=False)
     team_id = fields.Many2one('helpdesk_lite.team', string='Support Team', track_visibility='onchange',
-        default=lambda self: self.env['helpdesk_lite.team'].sudo()._get_default_team_id(user_id=self.env.uid),
-        index=True, help='When sending mails, the default email address is taken from the support team.')
+                              default=lambda self: self.env['helpdesk_lite.team'].sudo()._get_default_team_id(
+                                  user_id=self.env.uid),
+                              index=True,
+                              help='When sending mails, the default email address is taken from the support team.')
     date_deadline = fields.Datetime(string='Deadline', track_visibility='onchange')
     date_done = fields.Datetime(string='Done', track_visibility='onchange')
 
@@ -69,18 +73,15 @@ class HelpdeskTicket(models.Model):
     active = fields.Boolean(default=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
 
-
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
-        """ This function sets partner email address based on partner
-        """
-        self.email_from = self.partner_id.email\
-
+        """ This function sets partner email address based on partner """
+        self.email_from = self.partner_id.email
 
     def mark_as_done_id(self):
         """ This function sets partner email address based on partner
         """
-        done_stage = self.env['helpdesk_lite.stage'].search([('last','=',True)])
+        done_stage = self.env['helpdesk_lite.stage'].search([('last', '=', True)])
         if not done_stage:
             raise ValidationError('Please Select Last/done in stages')
         print(done_stage.id)
@@ -120,10 +121,10 @@ class HelpdeskTicket(models.Model):
     def _email_parse(self, email):
         match = re.match(r"(.*) *<(.*)>", email)
         if match:
-            contact_name, email_from =  match.group(1,2)
+            contact_name, email_from = match.group(1, 2)
         else:
             match = re.match(r"(.*)@.*", email)
-            contact_name =  match.group(1)
+            contact_name = match.group(1)
             email_from = email
         return contact_name, email_from
 
@@ -131,20 +132,20 @@ class HelpdeskTicket(models.Model):
     def message_new(self, msg, custom_values=None):
         match = re.match(r"(.*) *<(.*)>", msg.get('from'))
         if match:
-            contact_name, email_from =  match.group(1,2)
+            contact_name, email_from = match.group(1, 2)
         else:
             match = re.match(r"(.*)@.*", msg.get('from'))
-            contact_name =  match.group(1)
+            contact_name = match.group(1)
             email_from = msg.get('from')
 
         body = tools.html2plaintext(msg.get('body'))
-        bre = re.match(r"(.*)^-- *$", body, re.MULTILINE|re.DOTALL|re.UNICODE)
+        bre = re.match(r"(.*)^-- *$", body, re.MULTILINE | re.DOTALL | re.UNICODE)
         desc = bre.group(1) if bre else None
 
         defaults = {
-            'name':  msg.get('subject') or _("No Subject"),
+            'name': msg.get('subject') or _("No Subject"),
             'email_from': email_from,
-            'description':  desc or body,
+            'description': desc or body,
         }
 
         partner = self.env['res.partner'].sudo().search([('email', '=ilike', email_from)], limit=1)
@@ -189,7 +190,6 @@ class HelpdeskTicket(models.Model):
             res.message_subscribe([res.partner_id.id])
         return res
 
-
     @api.multi
     def write(self, vals):
         # stage change: update date_last_stage_update
@@ -220,7 +220,7 @@ class HelpdeskTicket(models.Model):
     def takeit(self):
         self.ensure_one()
         vals = {
-            'user_id' : self.env.uid,
+            'user_id': self.env.uid,
             # 'team_id': self.env['helpdesk_lite.team'].sudo()._get_default_team_id(user_id=self.env.uid).id
         }
         return super(HelpdeskTicket, self).write(vals)
