@@ -39,7 +39,6 @@
         'views/work_order_worker.xml',
         'views/purchase_requiest_vendor.xml',
         'views/mrp_request_report.xml',
-
         'reports/mrp_request_total_report.xml',
         'reports/purchase_report.xml',
         'reports/deliveryslip.xml',

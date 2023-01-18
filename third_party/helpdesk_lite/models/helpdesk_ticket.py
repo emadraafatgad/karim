@@ -29,7 +29,7 @@ class HelpdeskTicket(models.Model):
         return self.env['helpdesk_lite.stage'].search([], order='sequence', limit=1)
 
     name = fields.Char(string='Ticket', track_visibility='always', required=True)
-    ticket_category_id = fields.Many2one('ticket.category', required=True)
+    ticket_category_id = fields.Many2one('ticket.category',track_visibility='onchange', required=True)
     description = fields.Text('Private Note')
     partner_id = fields.Many2one('res.partner', string='Customer', track_visibility='onchange', index=True)
     phone = fields.Char(related='partner_id.phone', store=True, track_visibility='onchange')
@@ -68,10 +68,24 @@ class HelpdeskTicket(models.Model):
     legend_blocked = fields.Char(related="stage_id.legend_blocked", readonly=True)
     legend_done = fields.Char(related="stage_id.legend_done", readonly=True)
     last = fields.Boolean(related="stage_id.last", readonly=True)
+    submit = fields.Boolean(track_visibility='onchange')
+    lock_deadline = fields.Boolean(track_visibility='onchange',)
     legend_normal = fields.Char(related="stage_id.legend_normal", readonly=True)
 
     active = fields.Boolean(default=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
+
+    def mark_submit_tickit_id(self):
+        self.submit = True
+
+    def unlock_submit(self):
+        self.submit = False
+
+    def mark_dead_tickit_id(self):
+        self.lock_deadline = True
+
+    def unlock_deadline(self):
+        self.lock_deadline = False
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):

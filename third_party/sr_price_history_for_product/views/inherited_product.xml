@@ -53,9 +53,9 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-<xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="after">
-        <field name="direct_product_price" groups="mrp.group_mrp_routings"/>
-      </xpath>
+                <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="after">
+                    <field name="direct_product_price" groups="mrp.group_mrp_routings"/>
+                </xpath>
             </field>
         </record>
 

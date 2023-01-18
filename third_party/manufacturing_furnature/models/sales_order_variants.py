@@ -284,7 +284,7 @@ class SalesOrderKomash(models.Model):
                     component_line_id = component_line_obj.create({
                         'sale_order_id': self.id,
                         'sale_order_line_id': rec.id,
-                        'product_qty':rec.product_uom_qty,
+                        'product_qty': rec.product_uom_qty,
                         'product_id': rec.product_id.id,
                     })
                     component_line_id.add_list_of_records()
@@ -491,15 +491,25 @@ class SalesOrderKomash(models.Model):
             self.mrp_send = 'Sent'
             self.state = 'done'
 
+
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
+
+    discount_amount = fields.Float()
+
+    @api.onchange('discount_amount')
+    def get_discount_amount_percentage(self):
+        if self.discount_amount:
+            total = self.product_uom_qty * self.price_unit
+            discount = self.discount_amount / total
+            self.discount = discount * 100
 
     @api.multi
     def write(self, values):
         if 'product_uom_qty' in values or 'price_unit' in values:
             if len(self.invoice_lines) > 0:
                 for line in self.invoice_lines:
-                    if line.invoice_id.state not in ['draft','cancel']:
+                    if line.invoice_id.state not in ['draft', 'cancel']:
                         raise ValidationError("you can't update quantity or unit price of not cancel items invoices")
         return super(SaleOrderLine, self).write(values)
 
@@ -507,6 +517,6 @@ class SaleOrderLine(models.Model):
     def unlink(self):
         if len(self.invoice_lines) > 0:
             for line in self.invoice_lines:
-                if line.invoice_id.state not in ['draft','cancel']:
+                if line.invoice_id.state not in ['draft', 'cancel']:
                     raise ValidationError("you can't delete line with invoiced items")
         return super(SaleOrderLine, self).unlink()

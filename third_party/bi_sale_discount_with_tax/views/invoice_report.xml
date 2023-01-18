@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <template id="report_invoice_document_with_payments_inherited_1" inherit_id="account.report_invoice_document_with_payments">
+        <xpath expr="//div[@id='total']/div/table/t[@t-if='len(payments_vals) > 0']" position="before">
+            <tr class="border-black">
+                <td><strong><span t-field="o.amount_due_string"/></strong></td>
+                <td class="text-right">
+                     <span t-field="o.amount_due_value" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                </td>
+            </tr>
+        </xpath>
+    </template>
+
+    </data>
+</odoo>

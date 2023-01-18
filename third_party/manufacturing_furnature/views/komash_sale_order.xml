@@ -2,27 +2,43 @@
 <odoo>
     <data>
 
-     <record id="view_sale_order_komash_form" model="ir.ui.view">
-        <field name="name">sale.order.komash.form</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='payment_term_id']" position="after">
-                <field name="mrp_date"/>
-                <field name="to_date"/>
-                <field name="mrp_send" readonly="1"/>
-                <field name="po_send"/>
-            </xpath>
-            <xpath expr="//field[@name='partner_invoice_id']" position="replace">
-                <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" invisible="1" context="{'default_type':'invoice'}" options="{&quot;always_reload&quot;: True}"/>
-            </xpath>
-            <xpath expr="//field[@name='partner_shipping_id']" position="replace">
-                <field name="partner_shipping_id" groups="sale.group_delivery_invoice_address" invisible="1"  context="{'default_type':'delivery'}" options="{&quot;always_reload&quot;: True}"/>
-            </xpath>
+        <record id="view_order_form_discount_inherited" model="ir.ui.view">
+            <field name="name">sale.order.form.view.inherited</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='discount']" position="after">
+                        <field name="discount_amount"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
 
-            <xpath expr="//page/field[@name='order_line']" position="after">
-<!--                <page string="Client Selection">-->
-                    <button  name="product_component_form"  string="Get Product Variants" type="object" attrs="{'invisible':[('po_send','not in',['Ready'])]}" class="btn btn-success"/>
+        <record id="view_sale_order_komash_form" model="ir.ui.view">
+            <field name="name">sale.order.komash.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="mrp_date"/>
+                    <field name="to_date"/>
+                    <field name="mrp_send" readonly="1"/>
+                    <field name="po_send"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_invoice_id']" position="replace">
+                    <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" invisible="1"
+                           context="{'default_type':'invoice'}" options="{&quot;always_reload&quot;: True}"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_shipping_id']" position="replace">
+                    <field name="partner_shipping_id" groups="sale.group_delivery_invoice_address" invisible="1"
+                           context="{'default_type':'delivery'}" options="{&quot;always_reload&quot;: True}"/>
+                </xpath>
+
+                <xpath expr="//page/field[@name='order_line']" position="after">
+                    <!--                <page string="Client Selection">-->
+                    <button name="product_component_form" string="Get Product Variants" type="object"
+                            attrs="{'invisible':[('po_send','not in',['Ready'])]}" class="btn btn-success"/>
                     <field name="product_component_ids">
                         <form>
                             <sheet>
@@ -36,90 +52,102 @@
                                         <field name="attachment"/>
                                     </group>
                                     <group>
-<!--                                        <field name="mrp_product_qty" string="Product Qty"/>-->
+                                        <!--                                        <field name="mrp_product_qty" string="Product Qty"/>-->
                                         <field name="sale_order_line_id" invisible="1"/>
                                         <button name="add_list_of_records" string="Standard Component" type="object"
                                                 class="btn btn-warning" groups="sales_team.group_sale_manager"/>
                                     </group>
                                     <group>
 
-                                        <button name="update_list_of_records" string="Update Component qty" type="object"
+                                        <button name="update_list_of_records" string="Update Component qty"
+                                                type="object"
                                                 class="btn btn-warning" groups="sales_team.group_sale_manager"/>
                                     </group>
 
                                 </group>
-                                    <notebook>
-                                        <page string="Component">
-                                            <field name="component_list_ids">
-                                                <tree string="Conponent" editable="bottom">
-                                                    <field name="component_id"  options="{'no_quick_create':True,'no_create_edit':True,'no_open': True}"/>
-                                                    <field name="is_count" invisible="0"/>
-                                                    <field name="quantity" attrs="{'readonly':[('is_count','!=',True)]}"/>
-                                                     <field name="category_id"/>
-                                                    <field name="internal_component" />
-                                                    <field name="internal_quantity" invisible="0" groups="mrp.group_mrp_routings"/>
-                                                    <field name="operation_id" invisible="1" groups="mrp.group_mrp_routings"  options="{'no_quick_create':True,'no_create_edit':True}"/>
-                                                    <field name="note"/>
-                                                </tree>
-                                            </field>
-                                        </page>
-                                        <page string="Paint">
-                                            <field name="paint_ids" context="{'default_product_id':product_id}">
-                                                <tree string="Paint" editable="bottom">
-                                                    <field name="product_id" invisible="1"/>
-                                                    <field name="operation_id" required="1"/>
-                                                    <field name="color_id"/>
-                                                    <field name="delivery_date" invisible="1"/>
-                                                    <field name="customer" invisible="1"/>
-                                                </tree>
-                                            </field>
-                                        </page>
-                                        <page string="Note">
+                                <notebook>
+                                    <page string="Component">
+                                        <field name="component_list_ids">
+                                            <tree string="Conponent" editable="bottom">
+                                                <field name="component_id"
+                                                       options="{'no_quick_create':True,'no_create_edit':True,'no_open': True}"/>
+                                                <field name="is_count" invisible="0"/>
+                                                <field name="quantity" attrs="{'readonly':[('is_count','!=',True)]}"/>
+                                                <field name="category_id"/>
+                                                <field name="internal_component"/>
+                                                <field name="internal_quantity" invisible="0"
+                                                       groups="mrp.group_mrp_routings"/>
+                                                <field name="operation_id" invisible="1" groups="mrp.group_mrp_routings"
+                                                       options="{'no_quick_create':True,'no_create_edit':True}"/>
                                                 <field name="note"/>
-                                        </page>
-                                    </notebook>
+                                            </tree>
+                                        </field>
+                                    </page>
+                                    <page string="Paint">
+                                        <field name="paint_ids" context="{'default_product_id':product_id}">
+                                            <tree string="Paint" editable="bottom">
+                                                <field name="product_id" invisible="1"/>
+                                                <field name="operation_id" required="1"/>
+                                                <field name="color_id"/>
+                                                <field name="delivery_date" invisible="1"/>
+                                                <field name="customer" invisible="1"/>
+                                            </tree>
+                                        </field>
+                                    </page>
+                                    <page string="Note">
+                                        <field name="note"/>
+                                    </page>
+                                </notebook>
                             </sheet>
                         </form>
-                        <tree >
+                        <tree>
                             <field name="product_id"/>
                             <field name="sale_order_line_id" invisible="1"/>
-<!--                            <field name="mrp_product_qty" string="Product Qty"/>-->
+                            <!--                            <field name="mrp_product_qty" string="Product Qty"/>-->
                         </tree>
 
                     </field>
-<!--                </page>-->
-            </xpath>
-        </field>
-    </record>
+                    <!--                </page>-->
+                </xpath>
+            </field>
+        </record>
 
-     <record id="view_sale_order_mrp_form" model="ir.ui.view">
-        <field name="name">mrp.production  form</field>
-        <field name="model">mrp.production</field>
-        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='origin']" position="after">
-                <field name="sale_order_id"/>
-            </xpath>
-        </field>
-    </record>
+        <record id="view_sale_order_mrp_form" model="ir.ui.view">
+            <field name="name">mrp.production form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="sale_order_id"/>
+                </xpath>
+            </field>
+        </record>
 
-    <record id="view_mrp_komash_form" model="ir.ui.view">
-        <field name="name">sale.order.komash.form</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <button type="action" string="Manufacturing Order" class="oe_stat_button" name="%(mrp.mrp_production_action)d" invisible="1" context="{'default_name':partner_id}" icon="fa-wrench">
-                </button>
-            </xpath>
-            <!--                    <field string="Manufacturing Order" name="app_count" widget="statinfo"/>-->
-            <xpath expr="//button[@name='preview_sale_order']" position="before">
-                <button name="po_send_button"  attrs="{'invisible':['|','|',('invoice_status','not in',['invoiced','to invoice']),('po_send','not in',['Ready']),('state','not in',['sale','done'])]}" string="Purchase request" type="object"  class="btn btn-warning"/>
-                <button  name="send_to_mrp"  attrs="{'invisible':['|','|',('invoice_status','not in',['invoiced','to invoice']),('mrp_send','not in',['Ready']),('state','not in',['sale'])]}" string="Send MRP Request" type="object" class="btn btn-danger"/>
-                <button  name="update_attachment_mrp"  attrs="{'invisible':['|','|',('invoice_status','not in',['invoiced','to invoice']),('mrp_send','in',['Ready']),('state','not in',['sale','done'])]}" string="Update Design" type="object" class="btn btn-danger"/>
-            </xpath>
-        </field>
-    </record>
+        <record id="view_mrp_komash_form" model="ir.ui.view">
+            <field name="name">sale.order.komash.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button type="action" string="Manufacturing Order" class="oe_stat_button"
+                            name="%(mrp.mrp_production_action)d" invisible="1" context="{'default_name':partner_id}"
+                            icon="fa-wrench">
+                    </button>
+                </xpath>
+                <!--                    <field string="Manufacturing Order" name="app_count" widget="statinfo"/>-->
+                <xpath expr="//button[@name='preview_sale_order']" position="before">
+                    <button name="po_send_button"
+                            attrs="{'invisible':['|','|',('invoice_status','not in',['invoiced','to invoice']),('po_send','not in',['Ready']),('state','not in',['sale','done'])]}"
+                            string="Purchase request" type="object" class="btn btn-warning"/>
+                    <button name="send_to_mrp"
+                            attrs="{'invisible':['|','|',('invoice_status','not in',['invoiced','to invoice']),('mrp_send','not in',['Ready']),('state','not in',['sale'])]}"
+                            string="Send MRP Request" type="object" class="btn btn-danger"/>
+                    <button name="update_attachment_mrp"
+                            attrs="{'invisible':['|','|',('invoice_status','not in',['invoiced','to invoice']),('mrp_send','in',['Ready']),('state','not in',['sale','done'])]}"
+                            string="Update Design" type="object" class="btn btn-danger"/>
+                </xpath>
+            </field>
+        </record>
 
     </data>
 </odoo>
