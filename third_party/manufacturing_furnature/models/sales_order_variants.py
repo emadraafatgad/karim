@@ -492,6 +492,20 @@ class SalesOrderKomash(models.Model):
             self.state = 'done'
 
 
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    total_lines_discount = fields.Float(compute="compute_discount_lines_amount", store=True)
+
+    @api.depends("order_line.discount_amount")
+    def compute_discount_lines_amount(self):
+        for rec in self:
+            amount = 0
+            for line in rec.order_line:
+                amount += line.discount_amount
+            rec.total_lines_discount = amount
+
+
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
@@ -507,7 +521,7 @@ class SaleOrderLine(models.Model):
     @api.onchange('discount')
     def get_discount_percentage_amount(self):
         if self.discount:
-            disc = self.discount/100
+            disc = self.discount / 100
             total = self.product_uom_qty * self.price_unit * disc
             # discount = self.discount_amount / total
             self.discount_amount = total
