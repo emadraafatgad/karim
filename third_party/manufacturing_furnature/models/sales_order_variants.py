@@ -504,6 +504,14 @@ class SaleOrderLine(models.Model):
             discount = self.discount_amount / total
             self.discount = discount * 100
 
+    @api.onchange('discount')
+    def get_discount_amount_percentage(self):
+        if self.discount:
+            disc = self.discount/100
+            total = self.product_uom_qty * self.price_unit * disc
+            # discount = self.discount_amount / total
+            self.discount_amount = total
+
     @api.multi
     def write(self, values):
         if 'product_uom_qty' in values or 'price_unit' in values:
