@@ -11,7 +11,8 @@
                     <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='discount']" position="after">
                         <field name="discount_amount"/>
                     </xpath>
-                    <xpath expr="//field[@name='amount_untaxed']" position="after">
+                    <xpath expr="//field[@name='amount_untaxed']" position="before">
+                        <field name="total_untaxed_amount"/>
                         <field name="total_lines_discount"/>
                     </xpath>
                 </data>

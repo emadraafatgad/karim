@@ -496,14 +496,18 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     total_lines_discount = fields.Float(compute="compute_discount_lines_amount", store=True)
-
+    total_untaxed_amount = fields.Float(string="Before Discount",compute="compute_discount_lines_amount", store=True)
     @api.depends("order_line.discount_amount")
     def compute_discount_lines_amount(self):
         for rec in self:
             amount = 0
+            total = 0
             for line in rec.order_line:
                 amount += line.discount_amount
+                total += line.product_uom_qty*line.price_unit
             rec.total_lines_discount = amount
+            rec.total_untaxed_amount = total
+
 
 
 class SaleOrderLine(models.Model):

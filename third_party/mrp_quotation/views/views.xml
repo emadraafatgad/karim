@@ -57,18 +57,9 @@
                             <div t-if="doc.confirmation_date and doc.state not in ['draft','sent']"
                                  class="col-auto mw-100 mb-2">
                                 <strong>Date Ordered:</strong>
-<!--                                <p class="m-0" t-field="doc.mrp_date"/>-->
-                                                                <p class="m-0" t-field="doc.confirmation_date"/>
+                                <!--                                <p class="m-0" t-field="doc.mrp_date"/>-->
+                                <p class="m-0" t-field="doc.confirmation_date"/>
                             </div>
-                            <!--                            <div t-if="doc.validity_date and doc.state in ['draft', 'sent']"-->
-                            <!--                                 class="col-auto mw-100 mb-2">-->
-                            <!--                                <strong>Expiration Date:</strong>-->
-                            <!--                                <p class="m-0" t-field="doc.validity_date"/>-->
-                            <!--                            </div>-->
-                            <!--                            <div t-if="doc.team_id" class="col-auto mw-100 mb-2">-->
-                            <!--                                <strong>SalesTeam:</strong>-->
-                            <!--                                <p class="m-0" t-field="doc.team_id.name"/>-->
-                            <!--                            </div>-->
                             <div t-if="doc.user_id.name" class="col-auto mw-100 mb-2">
                                 <strong>Salesperson:</strong>
                                 <p class="m-0" t-field="doc.user_id"/>
@@ -182,25 +173,39 @@
 
                         <div class="clearfix">
                             <div id="total" class="row" name="total">
-                                <!--                                <div style="margin-right:290px;">-->
-                                <!--                                    <strong>Customer Signature</strong>-->
-                                <!--                                    <div style="border:thin solid; height: 100px; width: 300px;">-->
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
-
-                                <div class="row justify-content-end">
+                                <div t-attf-class="#{'col-5' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
                                     <table class="table table-sm">
-                                        <tr class="border-black o_subtotal" style="">
+                                        <tr class="border-black" style="border-bottom:1px solid #dddddd;">
                                             <td>
                                                 <strong>Subtotal</strong>
                                             </td>
                                             <td class="text-right">
-                                                <span t-field="doc.amount_untaxed"/>
+                                                <span t-field="doc.total_untaxed_amount"/>
                                             </td>
                                         </tr>
+                                        <t>
+                                            <tr>
+                                                <td>
+                                                    <strong>Discount</strong>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="doc.total_lines_discount"
+                                                          t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Amount After Discount</strong>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="doc.amount_untaxed"
+                                                          t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
                                         <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
-                                            <tr style="">
-                                                <t t-if="amount_by_group[5] == 1 and doc.amount_untaxed == amount_by_group[2]">
+                                            <tr style="border-bottom:1px solid #dddddd;">
+                                                <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
                                                     <td>
                                                         <span t-esc="amount_by_group[0]"/>
                                                         <span>&amp;nbsp;<span>on</span>&amp;nbsp;
@@ -208,7 +213,7 @@
                                                                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
                                                         </span>
                                                     </td>
-                                                    <td class="text-right o_price_total">
+                                                    <td class="text-right">
                                                         <span t-esc="amount_by_group[1]"
                                                               t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
                                                     </td>
@@ -217,14 +222,14 @@
                                                     <td>
                                                         <span t-esc="amount_by_group[0]"/>
                                                     </td>
-                                                    <td class="text-right o_price_total">
+                                                    <td class="text-right">
                                                         <span t-esc="amount_by_group[1]"
                                                               t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
                                                     </td>
                                                 </t>
                                             </tr>
                                         </t>
-                                        <tr class="border-black o_total">
+                                        <tr class="border-black">
                                             <td>
                                                 <strong>Total</strong>
                                             </td>
@@ -233,132 +238,177 @@
                                             </td>
                                         </tr>
                                     </table>
+                                    <!--                                    <table class="table table-sm">-->
+                                    <!--                                        <tr class="border-black o_subtotal" style="">-->
+                                    <!--                                            <td>-->
+                                    <!--                                                <strong>Subtotal</strong>-->
+                                    <!--                                            </td>-->
+                                    <!--                                            <td class="text-right">-->
+                                    <!--                                                <span t-field="doc.amount_untaxed"/>-->
+                                    <!--                                            </td>-->
+                                    <!--                                        </tr>-->
+                                    <!--                                        <t t-foreach="doc.amount_by_group" t-as="amount_by_group">-->
+                                    <!--                                            <tr style="">-->
+                                    <!--                                                <t t-if="amount_by_group[5] == 1 and doc.amount_untaxed == amount_by_group[2]">-->
+                                    <!--                                                    <td>-->
+                                    <!--                                                        <span t-esc="amount_by_group[0]"/>-->
+                                    <!--                                                        <span>&amp;nbsp;<span>on</span>&amp;nbsp;-->
+                                    <!--                                                            <t t-esc="amount_by_group[2]"-->
+                                    <!--                                                               t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>-->
+                                    <!--                                                        </span>-->
+                                    <!--                                                    </td>-->
+                                    <!--                                                    <td class="text-right o_price_total">-->
+                                    <!--                                                        <span t-esc="amount_by_group[1]"-->
+                                    <!--                                                              t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>-->
+                                    <!--                                                    </td>-->
+                                    <!--                                                </t>-->
+                                    <!--                                                <t t-else="">-->
+                                    <!--                                                    <td>-->
+                                    <!--                                                        <span t-esc="amount_by_group[0]"/>-->
+                                    <!--                                                    </td>-->
+                                    <!--                                                    <td class="text-right o_price_total">-->
+                                    <!--                                                        <span t-esc="amount_by_group[1]"-->
+                                    <!--                                                              t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>-->
+                                    <!--                                                    </td>-->
+                                    <!--                                                </t>-->
+                                    <!--                                            </tr>-->
+                                    <!--                                        </t>-->
+                                    <!--                                        <tr class="border-black o_total">-->
+                                    <!--                                            <td>-->
+                                    <!--                                                <strong>Total</strong>-->
+                                    <!--                                            </td>-->
+                                    <!--                                            <td class="text-right">-->
+                                    <!--                                                <span t-field="doc.amount_total"/>-->
+                                    <!--                                            </td>-->
+                                    <!--                                        </tr>-->
+                                    <!--                                    </table>-->
                                 </div>
                             </div>
+<!--                        </div>-->
+                    </div>
+
+                    <!--                        <p t-field="doc.note"/>-->
+                    <p t-if="doc.payment_term_id.note">
+                        <span t-field="doc.payment_term_id.note"/>
+                    </p>
+                    <p id="fiscal_position_remark"
+                       t-if="doc.fiscal_position_id and doc.fiscal_position_id.sudo().note">
+                        <strong>Fiscal Position Remark:</strong>
+                        <span t-field="doc.fiscal_position_id.sudo().note"/>
+                    </p>
+
+                    <div t-if="doc.signature" class="mt32 ml16 mr16" name="signature">
+                        <div class="offset-8">
+                            <strong>Signature</strong>
                         </div>
-
-                        <!--                        <p t-field="doc.note"/>-->
-                        <p t-if="doc.payment_term_id.note">
-                            <span t-field="doc.payment_term_id.note"/>
-                        </p>
-                        <p id="fiscal_position_remark"
-                           t-if="doc.fiscal_position_id and doc.fiscal_position_id.sudo().note">
-                            <strong>Fiscal Position Remark:</strong>
-                            <span t-field="doc.fiscal_position_id.sudo().note"/>
-                        </p>
-
-                        <div t-if="doc.signature" class="mt32 ml16 mr16" name="signature">
-                            <div class="offset-8">
-                                <strong>Signature</strong>
-                            </div>
-                            <div class="offset-8">
-                                <img t-att-src="image_data_uri(doc.signature)"
-                                     style="max-height: 4cm; max-width: 8cm;"/>
-                            </div>
-                            <div class="offset-8 text-center">
-                                <p t-field="doc.signed_by"/>
-                            </div>
+                        <div class="offset-8">
+                            <img t-att-src="image_data_uri(doc.signature)"
+                                 style="max-height: 4cm; max-width: 8cm;"/>
+                        </div>
+                        <div class="offset-8 text-center">
+                            <p t-field="doc.signed_by"/>
                         </div>
                     </div>
-                    <!--         <div class="page">-->
+                </div>
+                <!--         <div class="page">-->
 
-                    <div class="oe_structure"/>
-                    <t t-foreach="doc.product_component_ids" t-as="product_var">
-                        <div>
-                            <br/>
-                            <br/>
-                            <br/>
-                        </div>
-                        <h4 class="text-center">
-                            <t>
-                                <span t-field="product_var.product_id"/>
+                <div class="oe_structure"/>
+                <t t-foreach="doc.product_component_ids" t-as="product_var">
+                    <div>
+                        <br/>
+                        <br/>
+                        <br/>
+                    </div>
+                    <h4 class="text-center">
+                        <t>
+                            <span t-field="product_var.product_id"/>
+                        </t>
+                    </h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <t t-set="colspan" t-value="5"/>
+                                <th class="text-left">Part Name</th>
+                                <th class="text-right">Count</th>
+                                <th class="text-right">Material</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <t t-foreach="product_var.component_list_ids" t-as="comp_list">
+                                <tr>
+                                    <t>
+                                        <td>
+                                            <span t-field="comp_list.component_id"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="comp_list.quantity"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="comp_list.internal_component"/>
+                                        </td>
+                                    </t>
+                                </tr>
                             </t>
-                        </h4>
-                        <table class="table">
-                            <thead>
+                        </tbody>
+                    </table>
+                    <div>
+                        <br/>
+                        <br/>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <t t-set="colspan" t-value="5"/>
+                                <th class="text-left">Paint</th>
+                                <th class="text-right">Color</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <t t-foreach="product_var.paint_ids" t-as="paint_line">
                                 <tr>
-                                    <t t-set="colspan" t-value="5"/>
-                                    <th class="text-left">Part Name</th>
-                                    <th class="text-right">Count</th>
-                                    <th class="text-right">Material</th>
+                                    <t>
+                                        <td>
+                                            <span t-field="paint_line.operation_id"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="paint_line.color_id"/>
+                                        </td>
+                                    </t>
                                 </tr>
-                            </thead>
-                            <tbody class="sale_tbody">
-                                <t t-foreach="product_var.component_list_ids" t-as="comp_list">
-                                    <tr>
-                                        <t>
-                                            <td>
-                                                <span t-field="comp_list.component_id"/>
-                                            </td>
-                                            <td class="text-right">
-                                                <span t-field="comp_list.quantity"/>
-                                            </td>
-                                            <td class="text-right">
-                                                <span t-field="comp_list.internal_component"/>
-                                            </td>
-                                        </t>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                        <div>
-                            <br/>
-                            <br/>
-                        </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <t t-set="colspan" t-value="5"/>
-                                    <th class="text-left">Paint</th>
-                                    <th class="text-right">Color</th>
-                                </tr>
-                            </thead>
-                            <tbody class="sale_tbody">
-                                <t t-foreach="product_var.paint_ids" t-as="paint_line">
-                                    <tr>
-                                        <t>
-                                            <td>
-                                                <span t-field="paint_line.operation_id"/>
-                                            </td>
-                                            <td class="text-right">
-                                                <span t-field="paint_line.color_id"/>
-                                            </td>
-                                        </t>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
-                        <div>
-                            <br/>
-                            <br/>
-                        </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <t t-set="colspan" t-value="5"/>
-                                    <th class="text-left">Comments</th>
-                                </tr>
-                            </thead>
-                            <tbody class="sale_tbody">
-                                <t>
-                                    <td>
-                                        <span t-field="product_var.note"/>
-                                    </td>
-                                </t>
-                            </tbody>
-                        </table>
-                    </t>
-                    <div style="page-break-before:always;"/>
-                    <t>
-                        <br style="font-size: 10px;" t-field="doc.note"/>
-                        <div style="margin-right:290px;">
-                            <strong>Customer Signature</strong>
-                            <div style="border:thin solid; height: 100px; width: 300px;">
-                            </div>
-                        </div>
-                    </t>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div>
+                        <br/>
+                        <br/>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <t t-set="colspan" t-value="5"/>
+                                <th class="text-left">Comments</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <t>
+                                <td>
+                                    <span t-field="product_var.note"/>
+                                </td>
+                            </t>
+                        </tbody>
+                    </table>
                 </t>
-            </xpath>
-        </template>
-    </data>
-</odoo>
+                <div style="page-break-before:always;"/>
+                <t>
+                    <br style="font-size: 10px;" t-field="doc.note"/>
+                    <div style="margin-right:290px;">
+                        <strong>Customer Signature</strong>
+                        <div style="border:thin solid; height: 100px; width: 300px;">
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </xpath>
+    </template>
+</data>
+        </odoo>
