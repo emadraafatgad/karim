@@ -61,6 +61,7 @@ class SalesOrderKomash(models.Model):
 
     mrp_date = fields.Date(string="Delivery  Date",required=True)
 
+
     def product_component_form(self):
         component_line_obj = self.env['sale.order.component.line']
         for rec in self.order_line:

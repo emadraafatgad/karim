@@ -193,15 +193,15 @@
                                                           t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Amount After Discount</strong>
-                                                </td>
-                                                <td class="text-right">
-                                                    <span t-esc="doc.amount_untaxed"
-                                                          t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
-                                                </td>
-                                            </tr>
+<!--                                            <tr>-->
+<!--                                                <td>-->
+<!--                                                    <strong>Amount After Discount</strong>-->
+<!--                                                </td>-->
+<!--                                                <td class="text-right">-->
+<!--                                                    <span t-esc="doc.amount_untaxed"-->
+<!--                                                          t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>-->
+<!--                                                </td>-->
+<!--                                            </tr>-->
                                         </t>
                                         <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
                                             <tr style="border-bottom:1px solid #dddddd;">

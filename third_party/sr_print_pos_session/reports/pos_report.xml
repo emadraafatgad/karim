@@ -9,5 +9,14 @@
             name="sr_print_pos_session.pos_session_report_template"
             file="sr_print_pos_session.pos_session_report_template"
         />
+
+        <report
+            id="sr_pos_order_report"
+            model="pos.order"
+            string="Order Report"
+            report_type="qweb-pdf"
+            name="sr_print_pos_session.pos_order_report_template"
+            file="sr_print_pos_session.pos_order_report_template"
+        />
     </data>
 </odoo>

@@ -99,7 +99,13 @@ class SalesOrderKomash(models.Model):
     to_date = fields.Date(string="TO  Date", required=True, track_visibility='onchange', )
     city_id = fields.Many2one('res.city', 'City', track_visibility='onchange', )
     phone = fields.Char(related='partner_id.phone', required=True, readonly=False, track_visibility='onchange', )
+    days_count = fields.Integer(compute='calc_days_count')
 
+    @api.depends('mrp_date','confirmation_date')
+    def calc_days_count(self):
+        for rec in self:
+            if rec.mrp_date and rec.confirmation_date:
+                rec.days_count = (rec.mrp_date - rec.confirmation_date.date()).days
     # @api.multi
     # def action_cancel(self):
     #     now = fields.Datetime.now()

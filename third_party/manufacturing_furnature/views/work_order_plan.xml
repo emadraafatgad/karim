@@ -1,0 +1,135 @@
+<odoo>
+    <data>
+
+        <record id="view_work_orders_mrp_form" model="ir.ui.view">
+            <field name="name">mrp.production form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Work Order Plans" invisible="0">
+                        <field name="work_plan_ids">
+                            <tree string="Direct Labour Cost" editable="bottom">
+                                <field name="operation_id" readonly="1"/>
+                                <field name="worker_id" invisible="0"/>
+                                <!--                                <field name="name" string="Name"/>-->
+                                <field name="workcenter_id" readonly="1"/>
+                                <field name="state" readonly="1"/>
+                                <button name="button_finish" type="object" string="Finish Order"
+                                        attrs="{'invisible': [('state', '!=', 'progress')]}"
+                                        class="btn-info"/>
+                                <button name="button_start" type="object" string="Start Working"
+                                        attrs="{'invisible': [('state', 'not in', ['pending','ready'])]}"
+                                        class="btn-success"/>
+                                <button name="button_pending" type="object" string="Pause" class="btn-warning"
+                                        attrs="{'invisible': [ ('state', 'in', ('done', 'pending', 'ready', 'cancel'))]}"/>
+                            </tree>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="total_cost" invisible="1"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="work_order_plan_action" model="ir.actions.act_window">
+            <field name="name">Work Order Plan</field>
+            <field name="res_model">work.order.plan</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search,pivot</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="work_order_plan_form" model="ir.ui.view">
+            <field name="name">Work Order Plan Form</field>
+            <field name="model">work.order.plan</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_finish" type="object" string="Finish Order"
+                                attrs="{'invisible': [('state', '!=', 'progress')]}"
+                                class="btn-info"/>
+                        <button name="button_start" type="object" string="Start Working"
+                                attrs="{'invisible': [('state', 'not in', ['pending','ready'])]}"
+                                class="btn-success"/>
+                        <button name="button_pending" type="object" string="Pause" class="btn-warning"
+                                attrs="{'invisible': [ ('state', 'in', ('done', 'pending', 'ready', 'cancel'))]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="pending,ready,progress,done"/>
+                    </header>
+                    <sheet>
+                        <group colspan="12">
+                            <group cols="4">
+<!--                                <field name="name" string="Name"/>-->
+                                <field name="product_id"/>
+                                <field name="product_uom_id"/>
+                            </group>
+                            <group>
+                                <field name="workcenter_id"/>
+                                <field name="production_id"/>
+                            </group>
+                            <notebook>
+                                <page string="Info">
+                                    <group>
+                                        <field name="customer_id"/>
+                                        <field name="sale_order_id"/>
+                                    </group>
+                                </page>
+                                <page string="Dates">
+                                    <group cols="4">
+                                        <field name="worker_id"/>
+                                        <field name="production_date"/>
+                                        <field name="date_start"/>
+                                        <field name="date_finished" invisible="0"/>
+                                        <field name="next_work_order_id" invisible="0"/>
+                                    </group>
+                                </page>
+                            </notebook>
+
+
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="work_order_plan_tree" model="ir.ui.view">
+            <field name="name">Work Order Plan Tree</field>
+            <field name="model">work.order.plan</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="operation_id" />
+                    <field name="workcenter_id"/>
+                    <field name="production_id" string="To Produce"/>
+                    <field name="product_uom_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="work_order_plan_search" model="ir.ui.view">
+            <field name="name">Work Order Plan Search</field>
+            <field name="model">work.order.plan</field>
+            <field name="type">search</field>
+            <field name="priority">15</field>
+            <field name="arch" type="xml">
+                <search string="Search MRP Material">
+                    <field name="product_id"/>
+                </search>
+            </field>
+        </record>
+
+        <menuitem id="work_order_plan_id" action="work_order_plan_action" name="Work Plans"
+                  parent="mrp.menu_mrp_root" sequence="5"/>
+
+    </data>
+</odoo>

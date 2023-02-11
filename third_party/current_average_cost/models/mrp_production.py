@@ -13,7 +13,7 @@ class StockMove(models.Model):
     avarage_cost_qty = fields.Float('Current Average Cost', compute="_get_avg_cost", store=True,
                                     digits=dp.get_precision('Product Price'), help='Current Stock Average Cost')
 
-    @api.depends('product_id')
+    @api.depends('product_id','product_uom_qty')
     def _get_avg_cost(self):
         for move in self:
             # print("okay")
@@ -36,6 +36,7 @@ class MrpProduction(models.Model):
                                 compute='calculate_labour_cost')
     total_production_cost = fields.Float(digits=dp.get_precision('Product Price'), string='Actual Total Cost',
                                          compute='calculate_total_cost')
+    margin_cost = fields.Float(compute='get_margin_form_cost')
     finished_product_price = fields.Float(digits=dp.get_precision('Product Price'), string="Actual Price",
                                           related='product_id.lst_price')
     profit_per = fields.Float(digits=dp.get_precision('Product Price'), string="Profit Percentage",
@@ -43,6 +44,11 @@ class MrpProduction(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency',
                                   default=lambda self: self.env.user.company_id.currency_id.id)
 
+    @api.depends('total_production_cost','finished_product_price')
+    def get_margin_form_cost(self):
+        for rec in self:
+            if rec.total_production_cost and rec.finished_product_price:
+                rec.margin_cost = 100*rec.total_production_cost/rec.finished_product_price
     def calc_avaerage(self):
         for line in self.move_raw_ids:
             # print("ok")

@@ -16,15 +16,18 @@
     'description': """
     """,
     'author': "Sitaram",
-    'website':"sitaramsolutions.in",
-    'depends': ['base', 'point_of_sale'],
+    'website': "sitaramsolutions.in",
+    'depends': ['base', 'point_of_sale','sale_management'],
     'data': [
         'reports/pos_report.xml',
-'reports/pos_session_report_template.xml'
+        'reports/pos_session_report_template.xml',
+        'reports/pos_order_report_template.xml',
+        'views/pos_filter_data.xml',
+        'views/res_config_settings_views.xml',
     ],
     'demo': [],
-    'images':['static/description/banner.png'],
-    'live_test_url':'https://youtu.be/xYuOpF4aZis',
+    'images': ['static/description/banner.png'],
+    'live_test_url': 'https://youtu.be/xYuOpF4aZis',
     'installable': True,
     'application': False,
     'auto_install': False,

@@ -5,6 +5,12 @@
         <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
     </record>
 
+    <record id="group_component_change_permission" model="res.groups">
+        <field name="name">Component Change</field>
+        <field name="comment">Component Change From Line</field>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
     <record id="group_mark_done_mo" model="res.groups">
         <field name="name">Mark Done</field>
         <field name="comment">Mark Done MO</field>

@@ -10,9 +10,12 @@
                 <group string="Marketing" name="utm_link" >
                     <field name="campaign_id"/>
                     <field name="medium_id"/>
-                    <field name="source_id"/>
+                    <field name="source_id" required="1"/>
                 </group>
             </xpath>
+<!--            <xpath expr="//field[@name='delivery_status']" position="after">-->
+<!--                <field name="source_id" required="1"/>-->
+<!--            </xpath>-->
         </field>
     </record>
 

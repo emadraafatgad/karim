@@ -27,6 +27,7 @@
                 <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="mrp_date"/>
                     <field name="to_date"/>
+                    <field name="days_count"/>
                     <field name="mrp_send" readonly="1"/>
                     <field name="po_send"/>
                 </xpath>

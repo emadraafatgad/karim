@@ -9,8 +9,12 @@
                 <xpath expr="//field[@name='move_raw_ids']//field[@name='quantity_done']" position="after">
                     <field name="to_consume" string="Base Consume" readonly="1" invisible="0"/>
                     <field name="not_consumed" string="Not Consumed" invisible="0" readonly="1"/>
-
+                    <field name="is_lock" invisible="0"  readonly="1"/>
                 </xpath>
+                <xpath expr="//field[@name='move_raw_ids']" position="before">
+                    <button name="lock_unlock_done_mrp_move_qty" class="btn btn-danger" type="object" string="Lock Done Line" group="group_unlock_permission"/>
+                </xpath>
+
             </field>
         </record>
 
@@ -22,8 +26,36 @@
                 <xpath expr="//field[@name='product_id']" position="after">
                     <field name="to_consume" readonly="1"/>
                     <field name="customer_name" readonly="1"/>
+                    <field name="is_lock" invisible="1"/>
+                    <field name="has_tracking" invisible="1"/>
+                    <field name="order_finished_lot_ids" invisible="1"/>
+                    <field name="finished_lots_exist" invisible="1"/>
+                    <field name="picking_type_id" invisible="1"/>
 <!--                    <field name="customers_name"/>-->
                 </xpath>
+                <xpath expr="//field[@name='quantity_done']" position="replace">
+                    <field name="quantity_done"
+                           attrs="{'readonly': ['|', ('is_locked', '=', True),'|', ('is_lock', '=', True), '|', ('finished_lots_exist', '=', True), ('has_tracking', '!=', 'none')]}"
+                           nolabel="1"/>
+                </xpath>
+                <xpath expr="//field[@name='active_move_line_ids']" position="replace">
+                    <field name="active_move_line_ids" attrs="{'readonly': ['|', ('is_locked', '=', True),'|', ('is_lock', '=', True), ('state', '=', 'cancel')]}" context="{'default_workorder_id': workorder_id, 'default_product_uom_id': product_uom, 'default_product_id': product_id,  'default_location_id': location_id, 'default_location_dest_id': location_dest_id, 'default_production_id': production_id or raw_material_production_id}">
+                        <tree editable="bottom" decoration-success="product_qty==qty_done" decoration-danger="(product_qty &gt; 0) and (qty_done&gt;product_qty)">
+                            <field name="lot_id" attrs="{'column_invisible': [('parent.has_tracking', '=', 'none')]}" domain="[('product_id', '=', parent.product_id)]" context="{'default_product_id': parent.product_id}"/>
+                            <field name="lot_produced_id" options="{'no_open': True, 'no_create': True}" domain="[('id', 'in', parent.order_finished_lot_ids)]" invisible="not context.get('final_lots')"/>
+                            <field name="product_qty" string="Reserved" readonly="1"/>
+                            <field name="qty_done"/>
+                            <field name="workorder_id" invisible="1"/>
+                            <field name="product_id" invisible="1"/>
+                            <field name="product_uom_id" invisible="1"/>
+                            <field name="location_id" invisible="1"/>
+                            <field name="location_dest_id" invisible="1"/>
+                            <field name="done_wo" invisible="1"/>
+                            <field name="production_id" invisible="1"/>
+                        </tree>
+                    </field>
+                </xpath>
+
             </field>
         </record>
         <record id="view_stock_mrp_to_line" model="ir.ui.view">

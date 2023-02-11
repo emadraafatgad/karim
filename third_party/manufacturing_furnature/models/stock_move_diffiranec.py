@@ -12,9 +12,13 @@ class StockMoveNotConsumed(models.Model):
     not_consumed = fields.Float(compute='cal_product_to_consumed', store=True)
     to_consume = fields.Float(store=True)
     customer_name = fields.Char(related='raw_material_production_id.origin', store=True)
-
+    is_lock = fields.Boolean()
     # customers_name = fields.Char(related='raw_material_production_id.origin')
 
+    def lock_unlock_done_move_qty(self):
+        print("self.is_locked")
+        print(self.is_locked)
+        self.is_lock = True
     @api.model_create_multi
     def create(self, vals_list):
         tracking = []

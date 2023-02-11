@@ -10,7 +10,7 @@
                         <group>
                             <field name="product_id" />
 <!--                            <field name="product_uom_qty" groups="mrp.group_mrp_manager"/>-->
-                            <field name="product_uom_qty" groups="manufacturing_furnature.group_unlock_permission"/>
+                            <field name="product_uom_qty" groups="manufacturing_furnature.group_component_change_permission"/>
                         </group>
                     </group>
                     <footer>

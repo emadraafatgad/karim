@@ -31,6 +31,12 @@
                         <group string="Price">
                             <field name="finished_product_price"/>
                         </group>
+<!--                        <group string="Cost">-->
+<!--                            <field name="total_production_cost"/>-->
+<!--                        </group>-->
+                        <group string="Cost %">
+                            <field name="margin_cost"/>
+                        </group>
 <!--                        <group string="Profit Margin">-->
 <!--                            <label for="profit_per"/>-->
 <!--                            <div>-->
