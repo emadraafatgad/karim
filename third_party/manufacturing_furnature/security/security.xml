@@ -1,6 +1,6 @@
 <odoo>
     <record id="group_unlock_permission" model="res.groups">
-        <field name="name">Lock lines </field>
+        <field name="name">Lock/ unLock MO</field>
         <field name="comment">Enable Update Qty Done or Inital MO</field>
         <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
     </record>
