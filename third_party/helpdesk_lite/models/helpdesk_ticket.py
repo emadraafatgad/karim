@@ -216,7 +216,8 @@ class HelpdeskTicket(models.Model):
             else:
                 vals.update({'date_done': False})
         if 'date_deadline' in vals:
-            if not self.user_has_groups('helpdesk_lite.group_helpdesk_lite_manager'):
+            if self.lock_deadline :
+                # not self.user_has_groups('helpdesk_lite.group_helpdesk_lite_manager'):
                 raise ValidationError('you are not allowed to update deadline')
 
         return super(HelpdeskTicket, self).write(vals)
