@@ -81,7 +81,12 @@ class MoMaterialCost(models.Model):
             if line.state == 'done':
                 line.write({'is_lock': True})
                 print(line.is_lock)
-
+    def unlock_done_mrp_move_qty(self):
+        for line in self.move_raw_ids:
+            print(line.product_id, line.state, line.is_lock)
+            if line.state == 'done':
+                line.write({'is_lock': False})
+                print(line.is_lock)
     def action_toggle_is_locked(self):
         self.ensure_one()
         print("looooooooooooooooooooooooooooooooook")

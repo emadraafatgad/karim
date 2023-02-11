@@ -13,6 +13,7 @@
                 </xpath>
                 <xpath expr="//field[@name='move_raw_ids']" position="before">
                     <button name="lock_unlock_done_mrp_move_qty" class="btn btn-danger" type="object" string="Lock Done Line" group="group_unlock_permission"/>
+                    <button name="unlock_done_mrp_move_qty" class="btn btn-danger" type="object" string="UnLock Done Line" group="group_unlock_permission"/>
                 </xpath>
 
             </field>
