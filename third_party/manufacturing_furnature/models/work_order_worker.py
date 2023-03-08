@@ -5,7 +5,9 @@ from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
-
+from odoo.exceptions import UserError
+from odoo.tools import float_is_zero, pycompat
+from odoo.addons import decimal_precision as dp
 
 class WorkOrderWorker(models.Model):
     _inherit = 'mrp.workorder'
@@ -71,6 +73,7 @@ class WorkOrderWorker(models.Model):
 
     @api.multi
     def record_production(self):
+        self.record_update_product_cost()
         done_button = super(WorkOrderWorker, self).record_production()
 
         # if not self.worker_id and self.operation_type != 'others':
@@ -94,7 +97,32 @@ class WorkOrderWorker(models.Model):
         #     if bill_id:
         #         bill_id.action_invoice_open()
         self.production_id.post_inventory()
+        self.production_id.change_price()
         return done_button
+
+    def record_update_product_cost(self):
+        for rec in self:
+            print("rec.move_raw_ids")
+            # print(rec.move_raw_ids)
+            for move in rec.move_raw_ids:
+                print(move.product_id.name,"==**===========**=")
+                domain = [('product_id', '=', move.product_id.id), ('state', 'in', ('purchase', 'done'))]
+                purchase_order_line_ids = self.env['purchase.order.line'].sudo().search(domain,  limit=1,
+                                                                                        order='create_date desc')
+                # print(purchase_order_line_ids)
+                # print(purchase_order_line_ids.price_unit)
+                product_or_template = move.product_id.product_tmpl_id
+                print(product_or_template.name)
+                print(move.product_id.standard_price , purchase_order_line_ids.price_unit)
+                cost = purchase_order_line_ids.price_unit if purchase_order_line_ids.price_unit > 0 else 1
+
+                diff = move.product_id.standard_price -  cost
+                prec = self.env['decimal.precision'].precision_get('Product Price')
+                if not float_is_zero(diff, precision_digits=prec):
+                    # raise UserError(_("No difference between the standard price and the new price."))
+                # if move.product_id.standard_price != purchase_order_line_ids.price_unit:
+                    counterpart_account_id = product_or_template.property_account_expense_id or product_or_template.categ_id.property_account_expense_categ_id
+                    move.product_id.do_change_standard_price(cost, counterpart_account_id.id)
 
     @api.multi
     def button_start(self):
