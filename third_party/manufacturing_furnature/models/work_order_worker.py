@@ -9,6 +9,75 @@ from odoo.exceptions import UserError
 from odoo.tools import float_is_zero, pycompat
 from odoo.addons import decimal_precision as dp
 
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+
+    stock_value_currency_id = fields.Many2one('res.currency', compute='_compute_stock_value_currency')
+    stock_value = fields.Float(
+        'Value', compute='_compute_stock_value')
+    qty_at_date = fields.Float(
+        'Quantity', compute='_compute_stock_value')
+    stock_fifo_real_time_aml_ids = fields.Many2many(
+        'account.move.line', compute='_compute_stock_value')
+    stock_fifo_manual_move_ids = fields.Many2many(
+        'stock.move', compute='_compute_stock_value')
+
+    @api.multi
+    def do_change_standard_price(self, new_price, account_id):
+        """ Changes the Standard Price of Product and creates an account move accordingly."""
+        AccountMove = self.env['account.move']
+
+        quant_locs = self.env['stock.quant'].sudo().read_group([('product_id', 'in', self.ids)], ['location_id'], ['location_id'])
+        quant_loc_ids = [loc['location_id'][0] for loc in quant_locs]
+        locations = self.env['stock.location'].search([('usage', '=', 'internal'), ('company_id', '=', self.env.user.company_id.id), ('id', 'in', quant_loc_ids)])
+
+        product_accounts = {product.id: product.product_tmpl_id.get_product_accounts() for product in self}
+
+        prec = self.env['decimal.precision'].precision_get('Product Price')
+        for location in locations:
+            for product in self.with_context(location=location.id, compute_child=False).filtered(lambda r: r.valuation == 'real_time'):
+                print(product.name,"***********")
+                diff = product.standard_price - new_price
+                if float_is_zero(diff, precision_digits=prec):
+                    continue
+                    # raise UserError(_("No difference between the standard price and the new price. {}".format(product.name)))
+                if not product_accounts[product.id].get('stock_valuation', False):
+                    raise UserError(_('You don\'t have any stock valuation account defined on your product category. You must define one before processing this operation.'))
+                qty_available = product.qty_available
+                if qty_available:
+                    # Accounting Entries
+                    if diff * qty_available > 0:
+                        debit_account_id = account_id
+                        credit_account_id = product_accounts[product.id]['stock_valuation'].id
+                    else:
+                        debit_account_id = product_accounts[product.id]['stock_valuation'].id
+                        credit_account_id = account_id
+
+                    move_vals = {
+                        'journal_id': product_accounts[product.id]['stock_journal'].id,
+                        'company_id': location.company_id.id,
+                        'ref': product.default_code,
+                        'line_ids': [(0, 0, {
+                            'name': _('%s changed cost from %s to %s - %s') % (self.env.user.name, product.standard_price, new_price, product.display_name),
+                            'account_id': debit_account_id,
+                            'debit': abs(diff * qty_available),
+                            'credit': 0,
+                            'product_id': product.id,
+                        }), (0, 0, {
+                            'name': _('%s changed cost from %s to %s - %s') % (self.env.user.name, product.standard_price, new_price, product.display_name),
+                            'account_id': credit_account_id,
+                            'debit': 0,
+                            'credit': abs(diff * qty_available),
+                            'product_id': product.id,
+                        })],
+                    }
+                    move = AccountMove.create(move_vals)
+                    move.post()
+
+        self.write({'standard_price': new_price})
+        return True
+
 class WorkOrderWorker(models.Model):
     _inherit = 'mrp.workorder'
 
