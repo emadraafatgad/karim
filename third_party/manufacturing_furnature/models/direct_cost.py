@@ -66,6 +66,7 @@ class MoMaterialCost(models.Model):
     def confirm_work_orders(self):
         work_orders = self.env['mrp.workorder'].search([('production_id', '=', self.id), ('state', '!=', 'done')])
         print(work_orders)
+        self.change_price()
         for work_order in work_orders:
             work_order.qty_producing = 1
             if work_order.state in ['pending', 'ready']:
@@ -81,12 +82,14 @@ class MoMaterialCost(models.Model):
             if line.state == 'done':
                 line.write({'is_lock': True})
                 print(line.is_lock)
+
     def unlock_done_mrp_move_qty(self):
         for line in self.move_raw_ids:
             print(line.product_id, line.state, line.is_lock)
             if line.state == 'done':
                 line.write({'is_lock': False})
                 print(line.is_lock)
+
     def action_toggle_is_locked(self):
         self.ensure_one()
         print("looooooooooooooooooooooooooooooooook")
@@ -106,6 +109,15 @@ class MoMaterialCost(models.Model):
             for rec in line.direct_material_cost_ids:
                 cost += rec.unit_cost
             line.total_cost = cost
+
+    @api.multi
+    def change_price(self):
+        """ Changes the Standard Price of Product and creates an account move accordingly. """
+        self.ensure_one()
+        product_or_template = self.product_id.product_tmpl_id
+        counterpart_account_id = product_or_template.property_account_expense_id or product_or_template.categ_id.property_account_expense_categ_id
+        self.product_id.do_change_standard_price(self.total_production_cost, counterpart_account_id.id)
+        # return {'type': 'ir.actions.act_window_close'}
 
 
 class BomDirectCost(models.Model):

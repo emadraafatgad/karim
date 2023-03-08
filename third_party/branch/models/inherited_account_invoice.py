@@ -86,10 +86,12 @@ class AccountInvoice(models.Model):
                     'currency_id': diff_currency and inv.currency_id.id,
                     'invoice_id': inv.id
                 })
+                print(iml)
             part = self.env['res.partner']._find_accounting_partner(inv.partner_id)
             line = [(0, 0, self.line_get_convert(l, part.id)) for l in iml]
             line = inv.group_lines(iml, line)
-
+            # print("branch line")
+            # print(line)
             line = inv.finalize_invoice_move_lines(line)
 
             date = inv.date or inv.date_invoice
