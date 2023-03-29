@@ -31,9 +31,7 @@ class ProductProduct(models.Model):
         quant_locs = self.env['stock.quant'].sudo().read_group([('product_id', 'in', self.ids)], ['location_id'], ['location_id'])
         quant_loc_ids = [loc['location_id'][0] for loc in quant_locs]
         locations = self.env['stock.location'].search([('usage', '=', 'internal'), ('company_id', '=', self.env.user.company_id.id), ('id', 'in', quant_loc_ids)])
-
         product_accounts = {product.id: product.product_tmpl_id.get_product_accounts() for product in self}
-
         prec = self.env['decimal.precision'].precision_get('Product Price')
         for location in locations:
             for product in self.with_context(location=location.id, compute_child=False).filtered(lambda r: r.valuation == 'real_time'):
@@ -54,26 +52,26 @@ class ProductProduct(models.Model):
                         debit_account_id = product_accounts[product.id]['stock_valuation'].id
                         credit_account_id = account_id
 
-                    move_vals = {
-                        'journal_id': product_accounts[product.id]['stock_journal'].id,
-                        'company_id': location.company_id.id,
-                        'ref': product.default_code,
-                        'line_ids': [(0, 0, {
-                            'name': _('%s changed cost from %s to %s - %s') % (self.env.user.name, product.standard_price, new_price, product.display_name),
-                            'account_id': debit_account_id,
-                            'debit': abs(diff * qty_available),
-                            'credit': 0,
-                            'product_id': product.id,
-                        }), (0, 0, {
-                            'name': _('%s changed cost from %s to %s - %s') % (self.env.user.name, product.standard_price, new_price, product.display_name),
-                            'account_id': credit_account_id,
-                            'debit': 0,
-                            'credit': abs(diff * qty_available),
-                            'product_id': product.id,
-                        })],
-                    }
-                    move = AccountMove.create(move_vals)
-                    move.post()
+                    # move_vals = {
+                    #     'journal_id': product_accounts[product.id]['stock_journal'].id,
+                    #     'company_id': location.company_id.id,
+                    #     'ref': product.default_code,
+                    #     'line_ids': [(0, 0, {
+                    #         'name': _('%s changed cost from %s to %s - %s') % (self.env.user.name, product.standard_price, new_price, product.display_name),
+                    #         'account_id': debit_account_id,
+                    #         'debit': abs(diff * qty_available),
+                    #         'credit': 0,
+                    #         'product_id': product.id,
+                    #     }), (0, 0, {
+                    #         'name': _('%s changed cost from %s to %s - %s') % (self.env.user.name, product.standard_price, new_price, product.display_name),
+                    #         'account_id': credit_account_id,
+                    #         'debit': 0,
+                    #         'credit': abs(diff * qty_available),
+                    #         'product_id': product.id,
+                    #     })],
+                    # }
+                    # move = AccountMove.create(move_vals)
+                    # move.post()
 
         self.write({'standard_price': new_price})
         return True
