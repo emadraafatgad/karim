@@ -14,8 +14,6 @@
                     <field name="low_percentage"/>
                     <field name="done_low_percentage"/>
                     <field name="remaining_low_percentage"/>
-                    <field name="called_or_not"/>
-                    <field name="payment_validate_date"/>
                 </xpath>
             </field>
         </record>

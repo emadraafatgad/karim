@@ -8,7 +8,7 @@
 ##############################################################################
 from odoo import api, fields, models
 import odoo.addons.decimal_precision as dp
-
+from odoo.exceptions import ValidationError
 class AccountAccountTemplate(models.Model):
     _inherit = "account.account.template"
     
@@ -30,7 +30,21 @@ class AccountAccountType(models.Model):
 
 class AccountAccount(models.Model):
     _inherit = "account.account"
-    
+
+    @api.multi
+    @api.constrains('user_type_id')
+    def _check_user_type_id(self):
+        data_unaffected_earnings = self.env.ref('manufacturing_furnature.data_unaffected_earnings')
+        result = self.read_group([('user_type_id', '=', data_unaffected_earnings.id)], ['company_id'], ['company_id'])
+        for res in result:
+            if res.get('company_id_count', 0) >= 2:
+                account_unaffected_earnings = self.search([('company_id', '=', res['company_id'][0]),
+                                                           ('user_type_id', '=', data_unaffected_earnings.id)])
+                raise ValidationError(
+                    _('You cannot have more than one account with "Current Year Earnings" as type. (accounts: %s)') % [
+                        a.code for a in account_unaffected_earnings])
+
+
     @api.multi
     @api.depends('move_line_ids','move_line_ids.amount_currency','move_line_ids.debit','move_line_ids.credit')
     def compute_values(self):
