@@ -2,8 +2,8 @@
     <data>
 
         <record model="account.account.type" id="data_unaffected_earnings">
-          <field name="name">Current Year Earnings</field>
-          <field name="include_initial_balance" eval="True"/>
+            <field name="name">Current Year Earnings</field>
+            <field name="include_initial_balance" eval="True"/>
         </record>
 
         <record id="product_component_name_action" model="ir.actions.act_window">
@@ -53,6 +53,19 @@
                 </form>
             </field>
         </record>
+
+        <record id="discount_called_or_not_tree" model="ir.ui.view">
+            <field name="name">called.sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="before">
+                    <field name="called_or_not"/>
+                    <field name="delivery_status"/>
+                </xpath>
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="product_component_name_tree">
             <field name="name">product component list</field>
             <field name="model">component.name</field>
