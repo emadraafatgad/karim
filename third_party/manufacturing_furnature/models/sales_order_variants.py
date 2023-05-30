@@ -100,12 +100,15 @@ class SalesOrderKomash(models.Model):
     city_id = fields.Many2one('res.city', 'City', track_visibility='onchange', )
     phone = fields.Char(related='partner_id.phone', required=True, readonly=False, track_visibility='onchange', )
     days_count = fields.Integer(compute='calc_days_count')
+    payment_validate_date = fields.Date(track_visibility='onchange')
+    called_or_not = fields.Boolean(track_visibility='onchange')
 
-    @api.depends('mrp_date','confirmation_date')
+    @api.depends('mrp_date', 'confirmation_date')
     def calc_days_count(self):
         for rec in self:
             if rec.mrp_date and rec.confirmation_date:
                 rec.days_count = (rec.mrp_date - rec.confirmation_date.date()).days
+
     # @api.multi
     # def action_cancel(self):
     #     now = fields.Datetime.now()
@@ -502,7 +505,8 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     total_lines_discount = fields.Float(compute="compute_discount_lines_amount", store=True)
-    total_untaxed_amount = fields.Float(string="Before Discount",compute="compute_discount_lines_amount", store=True)
+    total_untaxed_amount = fields.Float(string="Before Discount", compute="compute_discount_lines_amount", store=True)
+
     @api.depends("order_line.discount_amount")
     def compute_discount_lines_amount(self):
         for rec in self:
@@ -510,10 +514,9 @@ class SaleOrder(models.Model):
             total = 0
             for line in rec.order_line:
                 amount += line.discount_amount
-                total += line.product_uom_qty*line.price_unit
+                total += line.product_uom_qty * line.price_unit
             rec.total_lines_discount = amount
             rec.total_untaxed_amount = total
-
 
 
 class SaleOrderLine(models.Model):

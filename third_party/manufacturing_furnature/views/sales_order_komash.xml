@@ -1,5 +1,11 @@
 <odoo>
     <data>
+
+        <record model="account.account.type" id="account.data_unaffected_earnings">
+          <field name="name">Current Year Earnings</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+
         <record id="product_component_name_action" model="ir.actions.act_window">
             <field name="name">component name</field>
             <field name="res_model">component.name</field>
@@ -186,6 +192,8 @@
                     <field name="city_id" options="{'no_quick_create':True,'no_create_edit':True}" required="1"
                            attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
                     <!--                <field name="date_order" string="Contract Date"/>-->
+                    <field name="payment_validate_date"/>
+                    <field name="called_or_not"/>
                     <field name="delivery_status"/>
                 </xpath>
             </field>

@@ -12,6 +12,7 @@ class PostOrder(models.Model):
 
     order_note = fields.Text('Terms and conditions', default=_default_note)
     city_id = fields.Many2one('res.city', 'City',)
+    state_id = fields.Many2one('res.country.state')
     delivery_date = fields.Date(string="Delivery Date")
     is_delivered = fields.Boolean()
 

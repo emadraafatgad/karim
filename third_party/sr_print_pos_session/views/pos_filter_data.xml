@@ -8,6 +8,7 @@
 		    <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
 		    <field name="arch" type="xml">
 		        <field name="partner_id" position="after">
+					<field name="state_id"/>
 					<field string="City" name="city_id" readonly="False"/>
 					<field string="Delivery Date" name="delivery_date" readonly="False"/>
 					<field string="Delivered" name="is_delivered" readonly="False"/>
