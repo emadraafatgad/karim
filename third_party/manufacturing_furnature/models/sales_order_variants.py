@@ -102,6 +102,15 @@ class SalesOrderKomash(models.Model):
     days_count = fields.Integer(compute='calc_days_count')
     payment_validate_date = fields.Date(track_visibility='onchange')
     called_or_not = fields.Boolean(track_visibility='onchange')
+    discount_from_lines = fields.Float(compute='calc_amount_from_lines', store=False)
+
+    @api.depends('order_line','order_line.discount_amount')
+    def calc_amount_from_lines(self):
+        for rec in self:
+            total_discount = 0
+            for line in rec.order_line:
+                total_discount += line.discount_amount
+            rec.discount_from_lines = total_discount
 
     @api.depends('mrp_date', 'confirmation_date')
     def calc_days_count(self):

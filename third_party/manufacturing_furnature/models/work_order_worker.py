@@ -185,11 +185,11 @@ class WorkOrderWorker(models.Model):
 
                 diff = move.product_id.standard_price -  cost
                 prec = self.env['decimal.precision'].precision_get('Product Price')
-                if not float_is_zero(diff, precision_digits=prec):
+                # if not float_is_zero(diff, precision_digits=prec):
                     # raise UserError(_("No difference between the standard price and the new price."))
                 # if move.product_id.standard_price != purchase_order_line_ids.price_unit:
-                    counterpart_account_id = product_or_template.property_account_expense_id or product_or_template.categ_id.property_account_expense_categ_id
-                    move.product_id.do_change_standard_price(cost, counterpart_account_id.id)
+                #     counterpart_account_id = product_or_template.property_account_expense_id or product_or_template.categ_id.property_account_expense_categ_id
+                #     move.product_id.do_change_standard_price(cost, counterpart_account_id.id)
 
     @api.multi
     def button_start(self):

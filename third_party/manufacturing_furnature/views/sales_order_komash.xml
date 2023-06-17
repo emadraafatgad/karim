@@ -61,6 +61,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='state']" position="before">
                     <field name="called_or_not"/>
+                    <field name="payment_validate_date"/>
                     <field name="delivery_status"/>
                 </xpath>
             </field>
