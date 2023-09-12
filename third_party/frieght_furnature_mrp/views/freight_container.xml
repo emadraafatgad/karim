@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="freight_container_tree_view" model="ir.ui.view">
+        <field name="name">Container</field>
+        <field name="model">freight.container</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="size"/>
+                <field name="weight"/>
+                <field name="volume"/>
+                <field name="active"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="freight_container_form_view" model="ir.ui.view">
+        <field name="name">Container</field>
+        <field name="model">freight.container</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" readonly="1" statusbar_visible="available,reserve"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="size"/>
+                            <field name="weight"/>
+                            <field name="volume"/>
+                        </group>
+                        <group>
+                            <field name="code"/>
+                            <field name="size_uom_id"/>
+                            <field name="weight_uom_id"/>
+                            <field name="volume_uom_id"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="freight_container_search_view" model="ir.ui.view">
+        <field name="name">Port</field>
+        <field name="model">freight.container</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter string="Inactive" name="invactive" domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_freight_container" model="ir.actions.act_window">
+        <field name="name">Containers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">freight.container</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="xml">
+            <p class="o_view_nocontent_smiling_face">
+                Define a new freigh container
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_freight_container" action="action_freight_container" name="Container" sequence="50"
+              parent="menu_configuration"/>
+
+    <record id="freight_service_tree_view" model="ir.ui.view">
+        <field name="name">Service</field>
+        <field name="model">freight.service</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="sale_price"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="freight_service_form_view" model="ir.ui.view">
+        <field name="name">Service</field>
+        <field name="model">freight.service</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="sale_price"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Vendors">
+                            <field name="line_ids">
+                                <tree string="Vendor" editable="bottom">
+                                    <field name="partner_id"/>
+                                    <field name="sale"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_freight_service" model="ir.actions.act_window">
+        <field name="name">Freight Service</field>
+        <field name="res_model">freight.service</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define a new Freight Service
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_freight_service" action="action_freight_service" name="Service" sequence="50"
+              parent="menu_configuration"/>
+</odoo>

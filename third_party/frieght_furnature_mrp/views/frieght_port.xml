@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="freight_port_tree_view" model="ir.ui.view">
+            <field name="name">Port</field>
+            <field name="model">freight.port</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="country_id"/>
+                    <field name="state_id"/>
+                    <field name="water"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+        <record id="freight_port_form_view" model="ir.ui.view">
+            <field name="name">Port</field>
+            <field name="model">freight.port</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="country_id"/>
+                                <field name="state_id"/>
+                            </group>
+                            <group>
+                                <field name="active" widget="boolean_toggle"/>
+                                <field name="water"/>
+                                <field name="land"/>
+                                <field name="air"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="freight_port_search_view" model="ir.ui.view">
+            <field name="name">Port</field>
+            <field name="model">freight.port</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter string="Inactive" name="invactive" domain="[('active','=',False)]"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_freight_port" model="ir.actions.act_window">
+            <field name="name">Freight Port</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">freight.port</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="xml">
+                <p class="o_view_nocontent_smiling_face">
+                    Define a new freigh port
+                </p>
+            </field>
+        </record>
+        <record id="freight_price_tree_view" model="ir.ui.view">
+            <field name="name">Price List</field>
+            <field name="model">freight.price</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="volume"/>
+                    <field name="weight"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="freight_price_form_view" model="ir.ui.view">
+            <field name="name">price</field>
+            <field name="model">freight.price</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="volume"/>
+                        </group>
+                        <group>
+                            <field name="weight"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_freight_price" model="ir.actions.act_window">
+            <field name="name">Freight Price</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">freight.price</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="xml">
+                <p class="o_view_nocontent_smiling_face">
+                    Define a new freight Price
+                </p>
+            </field>
+        </record>
+
+        <record id="freight_route_tree_view" model="ir.ui.view">
+            <field name="name">route</field>
+            <field name="model">freight.routes</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="land_sale"/>
+                    <field name="water_sale"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="freight_route_form_view" model="ir.ui.view">
+            <field name="name">Route</field>
+            <field name="model">freight.routes</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="land_sale"/>
+                        </group>
+                        <group>
+                            <field name="water_sale"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_freight_route" model="ir.actions.act_window">
+            <field name="name">Freight Route</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">freight.routes</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="xml">
+                <p class="o_view_nocontent_smiling_face">
+                    Define a new freight Routes
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_freight_root" name="Freight Management" sequence="4"/>
+        <menuitem id="menu_configuration" name="Configuration" sequence="4" parent="menu_freight_root"/>
+        <menuitem id="menu_freight_port" action="action_freight_port" name="Port" sequence="10" parent="menu_configuration"/>
+        <menuitem id="menu_freight_price" action="action_freight_price" name="Price" sequence="20" parent="menu_configuration"/>
+        <menuitem id="menu_freight_routes" action="action_freight_route" name="Routes" sequence="30" parent="menu_configuration"/>
+
+
+    </data>
+</odoo>

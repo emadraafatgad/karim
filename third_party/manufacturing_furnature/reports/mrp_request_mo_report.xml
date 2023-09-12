@@ -1,7 +1,6 @@
 <odoo>
     <data>
-        <report
-                id="action_report_mrp_all_mos"
+        <report id="action_report_mrp_all_mos"
                 string="Mo Material"
                 model="mrp.production"
                 report_type="qweb-pdf"
