@@ -18,6 +18,7 @@
         'views/frieght_order.xml',
         'views/custom_clearance.xml',
         'views/order_track.xml',
+        'views/product_template.xml',
 
     ],
     'demo': [

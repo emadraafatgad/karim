@@ -4,65 +4,71 @@
 
     <!--  CRM Res Partner Extension Views -->
 
-        <record model="ir.ui.view" id="district_res_partner_form">
-            <field name="name">Res Partner Form</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-                <field name="city" position="replace">
-                    <field name="city" invisible="True"/>
-                    <field name="city_id" placeholder="City"/>
-                </field>
+    <record model="ir.ui.view" id="district_res_partner_form">
+        <field name="name">Res Partner Form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="city" position="replace">
+                <field name="city" invisible="True"/>
+                <field name="city_id" placeholder="City"/>
             </field>
-        </record>
+        </field>
+    </record>
 
-        <record model="ir.ui.view" id="district_res_partner_tree">
-            <field name="name">Res Partner Tree</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_tree"/>
-            <field name="arch" type="xml">
-                <field name="email" position="after">
-                    <field name="city"/>
-                    <field name="state_id"/>
-                </field>
+    <record model="ir.ui.view" id="district_res_partner_tree">
+        <field name="name">Res Partner Tree</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <field name="email" position="after">
+                <field name="city"/>
+                <field name="state_id"/>
             </field>
-        </record>
+        </field>
+    </record>
 
     <!--  Partner City Views -->
 
-        <record model="ir.ui.view" id="partner_city_form">
-            <field name="name">Res City Form</field>
-            <field name="model">res.city</field>
-            <field name="arch" type="xml">
-                <form string="City">
+    <record model="ir.ui.view" id="partner_city_form">
+        <field name="name">Res City Form</field>
+        <field name="model">res.city</field>
+        <field name="arch" type="xml">
+            <form string="City">
+                <group>
                     <group>
                         <field name="name"/>
                         <field name="district_id"/>
                     </group>
-                </form>
-            </field>
-        </record>
+                    <group>
+                        <field name="company_id"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
 
-        <record model="ir.ui.view" id="partner_city_tree">
-            <field name="name">Res City Tree</field>
-            <field name="model">res.city</field>
-            <field name="arch" type="xml">
-                <tree string="City">
-                    <field name="name"/>
-                    <field name="district_id"/>
-                </tree>
-            </field>
-        </record>
+    <record model="ir.ui.view" id="partner_city_tree">
+        <field name="name">Res City Tree</field>
+        <field name="model">res.city</field>
+        <field name="arch" type="xml">
+            <tree string="City">
+                <field name="name"/>
+                <field name="district_id"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
 
-        <record id="partner_city_action" model="ir.actions.act_window">
-            <field name="name">Res City</field>
-            <field name="res_model">res.city</field>
-            <field name="view_type">form</field>
-            <field name="view_id" ref="partner_city_tree"/>
-            <field name="help">Create a new partner city</field>
-        </record>
+    <record id="partner_city_action" model="ir.actions.act_window">
+        <field name="name">Res City</field>
+        <field name="res_model">res.city</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="partner_city_tree"/>
+        <field name="help">Create a new partner city</field>
+    </record>
 
-        <menuitem
+    <menuitem
             action="partner_city_action"
             name="City"
             id="menu_partner_city"

@@ -478,7 +478,7 @@ class FreightOrderLine(models.Model):
                 'company_id': companies.id,
                 'invoice_id': created_invoice.id,
                 'uom_id': line.product_id.uom_po_id.id,
-                'price_unit': line.product_id.lst_price,
+                'price_unit': line.product_id.usa_price,
             }
             order_list.append(order_line)
             print(order_line)

@@ -25,4 +25,5 @@ class ResCity(models.Model):
 
     name = fields.Char('City')
     district_id = fields.Many2one('res.country.state', u'District')
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
 
