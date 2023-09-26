@@ -413,9 +413,10 @@ class SalesOrderKomash(models.Model):
             for dic in self.return_bill_material_bom(line.product_id):
                 bom_id.write({'bom_line_ids': [(0, 0, dic)]})
                 print("done Bom", dic)
-            for dic in self.return_bill_material_packaging(line.product_id):
-                bom_id.write({'bom_line_ids': [(0, 0, dic)]})
-                print("Done packaging", dic)
+            if self.env.company.id == 1:
+                for dic in self.return_bill_material_packaging(line.product_id):
+                    bom_id.write({'bom_line_ids': [(0, 0, dic)]})
+                    print("Done packaging", dic)
         else:
             raise exceptions.ValidationError(_("Please set a standard Bill Material Of %s" % line.product_id.name))
         # print("booooom_id", bom_id)
