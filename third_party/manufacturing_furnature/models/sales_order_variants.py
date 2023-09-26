@@ -56,7 +56,7 @@ class SalesOrderComponentLine(models.Model):
     def add_list_of_records(self):
         sales_component = self.env['product.component.list']
         ids_list = []
-        bom_id_base = self.env['mrp.bom'].search([('product_tmpl_id', '=', self.product_id.product_tmpl_id.id),
+        bom_id_base = self.env['mrp.bom'].sudo().search([('product_tmpl_id', '=', self.product_id.product_tmpl_id.id),
                                                   ('is_standard', '=', True)], )
         print(bom_id_base, )
         if len(bom_id_base) > 1:
@@ -296,7 +296,7 @@ class SalesOrderKomash(models.Model):
                         break
 
             if not product_flag:
-                bom_id_base = self.env['mrp.bom'].search([('product_tmpl_id', '=', rec.product_id.product_tmpl_id.id),
+                bom_id_base = self.env['mrp.bom'].sudo().search([('product_tmpl_id', '=', rec.product_id.product_tmpl_id.id),
                                                           ('is_standard', '=', True)], )
                 if bom_id_base:
                     component_line_id = component_line_obj.create({
