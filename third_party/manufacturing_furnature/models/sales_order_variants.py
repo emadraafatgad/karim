@@ -331,17 +331,31 @@ class SalesOrderKomash(models.Model):
 
     def return_bill_material(self, final_product):
         vals = []
+        print("return")
         for line in self.product_component_ids:
+            print("lines")
             if line.product_id == final_product and line.mrp_send == False:
+                print("log")
                 for l in line.component_list_ids:
-                    vals.append({
-                        'component_id': l.component_id.id,
-                        'internal_component': l.internal_component.id,
+                    print("l")
+                    print(l.sudo().internal_component.id,)
+                    print({
+                        'component_id': l.sudo().component_id.id,
+                        'internal_component': l.sudo().internal_component.id,
                         'quantity': l.quantity,
-                        'product_uom_id': l.internal_component.uom_id.id,
+                        'product_uom_id': l.sudo().internal_component.uom_id.id,
                         'internal_quantity': l.internal_quantity,
                         'operation_id': l.operation_id.id,
                     })
+                    vals.append({
+                        'component_id': l.sudo().component_id.id,
+                        'internal_component': l.sudo().internal_component.id,
+                        'quantity': l.quantity,
+                        'product_uom_id': l.sudo().internal_component.uom_id.id,
+                        'internal_quantity': l.internal_quantity,
+                        'operation_id': l.operation_id.id,
+                    })
+                    print("ffdsfs")
 
                 break
             print(vals, "===============================", vals)
@@ -353,21 +367,21 @@ class SalesOrderKomash(models.Model):
             if line.product_id == final_product and line.mrp_send == False:
                 for l in line.component_list_ids:
                     if l.internal_component.id:
-                        vals.append({'product_id': l.internal_component.id,
-                                     'product_uom_id': l.internal_component.uom_id.id,
-                                     'product_qty': l.internal_quantity * l.quantity,
-                                     'operation_id': l.operation_id.id,
+                        vals.append({'product_id': l.sudo().internal_component.id,
+                                     'product_uom_id': l.sudo().internal_component.uom_id.id,
+                                     'product_qty': l.sudo().internal_quantity * l.quantity,
+                                     'operation_id': l.sudo().operation_id.id,
                                      })
                     if l.component_id.s_product_id:
-                        vals.append({'product_id': l.component_id.s_product_id.id,
-                                     'product_uom_id': l.component_id.s_product_id.uom_id.id,
-                                     'product_qty': l.component_id.s_product_qty * l.quantity,
-                                     'operation_id': l.operation_id.id,
+                        vals.append({'product_id': l.sudo().component_id.s_product_id.id,
+                                     'product_uom_id': l.sudo().component_id.s_product_id.uom_id.id,
+                                     'product_qty': l.sudo().component_id.s_product_qty * l.quantity,
+                                     'operation_id': l.sudo().operation_id.id,
                                      })
                     if l.component_id.f_product_id:
-                        vals.append({'product_id': l.component_id.f_product_id.id,
-                                     'product_uom_id': l.component_id.f_product_id.uom_id.id,
-                                     'product_qty': l.component_id.f_product_qty * l.quantity,
+                        vals.append({'product_id': l.sudo().component_id.f_product_id.id,
+                                     'product_uom_id': l.sudo().component_id.f_product_id.uom_id.id,
+                                     'product_qty': l.sudo().component_id.f_product_qty * l.quantity,
                                      'operation_id': l.operation_id.id,
                                      })
                 line.mrp_send = True
@@ -380,7 +394,7 @@ class SalesOrderKomash(models.Model):
             if line.product_id == final_product and line.mrp_package == False:
                 for l in line.packaging_id.packaging_line_ids:
                     if l.id:
-                        vals.append({'product_id': l.product_id.id,
+                        vals.append({'product_id': l.sudo().product_id.id,
                                      'product_uom_id': l.uom_id.id,
                                      'product_qty': l.qty,
 
@@ -396,7 +410,7 @@ class SalesOrderKomash(models.Model):
                                                   ('is_standard', '=', True)], )
         print(bom_id_base, "base standard")
         if bom_id_base:
-            bom_id = self.env['mrp.bom'].create({
+            bom_id = self.env['mrp.bom'].sudo().create({
                 'product_tmpl_id': bom_id_base.product_tmpl_id.id,
                 'product_id': bom_id_base.product_id.id,
                 'code': self.partner_id.name,
@@ -407,15 +421,17 @@ class SalesOrderKomash(models.Model):
             })
             print(bom_id, "new bom")
             for dic in self.return_bill_material(line.product_id):
-                bom_id.write({'product_component_list_ids': [(0, 0, dic)]})
+                print("---")
+                bom_id.sudo().write({'product_component_list_ids': [(0, 0, dic)]})
                 print("dic base", dic)
-            bom_id.write({'bom_line_ids': [(6, 0, self.return_base_bom_lines(bom_id, line))]})
+            bom_id.sudo().write({'bom_line_ids': [(6, 0, self.return_base_bom_lines(bom_id, line))]})
             for dic in self.return_bill_material_bom(line.product_id):
-                bom_id.write({'bom_line_ids': [(0, 0, dic)]})
+                print()
+                bom_id.sudo().write({'bom_line_ids': [(0, 0, dic)]})
                 print("done Bom", dic)
-            if self.env.company.id == 1:
+            if self.env.user.company_id.id == 1:
                 for dic in self.return_bill_material_packaging(line.product_id):
-                    bom_id.write({'bom_line_ids': [(0, 0, dic)]})
+                    bom_id.sudo().write({'bom_line_ids': [(0, 0, dic)]})
                     print("Done packaging", dic)
         else:
             raise exceptions.ValidationError(_("Please set a standard Bill Material Of %s" % line.product_id.name))
@@ -429,6 +445,7 @@ class SalesOrderKomash(models.Model):
         if bom_id_base:
             lst = []
             for bom in bom_id_base.bom_line_ids:
+                print("pom line")
                 lst.append(self.env['mrp.bom.line'].create({
                     'product_id': bom.product_id.id,
                     'product_uom_id': bom.product_uom_id.id,
@@ -437,6 +454,7 @@ class SalesOrderKomash(models.Model):
                     # 'type': bom.type,
                     'bom_id': bom_id.id
                 }).id)
+                print("after")
             return lst
 
     def get_labour_cost(self, line):
@@ -472,7 +490,7 @@ class SalesOrderKomash(models.Model):
             check = self.env['mrp.production.request'].search(
                 [('sale_order_id', '=', self.id), ('product_id', '=', line.product_id.id)])
             check_zero = self.line_check_zero_qty(line)
-            if len(line.paint_ids) == 0:
+            if len(line.paint_ids) == 0 and self.env.user.company_id.id == 1:
                 raise ValidationError("You have to select colors")
             if check_zero != True:
                 return check_zero

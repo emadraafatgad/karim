@@ -53,7 +53,8 @@
                                         <field name="mrp_send" groups="mrp.group_mrp_routings"/>
                                     </group>
                                     <group>
-                                        <field name="packaging_id" required="1"/>
+<!--                                        <field name="sale_order_id" invisible="1"/>-->
+                                        <field name="packaging_id" required="0"/>
                                         <field name="attachment"/>
                                     </group>
                                     <group>
