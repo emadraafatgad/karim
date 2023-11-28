@@ -13,18 +13,18 @@
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
                     <t t-call="manufacturing_furnature.mrp_template_mrp_quotation"
-                       t-lang="doc.sale_order_id.partner_id.lang"/>
+                       t-lang="doc.sudo().sale_order_id.partner_id.lang"/>
                 </t>
             </t>
         </template>
         <template id="mrp_template_mrp_quotation">
             <t t-call="web.external_layout">
-                <t t-set="doc" t-value="doc.with_context(lang=doc.sale_order_id.partner_id.lang)"/>
+                <t t-set="doc" t-value="doc.with_context(lang=doc.sudo().sale_order_id.partner_id.lang)"/>
                 <div class="page">
                     <div class="oe_structure"/>
                     <h2 class="text-center">
-                        <span t-if="doc.sale_order_id.state not in ['draft','sent']">Order #</span>
-                        <span t-field="doc.sale_order_id.name"/>
+                        <span t-if="doc.sudo().sale_order_id.state not in ['draft','sent']">Order #</span>
+                        <span t-field="doc.sudo().sale_order_id.name"/>
                     </h2>
                     <h5>
                         <strong>Customer Details</strong>
@@ -33,18 +33,18 @@
                     <div class="row mt32 mb32" id="informations">
                         <div class="col-auto mw-100 ">
                             <strong>Customer Name:</strong>
-                            <p class="m-0" t-field="doc.sale_order_id.partner_id.name"/>
+                            <p class="m-0" t-field="doc.sudo().sale_order_id.partner_id.name"/>
                         </div>
                         <div class="col-auto mw-100 ">
                             <strong>Mobile:</strong>
-                            <p class="m-0" t-field="doc.sale_order_id.partner_id.mobile"/>
+                            <p class="m-0" t-field="doc.sudo().sale_order_id.partner_id.mobile"/>
                         </div>
                     </div>
                     <div class="row mt32 mb32" id="other_informations">
-                        <div t-if="doc.sale_order_id.mrp_date"
+                        <div t-if="doc.sudo().sale_order_id.mrp_date"
                              class="col-auto mw-100 mb-2">
                             <strong>Delivery Date:</strong>
-                            <p class="m-0" t-field="doc.sale_order_id.mrp_date"/>
+                            <p class="m-0" t-field="doc.sudo().sale_order_id.mrp_date"/>
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         </tr>
                     </thead>
                     <tbody class="sale_tbody">
-                        <t t-foreach="doc.sale_order_id.order_line" t-as="line">
+                        <t t-foreach="doc.sudo().sale_order_id.order_line" t-as="line">
                             <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
                                 <t t-if="not line.display_type">
                                     <td>
@@ -99,7 +99,7 @@
 <!--                        <i t-attf-class="fa fa-#{connections[record.connection.raw_value]}"></i>-->
 <!--                    </span>-->
 <!--                </t>-->
-                <t t-foreach="doc.sale_order_id.product_component_ids" t-as="product_var">
+                <t t-foreach="doc.sudo().sale_order_id.product_component_ids" t-as="product_var">
                     <h4 class="text-center">
                         <t>
                             <span t-field="product_var.product_id"/>
