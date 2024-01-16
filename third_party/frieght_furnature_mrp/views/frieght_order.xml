@@ -29,9 +29,9 @@
                         <button name="create_invoice" string="Invoice" type="object" class="oe_highlight"
                                 states="confirm"
                                 data-hotkey="w"/>
-<!--                        <button name="track_order" string="Tracking" type="object" class="oe_highlight"-->
-<!--                                states="confirm,invoice"-->
-<!--                                data-hotkey="w"/>-->
+                        <!--                        <button name="track_order" string="Tracking" type="object" class="oe_highlight"-->
+                        <!--                                states="confirm,invoice"-->
+                        <!--                                data-hotkey="w"/>-->
                         <button name="action_done" string="Done" type="object" class="oe_highlight"
                                 states="confirm,invoice"
                                 data-hotkey="w"/>
@@ -102,13 +102,19 @@
                                         <field name="items_count"/>
                                         <field name="billing_type"/>
                                         <field name="pricing_id"/>
+
+                                        <field name="custom_or_stock"/>
                                         <field name="volume" attrs="{'invisible': [('billing_type', '!=', 'volume')]}"/>
                                         <field name="actual_volume"/>
                                         <!--                                        <field name="weight" attrs="{'invisible': [('billing_type', '!=', 'weight')]}"/>-->
                                         <field name="price"/>
                                         <field name="total_price"/>
-                                        <button name="create_purchase_order_from_invoice" attrs="{'invisible':[('purchase_id','!=',False)]}" string="Create Purchase" type="object" class="btn btn-danger"/>
-                                        <button name="create_invoice_from_freight_line" attrs="{'invisible':[('invoice_id','!=',False)]}" string="Create Invoice" type="object" class="btn btn-warning"/>
+                                        <button name="create_purchase_order_from_invoice"
+                                                attrs="{'invisible':[('purchase_id','!=',False)]}"
+                                                string="Create Purchase" type="object" class="btn btn-danger"/>
+                                        <button name="create_invoice_from_freight_line"
+                                                attrs="{'invisible':[('invoice_id','!=',False)]}"
+                                                string="Create Invoice" type="object" class="btn btn-warning"/>
                                         <field name="purchase_id" invisible="0"/>
                                         <field name="invoice_id" invisible="0"/>
                                     </tree>
@@ -118,6 +124,7 @@
                                                 <group>
                                                     <field name="container_id"/>
                                                     <field name="pricing_id"/>
+                                                    <field name="custom_or_stock"/>
                                                     <field name="billing_type"/>
                                                 </group>
                                                 <group>

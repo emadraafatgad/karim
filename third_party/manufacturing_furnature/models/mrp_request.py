@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from odoo.exceptions import ValidationError
 from odoo import api, models, fields
 
 
@@ -20,7 +20,53 @@ class NewManufacturingRequest(models.Model):
     state = fields.Selection([('draft', 'draft'), ('Confirmed', 'MRP Order'), ('not', 'Not MRP'),
                               ('bom', 'Purchase Requested')], track_visibility='onchange',
                              default='draft', readonly=True)
-    sale_order_id = fields.Many2one('sale.order', readonly=True)
+    for_export = fields.Boolean(default=False)
+    mrp_operation_state = fields.Selection([('confirmed', 'Confirmed'), ('planned', 'Planned'),('progress', 'In Progress'), ('done', 'Not MRP'),
+                                            ('cancel','Canceled')], track_visibility='onchange',
+                             compute='get_mrp_state_from_mrp', readonly=True)
+    so_number = fields.Char()
+    is_shipped = fields.Boolean()
+
+    def create_freight_order(self):
+        for rec in self:
+            if not rec.for_export or rec.is_shipped:
+                continue
+            open_freight = self.env['freight.order'].search([('state','=','draft')])
+            if not open_freight:
+                raise ValidationError('please create open freight')
+            elif len(open_freight)>1:
+                raise ValidationError('please add only one open freight')
+            print(open_freight)
+            print(open_freight.order_ids)
+            print(open_freight.order_ids.mapped('purchase_id'))
+            freight_line = open_freight.order_ids.filtered(lambda  l: not l.purchase_id)
+            if not freight_line:
+                raise ValidationError('Please add Line in freight for customize')
+            print(freight_line)
+            order_line = {
+                'product_id': rec.product_id.id,
+                'container_id': freight_line.container_id.id,
+                'custom_or_stock':'custom',
+                'quantity': rec.quantity_qty,
+            }
+            freight_line.container_line_ids =[(0,0,order_line)]
+
+
+
+
+
+    def get_mrp_state_from_mrp(self):
+        for rec in self:
+            print('rec.sale_order_id')
+            print(rec.sudo().sale_order_id.name)
+            mrp = self.env['mrp.production'].sudo().search([('product_id','=',rec.product_id.id),('bom_id','=',rec.bom_id.id),('sale_order_id','=',rec.sale_order_id.id)],limit=1)
+            print("mrp found")
+            print(mrp)
+            mapped_state = mrp.mapped('state')
+            rec.mrp_operation_state = mrp.state
+            # stat for stat in mapped_state if stat =='done':
+            print('state',rec.mrp_operation_state)
+    sale_order_id = fields.Many2one('sale.order', readonly=True,groups="base.group_user")
     city_id = fields.Many2one('res.city', 'City', related='sale_order_id.city_id', store=True,
                               track_visibility='onchange', )
     expected_delivery_date = fields.Date(track_visibility='onchange')

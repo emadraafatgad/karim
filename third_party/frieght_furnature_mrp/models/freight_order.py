@@ -22,7 +22,7 @@ class FreightOrder(models.Model):
                             'Import/Export', required=True,
                             help="Type of freight operation")
     transport_type = fields.Selection([('land', 'Land'), ('air', 'Air'),
-                                       ('water', 'Water')], "Transport",
+                                       ('water', 'Water')], "Transport", default='water',
                                       help='Type of transportation',
                                       required=True)
     land_type = fields.Selection([('ltl', 'LTL'), ('ftl', 'FTL')],
@@ -448,6 +448,8 @@ class FreightOrderLine(models.Model):
     po_line_id = fields.Many2one('purchase.order.line')
     purchase_id = fields.Many2one('purchase.order')
     invoice_id = fields.Many2one('account.invoice')
+    custom_or_stock = fields.Selection([('custom', 'Customize'), ('stock', 'For Stock')], default='stock',
+                                       required=True)
 
     def create_invoice_from_freight_line(self):
         current_company = self.env.user.company_id
@@ -529,7 +531,7 @@ class FreightOrderLine(models.Model):
                 'order_id': created_purchase.id,
                 'date_planned': fields.Date.today(),
                 'product_uom': line.product_id.uom_po_id.id,
-                'price_unit': line.product_id.standard_price
+                'price_unit': line.product_id.usa_cost,
             }
             purchase_order_line = self.env['purchase.order.line'].sudo().create(order_line)
 
@@ -645,7 +647,8 @@ class FreightOrderServiceLine(models.Model):
     line_id = fields.Many2one('freight.order')
     clearance_id = fields.Many2one('custom.clearance')
     service_id = fields.Many2one('freight.service', required=False)
-    product_id = fields.Many2one('product.product',string="Service", domain="[('type','=','service'),('can_be_expensed','=',True)]", required=True)
+    product_id = fields.Many2one('product.product', string="Service",
+                                 domain="[('type','=','service'),('can_be_expensed','=',True)]", required=True)
     partner_id = fields.Many2one('res.partner', domain="[('supplier','=','True')]", string="Vendor")
     qty = fields.Float('Quantity')
     cost = fields.Float('Cost')
@@ -687,3 +690,30 @@ class Tracking(models.Model):
     date = fields.Date('Date')
     type = fields.Selection([('received', 'Received'),
                              ('delivered', 'Delivered')], 'Received/Delivered')
+
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    export = fields.Boolean('For Export', default=False)
+    freight_send = fields.Boolean()
+    def create_freight_order(self):
+        for rec in self.order_line:
+            open_freight = self.env['freight.order'].search([('state','=','draft')],limit=1)
+            if not open_freight:
+                raise ValidationError('please create open freight')
+            elif len(open_freight)>1:
+                raise ValidationError('please add only one open freight')
+            print(open_freight)
+            freight_line = open_freight.order_ids.filtered(lambda  l: not l.purchase_id)
+            if not freight_line:
+                raise ValidationError('Please add Line in freight for customize')
+            print(freight_line)
+            order_line = {
+                'product_id': rec.product_id.id,
+                'container_id': freight_line.container_id.id,
+                'custom_or_stock':'stock',
+                'quantity': rec.product_uom_qty,
+            }
+            freight_line.container_line_ids =[(0,0,order_line)]
+        self.freight_send = True

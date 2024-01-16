@@ -104,6 +104,7 @@ class SalesOrderKomash(models.Model):
     called_or_not = fields.Boolean(track_visibility='onchange')
     discount_from_lines = fields.Float(compute='calc_amount_from_lines', store=False)
 
+
     @api.depends('order_line','order_line.discount_amount')
     def calc_amount_from_lines(self):
         for rec in self:
@@ -503,6 +504,8 @@ class SalesOrderKomash(models.Model):
                 'product_id': line.product_id.id,
                 'product_uom_id': line.product_id.uom_id.id,
                 'origin': self.partner_id.name,
+                'so_number':self.name,
+                'for_export': True if self.company_id.id == 2 else False,
                 'sale_order_id': self.id,
                 'note': line.note,
                 'quantity_qty': product_uom_qty,

@@ -50,6 +50,9 @@
                                 <field name="product_id"/>
                                 <field name="quantity_qty"/>
                                 <field name="product_uom_id"/>
+                                <field name="for_export"/>
+                                <field name="is_shipped"/>
+                                <field name="mrp_operation_state"/>
                             </group>
                             <group cols="4">
                                 <field name="expected_delivery_date"/>
@@ -62,7 +65,7 @@
                             </group>
                             <group>
                                 <field name="bom_id"/>
-                                <field name="sale_order_id"/>
+                                <field name="sale_order_id" groups="base.group_user"/>
                             </group>
                             <group>
                                 <field name="city_id"/>
@@ -129,7 +132,8 @@
             <field name="arch" type="xml">
                 <tree string="Tree MRP" decoration-danger="is_late == True">
                     <field name="name"/>
-                    <field name="sale_order_id"/>
+                    <field name="sale_order_id" groups="base.group_user"/>
+                    <field name="so_number"/>
                     <field name="invoice_status" invisible="1"/>
                     <field name="payment_status"/>
                     <field name="product_id"/>
@@ -143,6 +147,9 @@
                     <field name="is_late" invisible="0"/>
                     <field name="payment_validate_date"/>
                     <field name="called_or_not" widget="boolean_toggle"/>
+                    <field name="for_export"/>
+                    <field name="is_shipped"/>
+                    <field name="mrp_operation_state"/>
                     <field name="state"/>
                 </tree>
             </field>
@@ -155,7 +162,7 @@
             <field name="priority">15</field>
             <field name="arch" type="xml">
                 <search string="Search MRP">
-                    <field name="sale_order_id"/>
+                    <field name="sale_order_id" groups="base.group_user"/>
                     <field name="product_id"/>
                     <field name="origin"/>
                     <filter string="Not Mrp" name="purchase_only"
@@ -177,10 +184,19 @@
             </field>
         </record>
 
+        <record id="action_create_freight" model="ir.actions.server">
+            <field name="name">Create Freight</field>
+            <field name="model_id" ref="manufacturing_furnature.model_mrp_production_request"/>
+            <field name="binding_model_id" ref="manufacturing_furnature.model_mrp_production_request"/>
+            <field name="state">code</field>
+            <field name="code">records.create_freight_order()</field>
+        </record>
+
         <menuitem id="manufacturing_request_id" name="Manufacturing Request"
                   parent="mrp.menu_mrp_root" sequence="5"/>
 
-        <menuitem id="manufacturing_request_action_id" action="manufacturing_furnature.product_production_request_action" name="Manufacturing Request"
+        <menuitem id="manufacturing_request_action_id"
+                  action="manufacturing_furnature.product_production_request_action" name="Manufacturing Request"
                   parent="manufacturing_furnature.manufacturing_request_id" sequence="5"/>
 
     </data>

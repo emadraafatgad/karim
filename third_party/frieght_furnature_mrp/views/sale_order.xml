@@ -1,0 +1,18 @@
+<odoo>
+    <record id="view_order_form_discount_inherited" model="ir.ui.view">
+        <field name="name">sale.order.form.view.inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='mrp_send']" position="before">
+                    <field name="export"/>
+                    <field name="freight_send" invisible="1"/>
+                    <button name="create_freight_order"
+                            attrs="{'invisible':['|','|','|',('invoice_status','not in',['invoiced','to invoice']),('export','!=',True),('freight_send','=',True),('state','not in',['sale','done'])]}"
+                            string="Send to Freight" type="object" class="btn btn-warning"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>
