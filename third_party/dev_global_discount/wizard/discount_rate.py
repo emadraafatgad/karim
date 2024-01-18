@@ -16,7 +16,7 @@ class DiscountRate(models.TransientModel):
     def calc_sales_orders_rate(self):
         for rec in self:
             domain = []
-            if rec.date_from or rec.date_to:
+            if rec.date_from and rec.date_to:
                 if rec.date_from:
                     domain.append(('confirmation_date','>=',self.date_from))
                 if rec.date_to:
@@ -29,7 +29,7 @@ class DiscountRate(models.TransientModel):
                     counter = counter+1
                     if line.apply_discount:
                         total_amount = total_amount + line.amount_untaxed
-                        total_discount += line.discount_from_lines
+                        total_discount += line.total_lines_discount
                     else:
                         if line.discount_type == 'amount':
                             total_amount += line.amount_untaxed + line.discount_rate
@@ -41,4 +41,5 @@ class DiscountRate(models.TransientModel):
                 rec.total_discount = total_discount
                 rec.total_amount = total_amount
                 rec.sales_count = counter
-                rec.rate = 100*total_discount/total_amount
+                if total_amount:
+                    rec.rate = 100*total_discount/total_amount

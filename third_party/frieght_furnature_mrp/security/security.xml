@@ -20,4 +20,15 @@
             </xpath>
         </field>
     </record>
+
+    <record model="ir.ui.view" id="view_vendor_bill_confirm_inherits">
+        <field name="name">account.invoice.confirm.form.bill</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_invoice_open']" position="attributes">
+                <attribute name="groups">frieght_furnature_mrp.group_po_invoice_approval_user</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
