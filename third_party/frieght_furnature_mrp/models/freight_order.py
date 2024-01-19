@@ -44,6 +44,13 @@ class FreightOrder(models.Model):
                               ('confirm', 'Arrived'),
                               ('invoice', 'Invoiced'), ('done', 'Done'),
                               ('cancel', 'Cancel')], default='draft')
+    allow_auto_fill = fields.Boolean(default=True,string="allowed")
+
+    @api.constrains('allow_auto_fill')
+    def get_constrains(self):
+        order = self.env['freight.order'].search([('id','!=',self.id),('state','=','draft'),('allow_auto_fill','=',True)])
+        if self.state == 'draft' and self.allow_auto_fill and order:
+            raise ValidationError(_('You should have only one Allowed Container to autofill'))
     clearance = fields.Boolean("Clearance")
     clearance_count = fields.Integer(compute='compute_count')
     invoice_count = fields.Integer(compute='compute_count')
