@@ -12,6 +12,10 @@
                             attrs="{'invisible':['|','|','|',('invoice_status','not in',['invoiced','to invoice']),('export','!=',True),('freight_send','=',True),('state','not in',['sale','done'])]}"
                             string="Send to Freight" type="object" class="btn btn-warning"/>
                 </xpath>
+                <xpath expr="//field[@name='order_line']" position="before">
+                    <button name="update_lines_prices_for_usa" class="btn btn-danger" string="Update Usa Price" type="object" attrs="{'invisible':['|',('invoice_status','in',['invoiced','to invoice']),('export','!=',True)]}"
+                            />
+                </xpath>
             </data>
         </field>
     </record>

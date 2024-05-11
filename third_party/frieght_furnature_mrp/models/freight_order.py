@@ -704,6 +704,13 @@ class SaleOrder(models.Model):
 
     export = fields.Boolean('For Export', default=False)
     freight_send = fields.Boolean()
+
+    def update_lines_prices_for_usa(self):
+        if self.export:
+            for line in self.order_line:
+                if line.product_id.usa_price:
+                    line.price_unit = line.product_id.usa_price
+
     def create_freight_order(self):
         for rec in self.order_line:
             open_freight = self.env['freight.order'].search([('state','=','draft')],limit=1)
