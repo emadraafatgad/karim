@@ -51,6 +51,16 @@ class StockQuant(models.Model):
                         quant.product_id.display_name, msg_add, quant.quantity,
                         quant.location_id.complete_name))
 
+    def get_to_un_reserved_quantity(self):
+        for rec in self:
+            moves = self.env['stock.move.line'].search([('product_id','=',rec.product_id.id),('location_id','=',rec.location_id.id),('state','in',['assigned','partially_available'])])
+            print(moves)
+            sum_reserved= 0
+            if moves:
+                sum_reserved = sum(moves.mapped('product_uom_qty'))
+                print('sum_reserved')
+                print(sum_reserved)
+            rec._update_reserved_quantity(rec.product_id,rec.location_id,-(rec.reserved_quantity - sum_reserved))
     @api.model
     def _update_reserved_quantity(self, product_id, location_id, quantity, lot_id=None, package_id=None, owner_id=None,
                                   strict=False):
@@ -70,12 +80,14 @@ class StockQuant(models.Model):
         quants = self._gather(product_id, location_id, lot_id=lot_id, package_id=package_id, owner_id=owner_id,
                               strict=strict)
         reserved_quants = []
-
+        print("available_quantity-----")
         if float_compare(quantity, 0, precision_rounding=rounding) > 0:
             # if we want to reserve
             available_quantity = sum(
                 quants.filtered(lambda q: float_compare(q.quantity, 0, precision_rounding=rounding) > 0).mapped(
                     'quantity')) - sum(quants.mapped('reserved_quantity'))
+            print('available_quantity')
+            print(available_quantity)
             if float_compare(quantity, available_quantity, precision_rounding=rounding) > 0:
                 raise UserError(
                     _('It is not possible to reserve more products of %s than you have in stock.') % product_id.display_name)
