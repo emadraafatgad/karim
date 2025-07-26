@@ -8,7 +8,8 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <data>
-                    <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='discount']" position="after">
+                    <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='discount']"
+                           position="after">
                         <field name="discount_amount"/>
                     </xpath>
                     <xpath expr="//field[@name='amount_untaxed']" position="before">
@@ -16,6 +17,18 @@
                         <field name="total_lines_discount"/>
                     </xpath>
                 </data>
+            </field>
+        </record>
+        <record id="view_order_tree_clearance" model="ir.ui.view">
+            <field name="name">sale.order.tree.clearance</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="expected_clearance_date"/>
+                    <field name="actual_clearance_date"/>
+                    <field name="clearance_delay"/>
+                </xpath>
             </field>
         </record>
 
@@ -28,6 +41,11 @@
                     <field name="mrp_date"/>
                     <field name="to_date"/>
                     <field name="days_count"/>
+                    <!--                    <group string="Clearance Info">-->
+                    <field name="expected_clearance_date" required="1"/>
+                    <field name="actual_clearance_date"/>
+                    <field name="clearance_delay" readonly="1"/>
+                    <!--            </group>-->
                     <field name="mrp_send" readonly="1"/>
                     <field name="po_send"/>
                 </xpath>
@@ -53,7 +71,7 @@
                                         <field name="mrp_send" groups="mrp.group_mrp_routings"/>
                                     </group>
                                     <group>
-<!--                                        <field name="sale_order_id" invisible="1"/>-->
+                                        <!--                                        <field name="sale_order_id" invisible="1"/>-->
                                         <field name="packaging_id" required="0"/>
                                         <field name="attachment"/>
                                     </group>

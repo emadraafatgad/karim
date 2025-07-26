@@ -103,7 +103,18 @@ class SalesOrderKomash(models.Model):
     payment_validate_date = fields.Date(track_visibility='onchange')
     called_or_not = fields.Boolean(track_visibility='onchange')
     discount_from_lines = fields.Float(compute='calc_amount_from_lines', store=False)
+    expected_clearance_date = fields.Date(string="Expected Clearance Date", required=True)
+    actual_clearance_date = fields.Date(string="Actual Clearance Date")
+    clearance_delay = fields.Integer(string="Clearance Delay (Days)", compute="_compute_clearance_delay", store=True)
 
+    @api.depends('expected_clearance_date', 'actual_clearance_date')
+    def _compute_clearance_delay(self):
+        for order in self:
+            if order.expected_clearance_date and order.actual_clearance_date:
+                delay = (order.actual_clearance_date - order.expected_clearance_date).days
+                order.clearance_delay = delay
+            else:
+                order.clearance_delay = 0
 
     @api.depends('order_line','order_line.discount_amount')
     def calc_amount_from_lines(self):
@@ -537,6 +548,7 @@ class SaleOrder(models.Model):
 
     total_lines_discount = fields.Float(compute="compute_discount_lines_amount", store=True)
     total_untaxed_amount = fields.Float(string="Before Discount", compute="compute_discount_lines_amount", store=True)
+
 
     @api.depends("order_line.discount_amount")
     def compute_discount_lines_amount(self):

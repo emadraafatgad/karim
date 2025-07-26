@@ -196,7 +196,7 @@ class WorkOrderWorker(models.Model):
         button_start = super(WorkOrderWorker, self).button_start()
         assigned = True
         for line in self.move_raw_ids:
-            if line.state not in ['assigned','done','cancel']:
+            if line.state not in ['assigned','done','cancel','waiting']:
                 assigned = False
         if not assigned:
             raise ValidationError(
