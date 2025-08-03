@@ -31,7 +31,21 @@
                 </xpath>
             </field>
         </record>
-
+        <record id="invoice_customer_form_inherit_actual_clearance_date" model="ir.ui.view">
+            <field name="name">invoice.actual_clearance_date.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']"
+                       position="after">
+                    <!-- Add your fields or attributes here -->
+                    <field name="actual_clearance_date"/>
+                    <field name="clearance_added" invisible="1"/>
+                    <button name="update_actual_clearance_date_sales" attrs="{'invisible':[('clearance_added','=',True)]}" class="btn btn-warning" string="Add Clearance" type="object"/>
+                    <button name="update_actual_clearance_date_sales" attrs="{'invisible':[('clearance_added','!=',True)]}" class="btn btn-danger" string="Update Clearance" type="object"/>
+                </xpath>
+            </field>
+        </record>
         <record id="view_sale_order_komash_form" model="ir.ui.view">
             <field name="name">sale.order.komash.form</field>
             <field name="model">sale.order</field>
@@ -46,7 +60,7 @@
                     <field name="actual_clearance_date"/>
                     <field name="clearance_delay" readonly="1"/>
                     <!--            </group>-->
-                    <field name="mrp_send" readonly="1"/>
+                    <field name="mrp_send" readonly="0"/>
                     <field name="po_send"/>
                 </xpath>
                 <xpath expr="//field[@name='partner_invoice_id']" position="replace">

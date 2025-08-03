@@ -542,6 +542,24 @@ class SalesOrderKomash(models.Model):
             self.mrp_send = 'Sent'
             self.state = 'done'
 
+        for o_line in self.order_line:
+            if  o_line.product_id and o_line.product_id.type == 'product' and o_line.product_id.bom_count == 0:
+                component_line = self.env['mrp.request.line']
+                pr_line = {
+                    'product_id': o_line.product_id.id,
+                    'product_qty': o_line.product_uom_qty,
+                    'product_uom_id': o_line.product_uom.id,
+                    'delivery_date':o_line.order_id.mrp_date,
+                    'origin':o_line.order_id.partner_id.id,
+                    'sale_order_id': self.id
+
+                }
+                print("pr_line ----------------------------")
+                print(pr_line)
+                print(o_line.name)
+                component_line.create(pr_line)
+        return True
+
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'

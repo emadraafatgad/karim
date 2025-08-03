@@ -21,9 +21,10 @@ class NewManufacturingRequest(models.Model):
                               ('bom', 'Purchase Requested')], track_visibility='onchange',
                              default='draft', readonly=True)
     for_export = fields.Boolean(default=False)
-    mrp_operation_state = fields.Selection([('confirmed', 'Confirmed'), ('planned', 'Planned'),('progress', 'In Progress'), ('done', 'Not MRP'),
-                                            ('cancel','Canceled')], track_visibility='onchange',
-                             compute='get_mrp_state_from_mrp', readonly=True)
+    mrp_operation_state = fields.Selection(
+        [('confirmed', 'Confirmed'), ('planned', 'Planned'), ('progress', 'In Progress'), ('done', 'Not MRP'),
+         ('cancel', 'Canceled')], track_visibility='onchange',
+        compute='get_mrp_state_from_mrp', readonly=True)
     so_number = fields.Char()
     is_shipped = fields.Boolean()
 
@@ -31,47 +32,46 @@ class NewManufacturingRequest(models.Model):
         for rec in self:
             if not rec.for_export or rec.is_shipped:
                 continue
-            open_freight = self.env['freight.order'].search([('state','=','draft')])
+            open_freight = self.env['freight.order'].search([('state', '=', 'draft')])
             if not open_freight:
                 raise ValidationError('please create open freight')
-            elif len(open_freight)>1:
+            elif len(open_freight) > 1:
                 raise ValidationError('please add only one open freight')
             print(open_freight)
             print(open_freight.order_ids)
             print(open_freight.order_ids.mapped('purchase_id'))
-            freight_line = open_freight.order_ids.filtered(lambda  l: not l.purchase_id)
+            freight_line = open_freight.order_ids.filtered(lambda l: not l.purchase_id)
             if not freight_line:
                 raise ValidationError('Please add Line in freight for customize')
             print(freight_line)
             order_line = {
                 'product_id': rec.product_id.id,
                 'container_id': freight_line.container_id.id,
-                'custom_or_stock':'custom',
+                'custom_or_stock': 'custom',
                 'quantity': rec.quantity_qty,
             }
-            freight_line.container_line_ids =[(0,0,order_line)]
-
-
-
-
+            freight_line.container_line_ids = [(0, 0, order_line)]
 
     def get_mrp_state_from_mrp(self):
         for rec in self:
             print('rec.sale_order_id')
             print(rec.sudo().sale_order_id.name)
-            mrp = self.env['mrp.production'].sudo().search([('product_id','=',rec.product_id.id),('bom_id','=',rec.bom_id.id),('sale_order_id','=',rec.sale_order_id.id)],limit=1)
+            mrp = self.env['mrp.production'].sudo().search(
+                [('product_id', '=', rec.product_id.id), ('bom_id', '=', rec.bom_id.id),
+                 ('sale_order_id', '=', rec.sale_order_id.id)], limit=1)
             print("mrp found")
             print(mrp)
             mapped_state = mrp.mapped('state')
             rec.mrp_operation_state = mrp.state
             # stat for stat in mapped_state if stat =='done':
-            print('state',rec.mrp_operation_state)
-    sale_order_id = fields.Many2one('sale.order', readonly=True,groups="base.group_user")
+            print('state', rec.mrp_operation_state)
+
+    sale_order_id = fields.Many2one('sale.order', readonly=True, groups="base.group_user")
     city_id = fields.Many2one('res.city', 'City', related='sale_order_id.city_id', store=True,
                               track_visibility='onchange', )
     expected_delivery_date = fields.Date(track_visibility='onchange')
     payment_validate_date = fields.Date(track_visibility='onchange')
-    latest_payment_date = fields.Date(readonly=1,track_visibility='onchange')
+    latest_payment_date = fields.Date(readonly=1, track_visibility='onchange')
     bom_line_ids = fields.One2many('mrp.request.line', 'request_id', readonly=True)
     paint_ids = fields.One2many('mrp.paint.request', 'request_id', track_visibility='onchange', )
     carpenter_ids = fields.One2many('mrp.carpenter.request', 'request_id', track_visibility='onchange', )
@@ -90,9 +90,9 @@ class NewManufacturingRequest(models.Model):
     mrp_routs_ids = fields.Many2many('mrp.checklist.line', domain="[('product_id','=',product_id)]")
     current_operation = fields.Many2one('rout.name', track_visibility='onchange')
     called_or_not = fields.Boolean(track_visibility='onchange')
-    is_late = fields.Boolean(compute="is_late_to_confirm",store=True)
+    is_late = fields.Boolean(compute="is_late_to_confirm", store=True)
 
-    @api.depends('payment_validate_date','latest_payment_date')
+    @api.depends('payment_validate_date', 'latest_payment_date')
     def is_late_to_confirm(self):
         for rec in self:
             if rec.payment_validate_date and rec.latest_payment_date:
@@ -115,11 +115,11 @@ class NewManufacturingRequest(models.Model):
     def get_latest_payment_date(self):
         all_payments = self.env['account.payment'].search(
             [('partner_id', '=', self.sale_order_id.partner_id.id), ('payment_type', '=', 'inbound')],
-            order="name DESC ,payment_date DESC",limit=1)
+            order="name DESC ,payment_date DESC", limit=1)
         if all_payments:
             self.latest_payment_date = all_payments.payment_date
         for line in all_payments:
-            print(line.name,line.payment_date)
+            print(line.name, line.payment_date)
 
     # @api.model
     def get_request_attachments(self):
@@ -214,23 +214,54 @@ class NewManufacturingRequest(models.Model):
         return result
 
 
+class AccountInvoice(models.Model):
+    _inherit = 'account.invoice'
+
+    actual_clearance_date = fields.Date()
+    clearance_added = fields.Boolean()
+
+    @api.depends('actual_clearance_date')
+    def update_actual_clearance_date_sales(self):
+        for rec in self:
+            if rec.actual_clearance_date:
+                sale_order = self.env['sale.order'].search([('name', '=', rec.origin)])
+                sale_order.actual_clearance_date = rec.actual_clearance_date
+                rec.clearance_added = True
+
+
 class ManufacturingRequestLine(models.Model):
     _name = 'mrp.request.line'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+    _order = "id desc"
 
     request_id = fields.Many2one('mrp.production.request')
+    sale_order_id = fields.Many2one('sale.order')
     product_id = fields.Many2one('product.product')
     virtual_available = fields.Float(string="Forcaste", related="product_id.virtual_available", store=True)
     product_qty = fields.Float(string="Quantity")
     product_total_qty = fields.Float(string="Total Quantity", compute="calc_total_product_lines", store=True)
     product_uom_id = fields.Many2one('uom.uom', string="Unit Of Measure")
-    partner_id = fields.Many2one('res.partner', domain="[('supplier','=','True')]")
     delivery_date = fields.Date(sotre=True, related="request_id.delivery_date")
     origin = fields.Char(string="Customer Name", readonly=True, related="request_id.origin", store=True)
     state = fields.Selection([('draft', 'draft'), ('Confirmed', 'MRP Order'),
                               ('bom', 'Purchase Requested')], track_visibility='onchange',
                              related="request_id.state", store=True)
     quantity_qty = fields.Float(string="Product Quantity", related="request_id.quantity_qty", )
+    expected_clearance_date = fields.Date(string="Expected Clearance Date", required=True)
+    actual_clearance_date = fields.Date(string="Actual Clearance Date")
+    clearance_delay = fields.Integer(string="Clearance Delay (Days)", )
+    partner_id = fields.Many2one('res.partner', string="Vendor", domain="[('supplier','=','True')]")
+    latest_payment_date = fields.Date(related="request_id.latest_payment_date", track_visibility='onchange')
+
+    def get_manufacture_order_request(self):
+        for rec in self:
+            vendor = rec.product_id.mapped('seller_ids')
+            if vendor:
+                rec.partner_id = vendor[0].name.id
+                sale_order = rec.request_id.sale_order_id if rec.request_id else rec.sale_order_id
+                rec.expected_clearance_date = sale_order.expected_clearance_date
+                rec.actual_clearance_date = sale_order.actual_clearance_date
+                rec.clearance_delay = sale_order.clearance_delay
 
     @api.depends('request_id', 'product_qty')
     def calc_total_product_lines(self):
@@ -238,6 +269,7 @@ class ManufacturingRequestLine(models.Model):
             # print("request_id", rec.request_id)
             # print("qty-qty-qty-qty")
             rec.product_total_qty = rec.product_qty * rec.quantity_qty
+
 
 class ManufacturingMaterials(models.Model):
     _name = 'mrp.production.material'
