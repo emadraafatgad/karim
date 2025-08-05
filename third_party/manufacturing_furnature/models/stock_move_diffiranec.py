@@ -34,13 +34,13 @@ class StockMoveNotConsumed(models.Model):
     @api.depends('product_uom_qty', 'quantity_done','state')
     def cal_product_to_consumed(self):
         for rec in self:
-            print("rec")
-            print(rec.id)
-            print(rec.product_id.name)
-            print(rec.state)
-            print(rec.product_id.name,"====",rec.product_uom_qty,"========",rec.quantity_done)
+            print("rec cal_product_to_consumed")
+            # print(rec.id)
+            # print(rec.product_id.name)
+            # print(rec.state)
+            # print(rec.product_id.name,"====",rec.product_uom_qty,"========",rec.quantity_done)
             if rec.created_production_id and rec.product_uom_qty and rec.quantity_done :
-                print(rec.product_uom_qty, rec.quantity_done)
+                # print(rec.product_uom_qty, rec.quantity_done)
                 rec.customer_name = rec.created_production_id.origin
                 not_consumed = rec.to_consume - rec.quantity_done
                 print(not_consumed, "not consumed")
