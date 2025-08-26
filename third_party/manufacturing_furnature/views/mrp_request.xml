@@ -24,6 +24,57 @@
             <field name="domain">[]</field>
             <field name="context">{}</field>
         </record>
+<record id="manage_production_request_tree" model="ir.ui.view">
+            <field name="name">mrp Production request Tree</field>
+            <field name="model">mrp.production.request</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Manage Requests" editable="bottom" delete="false" decoration-danger="is_late == True">
+                    <field name="name"/>
+                    <field name="sale_order_id" groups="base.group_user"/>
+                    <field name="so_number"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="product_id"/>
+                    <field name="quantity_qty"/>
+                    <field name="bom_id"/>
+                    <field name="origin"/>
+                    <field name="delivery_date"/>
+                    <field name="current_operation"/>
+                    <field name="expected_clearance_date"/>
+                    <field name="actual_clearance_date"/>
+                    <field name="clearance_delay"/>
+                    <field name="latest_payment_date"/>
+                    <field name="expected_delivery_date"/>
+                    <field name="is_late" invisible="0"/>
+                    <field name="payment_validate_date"/>
+                    <field name="called_or_not" widget="boolean_toggle"/>
+                    <field name="for_export"/>
+                    <field name="is_shipped"/>
+                    <field name="expected_fabric_delivery"/>
+                    <field name="payment_status"/>
+                    <field name="stage_wood"/>
+                    <field name="stage_fabric_purchase"/>
+                    <field name="stage_body_upholstery"/>
+                    <field name="stage_finishing_upholstery"/>
+                    <field name="stage_factory_quality"/>
+                    <field name="stage_supplier_purchase"/>
+                    <field name="stage_table_cutting"/>
+                    <field name="stage_supplier_quality"/>
+                    <field name="mrp_operation_state"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="manage_production_request_action" model="ir.actions.act_window">
+            <field name="name">Manufacturing Request</field>
+            <field name="res_model">mrp.production.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" ref="manufacturing_furnature.manage_production_request_tree"/>
+            <field name="flags">{'delete': False}</field>
+        </record>
 
         <record id="product_production_request_form" model="ir.ui.view">
             <field name="name">mrp Production request Form</field>
@@ -44,9 +95,8 @@
                     </header>
                     <sheet>
                         <group colspan="12">
-                            <group cols="4">
+                            <group string="Request Info" cols="4">
                                 <field name="name"/>
-                                <field name="invoice_status"/>
                                 <field name="product_id"/>
                                 <field name="quantity_qty"/>
                                 <field name="product_uom_id"/>
@@ -54,21 +104,36 @@
                                 <field name="is_shipped"/>
                                 <field name="mrp_operation_state"/>
                             </group>
-                            <group cols="4">
+                            <group string="Expected Dates" cols="4">
+                                <field name="expected_fabric_delivery"/>
                                 <field name="expected_delivery_date"/>
                                 <field name="payment_validate_date"/>
                                 <field name="latest_payment_date"/>
+                                <field name="expected_clearance_date"/>
+                                <field name="actual_clearance_date"/>
+                                <field name="clearance_delay"/>
                                 <field name="called_or_not"/>
                                 <field name="delivery_date"/>
-                                <field name="origin"/>
-                                <field name="attachment"/>
                             </group>
-                            <group>
+                            <group string="Bom Info">
                                 <field name="bom_id"/>
                                 <field name="sale_order_id" groups="base.group_user"/>
+                                <field name="origin"/>
+                                <field name="city_id"/>
+                                <field name="invoice_status"/>
+                                <field name="attachment"/>
+                            </group>
+                            <group string="Manufacturing Stages" col="4">
+                                <field name="stage_wood"/>
+                                <field name="stage_fabric_purchase"/>
+                                <field name="stage_body_upholstery"/>
+                                <field name="stage_finishing_upholstery"/>
+                                <field name="stage_factory_quality"/>
+                                <field name="stage_supplier_purchase"/>
+                                <field name="stage_table_cutting"/>
+                                <field name="stage_supplier_quality"/>
                             </group>
                             <group>
-                                <field name="city_id"/>
                                 <field name="note"/>
                             </group>
                         </group>
@@ -135,13 +200,15 @@
                     <field name="sale_order_id" groups="base.group_user"/>
                     <field name="so_number"/>
                     <field name="invoice_status" invisible="1"/>
-                    <field name="payment_status"/>
                     <field name="product_id"/>
                     <field name="quantity_qty"/>
                     <field name="bom_id"/>
                     <field name="origin"/>
                     <field name="delivery_date"/>
                     <field name="current_operation"/>
+                    <field name="expected_clearance_date"/>
+                    <field name="actual_clearance_date"/>
+                    <field name="clearance_delay"/>
                     <field name="latest_payment_date"/>
                     <field name="expected_delivery_date"/>
                     <field name="is_late" invisible="0"/>
@@ -149,14 +216,25 @@
                     <field name="called_or_not" widget="boolean_toggle"/>
                     <field name="for_export"/>
                     <field name="is_shipped"/>
+                    <field name="expected_fabric_delivery"/>
+                    <field name="payment_status"/>
+                    <field name="stage_wood"/>
+                    <field name="stage_fabric_purchase"/>
+                    <field name="stage_body_upholstery"/>
+                    <field name="stage_finishing_upholstery"/>
+                    <field name="stage_factory_quality"/>
+                    <field name="stage_supplier_purchase"/>
+                    <field name="stage_table_cutting"/>
+                    <field name="stage_supplier_quality"/>
                     <field name="mrp_operation_state"/>
                     <field name="state"/>
                 </tree>
             </field>
         </record>
 
+
         <record id="product_production_request_search" model="ir.ui.view">
-            <field name="name">mrp Production request Tree</field>
+            <field name="name">mrp Production request Search</field>
             <field name="model">mrp.production.request</field>
             <field name="type">search</field>
             <field name="priority">15</field>
@@ -165,21 +243,53 @@
                     <field name="sale_order_id" groups="base.group_user"/>
                     <field name="product_id"/>
                     <field name="origin"/>
+                    <field name="name"/>
+                    <field name="sale_order_id"/>
+                    <field name="product_id"/>
+                    <field name="state"/>
+                    <filter string="Draft" name="state_draft" domain="[('state','=','draft')]"/>
+                    <filter string="Confirmed" name="state_confirmed" domain="[('state','=','Confirmed')]"/>
+                    <filter string="Purchase Not Requested" name="state_bom" domain="[('state','!=','bom')]"/>
+                    <filter string="Purchase Requested" name="state_bom" domain="[('state','=','bom')]"/>
+                    <filter string="Paid" name="payment_status" domain="[('payment_status','=','paid')]"/>
+                    <filter string="Is Called" name="called_or_not" domain="[('called_or_not','=',True)]"/>
+                    <filter string="Not Called" name="called_or_not" domain="[('called_or_not','=',False)]"/>
+
+                    <!-- Filters for stages -->
+                    <separator string="Stages"/>
+                    <filter string="خشب" name="stage_wood" domain="[('stage_wood','=',True)]"/>
+                    <filter string="شراء قماش" name="stage_fabric_purchase"
+                            domain="[('stage_fabric_purchase','=',True)]"/>
+                    <filter string="تنجيد جسم" name="stage_body_upholstery"
+                            domain="[('stage_body_upholstery','=',True)]"/>
+                    <filter string="تنجيد تشطيب" name="stage_finishing_upholstery"
+                            domain="[('stage_finishing_upholstery','=',True)]"/>
+                    <filter string="جودة مصنع" name="stage_factory_quality"
+                            domain="[('stage_factory_quality','=',True)]"/>
+                    <filter string="مشتريات موردين" name="stage_supplier_purchase"
+                            domain="[('stage_supplier_purchase','=',True)]"/>
+                    <filter string="قرصة ترابيزات" name="stage_table_cutting"
+                            domain="[('stage_table_cutting','=',True)]"/>
+                    <filter string="جودة موردين" name="stage_supplier_quality"
+                            domain="[('stage_supplier_quality','=',True)]"/>
                     <filter string="Not Mrp" name="purchase_only"
                             domain="[('state', '=','not')]"/>
                     <filter string="MO for next 15 days" name="this_month_mo"
                             domain="[('delivery_date', '&gt;=', context_today().strftime('%Y-%m-%d')),('delivery_date', '&lt;=', (context_today() + datetime.timedelta(days=15)).strftime('%Y-%m-%d'))]"/>
-                    <filter string="Product" name="groupby_product" domain="[]"
-                            context="{'group_by': 'product_id'}"/>
-                    <filter string="Sale Order" name="sale_order_id" domain="[]"
-                            context="{'group_by': 'sale_order_id'}"/>
-                    <filter string="State" name="state_id" domain="[]"
-                            context="{'group_by': 'state'}"/>
-                    <!--                    <filter string="Invoice Status" name="state_id" domain="[]"-->
-                    <!--                            context="{'group_by': 'invoice_status'}"/>-->
-                    <filter string="Payment Status" name="payment_status" domain="[]"
-                            context="{'group_by': 'payment_status'}"/>
-
+                    <group expand="0" string="Group By">
+                        <filter string="Product" name="groupby_product" domain="[]"
+                                context="{'group_by': 'product_id'}"/>
+                        <filter string="Sale Order" name="sale_order_id" domain="[]"
+                                context="{'group_by': 'sale_order_id'}"/>
+                        <filter string="State" name="state_id" domain="[]"
+                                context="{'group_by': 'state'}"/>
+                        <!--                    <filter string="Invoice Status" name="state_id" domain="[]"-->
+                        <!--                            context="{'group_by': 'invoice_status'}"/>-->
+                        <filter string="Payment Status" name="payment_status" domain="[]"
+                                context="{'group_by': 'payment_status'}"/>
+                        <filter string="City" name="city_id" domain="[]"
+                                context="{'group_by': 'city_id'}"/>
+                    </group>
                 </search>
             </field>
         </record>
@@ -197,6 +307,10 @@
 
         <menuitem id="manufacturing_request_action_id"
                   action="manufacturing_furnature.product_production_request_action" name="Manufacturing Request"
+                  parent="manufacturing_furnature.manufacturing_request_id" sequence="10"/>
+
+  <menuitem id="manage_manufacturing_request_action_id"
+                  action="manufacturing_furnature.manage_production_request_action" name="Manage Manufacture Request"
                   parent="manufacturing_furnature.manufacturing_request_id" sequence="5"/>
 
     </data>

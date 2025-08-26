@@ -91,7 +91,25 @@ class NewManufacturingRequest(models.Model):
     current_operation = fields.Many2one('rout.name', track_visibility='onchange')
     called_or_not = fields.Boolean(track_visibility='onchange')
     is_late = fields.Boolean(compute="is_late_to_confirm", store=True)
+    expected_clearance_date = fields.Date(string="Expected Clearance Date", required=True)
+    actual_clearance_date = fields.Date(string="Actual Clearance Date")
+    clearance_delay = fields.Integer(string="Clearance Delay (Days)", )
+    # paid = fields.Boolean(
+    #     string="Paid or Not",
+    #     related="sale_order_id.invoice_status",  # ممكن نعملها logic مختلفة حسب المطلوب
+    #     store=False,
+    # )
 
+    # مراحل التصنيع
+    stage_wood = fields.Boolean(string="خشب")
+    stage_fabric_purchase = fields.Boolean(string="شراء قماش")
+    stage_body_upholstery = fields.Boolean(string="تنجيد جسم")
+    stage_finishing_upholstery = fields.Boolean(string="تنجيد تشطيب")
+    stage_factory_quality = fields.Boolean(string="جودة مصنع")
+    stage_supplier_purchase = fields.Boolean(string="مشتريات موردين")
+    stage_table_cutting = fields.Boolean(string="قرصة ترابيزات")
+    stage_supplier_quality = fields.Boolean(string="جودة موردين")
+    expected_fabric_delivery = fields.Date(string="Expected Fabric Delivery")
     @api.depends('payment_validate_date', 'latest_payment_date')
     def is_late_to_confirm(self):
         for rec in self:
