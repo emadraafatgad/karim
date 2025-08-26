@@ -23,6 +23,7 @@
             <field name="view_mode">tree,form,search</field>
             <field name="domain">[]</field>
             <field name="context">{}</field>
+            <field name="flags">{'delete': False}</field>
         </record>
 <record id="manage_production_request_tree" model="ir.ui.view">
             <field name="name">mrp Production request Tree</field>
@@ -30,27 +31,27 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Manage Requests" editable="bottom" delete="false" decoration-danger="is_late == True">
-                    <field name="name"/>
-                    <field name="sale_order_id" groups="base.group_user"/>
-                    <field name="so_number"/>
+                    <field name="name" readonly="1"/>
+                    <field name="sale_order_id" readonly="1" groups="base.group_user"/>
+                    <field name="so_number" readonly="1"/>
                     <field name="invoice_status" invisible="1"/>
-                    <field name="product_id"/>
+                    <field name="product_id" readonly="1"/>
                     <field name="quantity_qty"/>
                     <field name="bom_id"/>
                     <field name="origin"/>
                     <field name="delivery_date"/>
-                    <field name="current_operation"/>
-                    <field name="expected_clearance_date"/>
-                    <field name="actual_clearance_date"/>
-                    <field name="clearance_delay"/>
-                    <field name="latest_payment_date"/>
-                    <field name="expected_delivery_date"/>
-                    <field name="is_late" invisible="0"/>
+                    <field name="current_operation" readonly="1"/>
+                    <field name="expected_clearance_date" readonly="1"/>
+                    <field name="actual_clearance_date" readonly="1"/>
+                    <field name="clearance_delay" readonly="1"/>
+                    <field name="latest_payment_date" />
+                    <field name="expected_delivery_date" readonly="1"/>
+                    <field name="is_late" readonly="1" invisible="0"/>
                     <field name="payment_validate_date"/>
                     <field name="called_or_not" widget="boolean_toggle"/>
-                    <field name="for_export"/>
-                    <field name="is_shipped"/>
-                    <field name="expected_fabric_delivery"/>
+                    <field name="for_export" readonly="1"/>
+                    <field name="is_shipped" readonly="1"/>
+                    <field name="expected_fabric_delivery" readonly="1"/>
                     <field name="payment_status"/>
                     <field name="stage_wood"/>
                     <field name="stage_fabric_purchase"/>
@@ -66,7 +67,7 @@
             </field>
         </record>
         <record id="manage_production_request_action" model="ir.actions.act_window">
-            <field name="name">Manufacturing Request</field>
+            <field name="name">Manage Manufacture Request</field>
             <field name="res_model">mrp.production.request</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,search</field>
