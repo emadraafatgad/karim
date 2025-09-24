@@ -47,7 +47,7 @@
                     <field name="latest_payment_date" />
                     <field name="expected_delivery_date" readonly="1"/>
                     <field name="is_late" readonly="1" invisible="0"/>
-                    <field name="payment_validate_date"/>
+                    <field name="payment_validate_date" readonly="1"/>
                     <field name="called_or_not" widget="boolean_toggle"/>
                     <field name="for_export" readonly="1"/>
                     <field name="is_shipped" readonly="1"/>

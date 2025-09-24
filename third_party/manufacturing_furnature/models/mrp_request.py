@@ -91,7 +91,7 @@ class NewManufacturingRequest(models.Model):
     current_operation = fields.Many2one('rout.name', track_visibility='onchange')
     called_or_not = fields.Boolean(track_visibility='onchange')
     is_late = fields.Boolean(compute="is_late_to_confirm", store=True)
-    expected_clearance_date = fields.Date(string="Expected Clearance Date", required=True)
+    expected_clearance_date = fields.Date(string="Expected Clearance Date", required=False)
     actual_clearance_date = fields.Date(string="Actual Clearance Date")
     clearance_delay = fields.Integer(string="Clearance Delay (Days)", )
     # paid = fields.Boolean(
